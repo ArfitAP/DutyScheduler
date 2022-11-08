@@ -1,36 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { AuthModule } from './auth/auth.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    ProfileComponent,
-    BoardModeratorComponent,
-    BoardUserComponent,
-    BoardAdminComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule,
+    SchedulerModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
