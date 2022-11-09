@@ -38,6 +38,9 @@ public class User {
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
+	
+	@OneToMany(mappedBy="user", fetch = FetchType.LAZY)
+    private Set<UserApplication> userApplications;
 
 	public User() {
 	}
@@ -87,4 +90,14 @@ public class User {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+
+	public Set<UserApplication> getUserApplications() {
+		return userApplications;
+	}
+
+	public void setUserApplications(Set<UserApplication> userApplications) {
+		this.userApplications = userApplications;
+	}
+	
+	
 }

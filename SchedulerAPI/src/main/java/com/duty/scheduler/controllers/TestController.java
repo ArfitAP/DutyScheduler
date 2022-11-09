@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.duty.scheduler.models.Role;
 import com.duty.scheduler.payload.response.JwtResponse;
 import com.duty.scheduler.repository.RoleRepository;
+import com.duty.scheduler.repository.UserRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -20,6 +21,14 @@ public class TestController {
 	
 	@Autowired
 	RoleRepository roleRepository;
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	@GetMapping("/allusers")
+	public ResponseEntity<?> allUsers() {
+		return ResponseEntity.ok(userRepository.findAll());
+	}
 	
 	@GetMapping("/all")
 	public String allAccess() {
