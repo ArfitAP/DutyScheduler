@@ -1,1 +1,17 @@
-<p>board-user works!</p>
+<h4>Odabir termina dežurstva za mjesec {{nextMonth | date: 'MM.yyyy.'}}</h4>
+
+<input type="checkbox" [(ngModel)]="userApplication.grouped">Želim dežurstvo grupirano
+
+<div>
+    <table>
+        <tbody>
+            <tr *ngFor="let weeks of nextMonthWeeks">
+                <td *ngFor="let days of weeks">
+                    <p *ngIf="!days.hidden" [ngClass]="{'background-selected' : days.selected}">
+                        {{days.date | date: 'dd'}}
+                    </p>                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

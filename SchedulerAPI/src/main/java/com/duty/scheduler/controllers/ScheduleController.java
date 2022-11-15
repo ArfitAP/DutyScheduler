@@ -22,10 +22,10 @@ public class ScheduleController {
 	@Autowired
 	ScheduleService scheduleService;
 	
-	@GetMapping("/userapplications/{userid}/{start}/{end}")
+	@GetMapping("/userapplications/{userid}/{mon}")
 	public ResponseEntity<?> userApplications(@PathVariable Long userid, @PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
-		return ResponseEntity.ok(scheduleService.getUserApplicationsInMonth(userid, month));
+		return ResponseEntity.ok(scheduleService.getApplicationsInMonthForUser(userid, month));
 	}
 
 }

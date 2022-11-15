@@ -60,6 +60,32 @@ public class UserApplication {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public Boolean getGrouped() {
+		return grouped;
+	}
+
+	public void setGrouped(Boolean grouped) {
+		this.grouped = grouped;
+	}
+
+	public Set<ApplicationDay> getApplicationDays() {
+		return applicationDays;
+	}
+
+	public void setApplicationDays(Set<ApplicationDay> applicationDays) {
+		this.applicationDays = applicationDays;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 	
 	
 }
