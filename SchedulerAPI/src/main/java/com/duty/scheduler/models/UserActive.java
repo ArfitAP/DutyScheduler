@@ -1,7 +1,9 @@
 package com.duty.scheduler.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,9 +29,10 @@ public class UserActive {
     private User activatedBy;
 	
 	@NotBlank
-	private Date month;
+	@Column(columnDefinition = "DATE")
+	private LocalDate month;
 
-	public UserActive(User user, User activatedBy, @NotBlank Date month) {
+	public UserActive(User user, User activatedBy, @NotBlank LocalDate month) {
 		super();
 		this.user = user;
 		this.activatedBy = activatedBy;
@@ -48,11 +51,11 @@ public class UserActive {
 		this.id = id;
 	}
 
-	public Date getMonth() {
+	public LocalDate getMonth() {
 		return month;
 	}
 
-	public void setMonth(Date month) {
+	public void setMonth(LocalDate month) {
 		this.month = month;
 	}
 	

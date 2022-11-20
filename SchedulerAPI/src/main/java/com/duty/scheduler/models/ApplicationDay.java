@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "application_day")
@@ -19,15 +18,14 @@ public class ApplicationDay {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne
+	@ManyToOne()
     @JoinColumn(name="application_id", nullable=false)
     private UserApplication userApplication;
 	
-	@NotBlank
 	@Column(columnDefinition = "DATE")
 	private LocalDate day;
 
-	public ApplicationDay(UserApplication userApplication, @NotBlank LocalDate day) {
+	public ApplicationDay(UserApplication userApplication, LocalDate day) {
 		super();
 		this.userApplication = userApplication;
 		this.day = day;
@@ -52,6 +50,14 @@ public class ApplicationDay {
 	public void setDay(LocalDate day) {
 		this.day = day;
 	}
-	
+
+	/*public UserApplication getUserApplication() {
+		return userApplication;
+	}
+
+	public void setUserApplication(UserApplication userApplication) {
+		this.userApplication = userApplication;
+	}
+	*/
 	
 }
