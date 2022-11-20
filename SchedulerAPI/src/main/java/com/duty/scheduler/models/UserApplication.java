@@ -25,20 +25,20 @@ public class UserApplication {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 	
-	@NotBlank
 	@Column(columnDefinition = "DATE")
 	private LocalDate month;
 	
-	@NotBlank
 	private Boolean grouped;
 	
 	@OneToMany(mappedBy="userApplication")
     private Set<ApplicationDay> applicationDays;
 	
-	public UserApplication(User user, @NotBlank LocalDate month) {
+	public UserApplication(User user, @NotBlank LocalDate month, Boolean grouped, Set<ApplicationDay> applicationDays) {
 		super();
 		this.user = user;
 		this.month = month;
+		this.grouped = grouped;
+		this.applicationDays = applicationDays;
 	}
 
 	public UserApplication() {

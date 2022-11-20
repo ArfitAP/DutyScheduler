@@ -1,7 +1,6 @@
 package com.duty.scheduler.DTO;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +11,8 @@ import com.duty.scheduler.models.UserApplication;
 public class UserApplicationDTO {
 	private Integer id;
 	
+	private Boolean active;
+	
     private Long user_id;
 
 	private LocalDate month;
@@ -20,12 +21,26 @@ public class UserApplicationDTO {
 	
     private Set<ApplicationDay> applicationDays;
 
-	public UserApplicationDTO(UserApplication uap, Long user_id ) {
+	public UserApplicationDTO(UserApplication uap, Long user_id) {
 		this.id = uap.getId();
 		this.user_id =  user_id;
 		this.month = uap.getMonth();
 		this.grouped = uap.getGrouped();
 		this.applicationDays = uap.getApplicationDays();
+	}
+	
+	public UserApplicationDTO(Long userId, LocalDate month) {
+		this.id = 0;
+		this.user_id = userId;
+		this.month = month;
+		this.grouped = false;
+		this.applicationDays = new HashSet<ApplicationDay>();
+		this.active = false;
+	}
+	
+
+	public UserApplicationDTO() {
+
 	}
 
 	public Integer getId() {
@@ -66,6 +81,14 @@ public class UserApplicationDTO {
 
 	public void setApplicationDays(Set<ApplicationDay> applicationDays) {
 		this.applicationDays = applicationDays;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
     
     

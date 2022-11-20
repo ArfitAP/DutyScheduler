@@ -8,6 +8,8 @@ import com.duty.scheduler.models.UserApplication;
 
 public interface IScheduleService {
 	
-	List<UserApplicationDTO> getApplicationsInMonthForUser(Long userId, LocalDate month);
+	UserApplicationDTO getApplicationsInMonthForUser(Long userId, LocalDate month);
+	
+	boolean updateApplicationsInMonthForUser(UserApplicationDTO userApplication);
 	
 }

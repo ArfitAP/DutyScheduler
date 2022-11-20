@@ -1,17 +1,33 @@
 <h4>Odabir termina dežurstva za mjesec {{nextMonth | date: 'MM.yyyy.'}}</h4>
 
-<input type="checkbox" [(ngModel)]="userApplication.grouped">Želim dežurstvo grupirano
+<div *ngIf="!userApplication.active">
+    <p>Niste uključeni u dežurstvo za sljedeći mjesec !</p>
+</div>
+<div *ngIf="userApplication.active">
+    <input type="checkbox" [(ngModel)]="userApplication.grouped">Želim dežurstvo grupirano
 
-<div>
-    <table>
-        <tbody>
-            <tr *ngFor="let weeks of nextMonthWeeks">
-                <td *ngFor="let days of weeks">
-                    <p *ngIf="!days.hidden" [ngClass]="{'background-selected' : days.selected}">
-                        {{days.date | date: 'dd'}}
-                    </p>                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td *ngFor="let i of [0,1,2,3,4,5,6]">{{dayNames[i]}}</td>
+                </tr>
+                <tr *ngFor="let weeks of nextMonthWeeks">
+                    <td *ngFor="let days of weeks">
+                        <p *ngIf="!days.hidden">
+                            <button type="button" [ngClass]="{'background-selected' : days.selected}" (click)="dayClick(days.date)">
+                                {{days.date | date: 'dd'}}
+                            </button>
+                        </p>                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <button type="button" (click)="save()">
+            Spremi odabir
+        </button>
+    </div>
 </div>

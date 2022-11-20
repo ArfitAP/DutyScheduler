@@ -1,8 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { IUserApplication } from 'src/app/_models/UserApplication';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Component({
   selector: 'app-board-user',
@@ -12,17 +16,21 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 })
 export class BoardUserComponent implements OnInit {
 
+  dayNames: string[] = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'];
+
   isLoggedIn = false;
   userId = 0;
+  nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
+
   userApplication: IUserApplication = {
     id: 0,
-    month: new Date(),
+    active: true,
+    month: this.nextMonth,
     grouped: false,
     user_id: 0,
     applicationDays: []
   };
   userDays: Date[] = [];
-  nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
 
   nextMonthWeeks: any[] = [];
 
@@ -33,7 +41,6 @@ export class BoardUserComponent implements OnInit {
     
     if (this.isLoggedIn) {
       this.userId = this.tokenStorageService.getUser().id;
-      this.nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
 
       this.userApplication.user_id = this.userId;
       this.userApplication.month = this.nextMonth;
@@ -88,7 +95,7 @@ export class BoardUserComponent implements OnInit {
       this.http.get("http://localhost:180/api/test/schedule/userapplications/" + this.userId + '/' + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
                .subscribe({
                   next: data => {
-                    this.userApplication = JSON.parse(data)[0];
+                    this.userApplication = JSON.parse(data);
 
                     try {
                       this.userDays = this.userApplication.applicationDays.map((item: { day: Date; }) => item.day);
@@ -119,6 +126,47 @@ export class BoardUserComponent implements OnInit {
     }
   }
 
+  save() : void {
+    console.log(this.userDays);
+
+    this.userApplication.applicationDays =  this.userDays.map((item) => { return { id: 0, day: this.datePipe.transform(item, 'yyyy-MM-dd') }; });
+
+    this.http.post("http://localhost:180/api/test/schedule/adduserapplications/", this.userApplication, { responseType: 'text' })
+               .subscribe({
+                  next: data => {
+                    let res : Boolean = JSON.parse(data);
+
+                    if(res == true)
+                    {
+                      alert("Vaš izbor je spremljen");
+                    }
+                    else alert("Pogreška !");
+                  },
+                  error: err => {
+                    alert("Pogreška !");
+                  }
+                });
+  }
+
+  dayClick(date: string) : void {
+    this.nextMonthWeeks.forEach( (value) => {
+      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; }) => {
+        if(dayinweek.date == date)
+        {
+          dayinweek.selected = !dayinweek.selected;
+
+          if(this.userDays.includes(dayinweek.date))
+          {
+            this.userDays = this.userDays.filter(obj => obj !== dayinweek.date);
+          }
+          else
+          {
+            this.userDays.push(dayinweek.date);
+          }
+        }
+      });
+    }); 
+  }
 
   getNumberOfDaysInMonth(month: number, year: number) : number {
 
