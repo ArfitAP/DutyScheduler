@@ -3,6 +3,7 @@ import { HomeComponent } from './home/home.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { SharedModule } from '../shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -13,7 +14,8 @@ import { SharedModule } from '../shared/shared.module';
     BoardAdminComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class SchedulerModule { }

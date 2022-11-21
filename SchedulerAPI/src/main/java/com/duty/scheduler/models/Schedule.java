@@ -1,8 +1,9 @@
 package com.duty.scheduler.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "schedule")
@@ -25,19 +25,18 @@ public class Schedule {
     @JoinColumn(name="generatedby", nullable=false)
     private User generatedBy;
 	
-	@NotBlank
-	private Date month;
+	@Column(columnDefinition = "DATE")
+	private LocalDate month;
 	
-	@NotBlank
-	private Date generatedDateTime;
+	@Column(columnDefinition = "DATE")
+	private LocalDate generatedDateTime;
 	
-	@NotBlank
 	private Boolean valid;
 
 	@OneToMany(mappedBy="schedule", fetch = FetchType.LAZY)
     private Set<UserDuty> userDuties;
 	
-	public Schedule(User generatedBy, @NotBlank Date month, @NotBlank Date generatedDateTime, @NotBlank Boolean valid) {
+	public Schedule(User generatedBy, LocalDate month, LocalDate generatedDateTime, Boolean valid) {
 		super();
 		this.generatedBy = generatedBy;
 		this.month = month;
@@ -57,19 +56,19 @@ public class Schedule {
 		this.id = id;
 	}
 
-	public Date getMonth() {
+	public LocalDate getMonth() {
 		return month;
 	}
 
-	public void setMonth(Date month) {
+	public void setMonth(LocalDate month) {
 		this.month = month;
 	}
 
-	public Date getGeneratedDateTime() {
+	public LocalDate getGeneratedDateTime() {
 		return generatedDateTime;
 	}
 
-	public void setGeneratedDateTime(Date generatedDateTime) {
+	public void setGeneratedDateTime(LocalDate generatedDateTime) {
 		this.generatedDateTime = generatedDateTime;
 	}
 
