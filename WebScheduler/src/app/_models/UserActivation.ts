@@ -1,6 +1,6 @@
 export interface IUserActivation {
     userid: number;
-    username: number;
+    username: String;
     month: Date;
     active: boolean;
 }

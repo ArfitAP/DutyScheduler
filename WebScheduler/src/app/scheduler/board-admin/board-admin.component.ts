@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ISchedule } from 'src/app/_models/Schedule';
 import { IUserActivation } from 'src/app/_models/UserActivation';
+import { IUserRole } from 'src/app/_models/UserRole';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
 
@@ -24,6 +25,9 @@ export class BoardAdminComponent implements OnInit {
   userId = 0;
   nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
   selectedMonth = this.nextMonth;
+
+  username: string = '';
+  requestedUser: IUserRole | null = null;
 
   form: FormGroup = this.fb.group({
     month: [new Date(), Validators.required]
@@ -93,6 +97,23 @@ export class BoardAdminComponent implements OnInit {
   generateSchedule() : void {
     let requestedMonth = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd'); 
 
+    this.http.get("http://localhost:180/api/test/schedule/generateSchedule/" + requestedMonth + "/" + this.userId, { responseType: 'text' })
+                .subscribe({
+                   next: data => {
+                    let res : Boolean = JSON.parse(data);
+
+                    if(res == true)
+                    {
+                      alert("Raspored je generiran");
+                      this.getDataForMonth();
+                    }
+                    else alert("Pogreška !");
+                   },
+                   error: err => {
+                    alert("Pogreška !");
+                   }
+                 });
+
     console.log(requestedMonth);
 
   }
@@ -116,6 +137,40 @@ export class BoardAdminComponent implements OnInit {
                   }
                 });
 
+  }
+
+  getUserRole() : void {
+    if(this.username.length == 0) return;
+
+    this.http.get("http://localhost:180/api/test/schedule/getUserRole/" + this.username, { responseType: 'text' })
+                .subscribe({
+                   next: data => {
+                     this.requestedUser = JSON.parse(data);
+                   },
+                   error: err => {
+                     
+                   }
+                 });
+  }
+
+  setAdmin() : void {
+    this.http.post("http://localhost:180/api/test/schedule/setUserRole/", this.requestedUser, { responseType: 'text' })
+    .subscribe({
+       next: data => {
+         let res : Boolean = JSON.parse(data);
+
+         if(res == true)
+         {
+           alert("Korisnik je spremljen");
+           this.requestedUser = null;
+           this.username = '';
+         }
+         else alert("Pogreška !");
+       },
+       error: err => {
+         alert("Pogreška !");
+       }
+     });
   }
 
 }

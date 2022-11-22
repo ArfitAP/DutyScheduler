@@ -1,6 +1,8 @@
 package com.duty.scheduler.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -28,20 +30,21 @@ public class Schedule {
 	@Column(columnDefinition = "DATE")
 	private LocalDate month;
 	
-	@Column(columnDefinition = "DATE")
-	private LocalDate generatedDateTime;
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime generatedDateTime;
 	
 	private Boolean valid;
 
 	@OneToMany(mappedBy="schedule", fetch = FetchType.LAZY)
     private Set<UserDuty> userDuties;
 	
-	public Schedule(User generatedBy, LocalDate month, LocalDate generatedDateTime, Boolean valid) {
+	public Schedule(User generatedBy, LocalDate month, LocalDateTime generatedDateTime, Boolean valid) {
 		super();
 		this.generatedBy = generatedBy;
 		this.month = month;
 		this.generatedDateTime = generatedDateTime;
 		this.valid = valid;
+		this.userDuties = new HashSet<UserDuty>();
 	}
 
 	public Schedule() {
@@ -64,11 +67,11 @@ public class Schedule {
 		this.month = month;
 	}
 
-	public LocalDate getGeneratedDateTime() {
+	public LocalDateTime getGeneratedDateTime() {
 		return generatedDateTime;
 	}
 
-	public void setGeneratedDateTime(LocalDate generatedDateTime) {
+	public void setGeneratedDateTime(LocalDateTime generatedDateTime) {
 		this.generatedDateTime = generatedDateTime;
 	}
 

@@ -1,6 +1,7 @@
 package com.duty.scheduler.DTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,13 +15,13 @@ public class ScheduleDTO {
 	
 	private LocalDate month;
 	
-	private LocalDate generatedDateTime;
+	private LocalDateTime generatedDateTime;
 	
 	private Boolean valid;
 
     private Set<UserDuty> userDuties;
 
-	public ScheduleDTO(Integer id, String generatedByUser, LocalDate month, LocalDate generatedDateTime, Boolean valid,
+	public ScheduleDTO(Integer id, String generatedByUser, LocalDate month, LocalDateTime generatedDateTime, Boolean valid,
 			Set<UserDuty> userDuties) {
 		this.id = id;
 		this.generatedByUser = generatedByUser;
@@ -70,11 +71,11 @@ public class ScheduleDTO {
 		this.month = month;
 	}
 
-	public LocalDate getGeneratedDateTime() {
+	public LocalDateTime getGeneratedDateTime() {
 		return generatedDateTime;
 	}
 
-	public void setGeneratedDateTime(LocalDate generatedDateTime) {
+	public void setGeneratedDateTime(LocalDateTime generatedDateTime) {
 		this.generatedDateTime = generatedDateTime;
 	}
 
