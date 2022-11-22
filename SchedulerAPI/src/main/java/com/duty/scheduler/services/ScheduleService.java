@@ -1,17 +1,30 @@
 package com.duty.scheduler.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.duty.scheduler.DTO.ActiveUsersDTO;
+import com.duty.scheduler.DTO.ScheduleDTO;
 import com.duty.scheduler.DTO.UserApplicationDTO;
+import com.duty.scheduler.DTO.UserRoleDTO;
 import com.duty.scheduler.models.ApplicationDay;
+import com.duty.scheduler.models.ERole;
+import com.duty.scheduler.models.Role;
+import com.duty.scheduler.models.Schedule;
 import com.duty.scheduler.models.User;
+import com.duty.scheduler.models.UserActive;
 import com.duty.scheduler.models.UserApplication;
 import com.duty.scheduler.repository.ApplicationDayRepository;
 import com.duty.scheduler.repository.ApplicationRepository;
+import com.duty.scheduler.repository.RoleRepository;
+import com.duty.scheduler.repository.ScheduleRepository;
 import com.duty.scheduler.repository.UserActiveRepository;
 import com.duty.scheduler.repository.UserRepository;
 
@@ -29,6 +42,12 @@ public class ScheduleService implements IScheduleService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	RoleRepository roleRepository;
+	
+	@Autowired
+	ScheduleRepository scheduleRepository;
 	
 	@Override
 	public UserApplicationDTO getApplicationsInMonthForUser(Long userId, LocalDate month) {
@@ -85,6 +104,143 @@ public class ScheduleService implements IScheduleService {
 		{
 			return false;
 		}		
+	}
+
+	@Override
+	public ScheduleDTO getScheduleForMonth(LocalDate month) {
+		ScheduleDTO schedule = scheduleRepository.getScheduleForMonth(month);
+		if(schedule == null) schedule = new ScheduleDTO();
+		
+		return schedule;
+	}
+
+	@Override
+	public List<ActiveUsersDTO> getUsersListForActivation(LocalDate month) {
+
+		List<ActiveUsersDTO> res = new ArrayList<ActiveUsersDTO>();
+		
+		List<User> users = userRepository.findAll();
+		
+		for(User user : users)
+		{
+			boolean userActive = userActiveRepository.existsUserActive(user.getId(), month);
+			
+			res.add(new ActiveUsersDTO(user.getId(), user.getUsername(), month, userActive));
+		}
+		
+		return res;
+	}
+
+	@Override
+	public boolean updateUserActivesInMonth(LocalDate month, Integer userid, List<ActiveUsersDTO> userActives) {
+		try
+		{
+			List<UserActive> oldActives = userActiveRepository.findByMonth(month);	
+			
+			userActiveRepository.deleteAll(oldActives);
+				
+			for(ActiveUsersDTO au : userActives)
+			{
+				if(au.isActive())
+				{
+					User user = userRepository.getReferenceById(au.getUserid());
+					User activatedBy = userRepository.getReferenceById(Long.parseLong(userid.toString()));
+					
+					UserActive userActive = new UserActive(user, activatedBy, month);
+									
+					userActiveRepository.save(userActive);
+				}
+			}
+			
+			userActiveRepository.flush();
+			
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}		
+	}
+
+	@Override
+	public Optional<UserRoleDTO> getUserRole(String username) {
+
+		Optional<User> user = userRepository.findByUsername(username);
+		Optional<Role> adminrole = roleRepository.findByName(ERole.ROLE_ADMIN);
+		
+		if(user.isPresent())
+		{			
+			if(user.get().getRoles().contains(adminrole.get())) return Optional.of(new UserRoleDTO(username, true));
+			else return Optional.of(new UserRoleDTO(username, false));
+		}
+		return null;
+	}
+
+	@Override
+	public boolean setUserRole(UserRoleDTO userRole) {
+		
+		Optional<User> user = userRepository.findByUsername(userRole.getUsername());
+		Optional<Role> adminrole = roleRepository.findByName(ERole.ROLE_ADMIN);
+		Optional<Role> userrole = roleRepository.findByName(ERole.ROLE_USER);
+		
+		if(user.isPresent())
+		{
+			User us = user.get();
+			if(userRole.isActive())
+			{
+				if(us.getRoles().contains(adminrole.get()) == false) 
+				{
+					Set<Role> newroles = new HashSet<Role>();
+					newroles.add(adminrole.get());
+					newroles.add(userrole.get());
+					us.setRoles(newroles);
+				}
+			}
+			else
+			{
+				if(us.getRoles().contains(adminrole.get()) == true) 
+				{
+					Set<Role> newroles = new HashSet<Role>();
+					newroles.add(userrole.get());
+					us.setRoles(newroles);
+				}
+			}
+
+			userRepository.save(us);
+			userRepository.flush();
+			return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean generateSchedule(LocalDate month, Integer userid) {
+
+		try
+		{
+			User generatedBy = userRepository.getReferenceById(Long.parseLong(userid.toString()));
+			
+			List<Schedule> schedules = scheduleRepository.findByMonth(month);
+			
+			for(Schedule sch : schedules)
+			{
+				sch.setValid(false);
+			}
+			
+			List<UserActive> activeUsers = userActiveRepository.findByMonth(month);
+			List<UserApplication> userApplications = applicationRepository.findByMonth(month);			
+					
+			Schedule newSchedule = Utils.generateSchedule(month, generatedBy, activeUsers, userApplications);
+			scheduleRepository.save(newSchedule);
+			scheduleRepository.flush();
+			
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}	
 	}
 	
 }

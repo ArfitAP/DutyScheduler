@@ -1,5 +1,49 @@
 <div class="container">
-    <header class="jumbotron">
-        <p>{{ content }}</p>
-    </header>
+
+    <form [formGroup]="form" (ngSubmit)="getDataForMonth()">  
+             
+        <div class="form-group">  
+            <label for="month">Mjesec:</label>  
+            <select formControlName="month" class="form-control">  
+                <option *ngFor="let mon of monthList" [value]="mon.value">{{mon.viewValue}}</option>  
+            </select>  
+            <div *ngIf="form.get('month')?.touched && form.get('month')?.invalid" class="alert alert-danger">  
+                <div *ngIf="form.get('month')?.errors">Mjesec je obavezan za odabir.</div>  
+            </div>  
+        </div>  
+         
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Dohvati</button>  
+    </form>  
+
+    <div>
+        <div *ngIf="!schedule.valid">
+            <p>Raspored za mjesec {{selectedMonth | date: 'MM.yyyy.'}} nije generiran</p>
+        </div>
+        <div *ngIf="schedule.valid">
+            <p>Raspored za mjesec {{selectedMonth | date: 'MM.yyyy.'}} je generirao korisnik {{schedule.generatedByUser}} dana {{schedule.generatedDateTime | date: 'dd.MM.yyyy. HH:mm'}}</p>
+        </div>
+    </div>
+    <button class="btn btn-primary" (click)="generateSchedule()">Generiraj raspored</button>  
+
+    <div>
+        <p>Korisnici aktivni u mjesecu {{selectedMonth | date: 'MM.yyyy.'}}:</p>
+
+        <div>
+            <div *ngFor="let user of userActivations">
+                <input type="checkbox" [(ngModel)]="user.active"> {{user.username}}
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="saveUsers()">Spremi</button>
+    </div>
+
+    <div>
+        <p>
+            <input type="text" id="username" name="username" [(ngModel)]="username">
+            <button class="btn btn-primary" type="button" (click)="getUserRole()">Dohvati korisnika</button>
+        </p>
+        <p *ngIf="requestedUser">
+            Admin: <input type="checkbox" [(ngModel)]="requestedUser.active">
+            <button class="btn btn-primary" type="button" (click)="setAdmin()">Spremi</button>
+        </p>
+    </div>
 </div>

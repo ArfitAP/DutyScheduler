@@ -19,4 +19,6 @@ public interface ApplicationRepository extends JpaRepository<UserApplication, Lo
 	@Query(value = "SELECT ua FROM UserApplication ua JOIN ua.user u WHERE u.id = ?1 AND ua.month = ?2")
 	List<UserApplication> findApplicationsInMonthForUser(Long userId, LocalDate month);
 	
+	List<UserApplication> findByMonth(LocalDate month);
+	
 }

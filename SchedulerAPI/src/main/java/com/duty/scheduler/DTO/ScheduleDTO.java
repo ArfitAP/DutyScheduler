@@ -1,54 +1,50 @@
-package com.duty.scheduler.models;
+package com.duty.scheduler.DTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import com.duty.scheduler.models.Schedule;
+import com.duty.scheduler.models.UserDuty;
 
-@Entity
-@Table(name = "schedule")
-public class Schedule {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ScheduleDTO {
 	private Integer id;
 	
-	@ManyToOne
-    @JoinColumn(name="generatedby", nullable=false)
-    private User generatedBy;
+    private String generatedByUser;
 	
-	@Column(columnDefinition = "DATE")
 	private LocalDate month;
 	
-	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime generatedDateTime;
 	
 	private Boolean valid;
 
-	@OneToMany(mappedBy="schedule", fetch = FetchType.LAZY)
     private Set<UserDuty> userDuties;
-	
-	public Schedule(User generatedBy, LocalDate month, LocalDateTime generatedDateTime, Boolean valid) {
-		super();
-		this.generatedBy = generatedBy;
+
+	public ScheduleDTO(Integer id, String generatedByUser, LocalDate month, LocalDateTime generatedDateTime, Boolean valid,
+			Set<UserDuty> userDuties) {
+		this.id = id;
+		this.generatedByUser = generatedByUser;
 		this.month = month;
 		this.generatedDateTime = generatedDateTime;
 		this.valid = valid;
-		this.userDuties = new HashSet<UserDuty>();
+		this.userDuties = userDuties;
 	}
-
-	public Schedule() {
-		super();
+	
+	public ScheduleDTO(Schedule sch, String generatedByUser) {
+		this.id = sch.getId();
+		this.generatedByUser = generatedByUser;
+		this.month = sch.getMonth();
+		this.generatedDateTime = sch.getGeneratedDateTime();
+		this.valid = sch.getValid();
+		this.userDuties = sch.getUserDuties();
+	}
+	
+	public ScheduleDTO() {
+		this.id = 0;
+		this.generatedByUser = "";
+		this.valid = false;
+		this.userDuties = new HashSet<UserDuty>();
 	}
 
 	public Integer getId() {
@@ -57,6 +53,14 @@ public class Schedule {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getGeneratedByUser() {
+		return generatedByUser;
+	}
+
+	public void setGeneratedByUser(String generatedByUser) {
+		this.generatedByUser = generatedByUser;
 	}
 
 	public LocalDate getMonth() {
@@ -89,7 +93,7 @@ public class Schedule {
 
 	public void setUserDuties(Set<UserDuty> userDuties) {
 		this.userDuties = userDuties;
-	} 
-	
-	
+	}
+    
+    
 }

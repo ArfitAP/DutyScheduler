@@ -1,7 +1,8 @@
 package com.duty.scheduler.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "user_duty")
@@ -26,10 +26,10 @@ public class UserDuty {
     @JoinColumn(name="schedule_id", nullable=false)
     private Schedule schedule;
 	
-	@NotBlank
-	private Date day;
+	@Column(columnDefinition = "DATE")
+	private LocalDate day;
 
-	public UserDuty(User user, Schedule schedule, @NotBlank Date day) {
+	public UserDuty(User user, Schedule schedule, LocalDate day) {
 		super();
 		this.user = user;
 		this.schedule = schedule;
@@ -48,11 +48,11 @@ public class UserDuty {
 		this.id = id;
 	}
 
-	public Date getDay() {
+	public LocalDate getDay() {
 		return day;
 	}
 
-	public void setDay(Date day) {
+	public void setDay(LocalDate day) {
 		this.day = day;
 	}
 	
