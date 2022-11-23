@@ -110,7 +110,8 @@ public class ScheduleService implements IScheduleService {
 	public ScheduleDTO getScheduleForMonth(LocalDate month) {
 		ScheduleDTO schedule = scheduleRepository.getScheduleForMonth(month);
 		if(schedule == null) schedule = new ScheduleDTO();
-		
+		else schedule.setUserDuties(new HashSet<>(scheduleRepository.getUserDutiesForSchedule(schedule.getId())));
+			
 		return schedule;
 	}
 

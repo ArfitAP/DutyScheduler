@@ -48,6 +48,7 @@ export class BoardUserComponent implements OnInit {
       const numOfDays = this.getNumberOfDaysInMonth(this.nextMonth.getMonth(), this.nextMonth.getFullYear());
 
       var dayofweekfirstday = this.nextMonth.getDay();
+      if(dayofweekfirstday == 0) dayofweekfirstday = 7;
       var week = [];
       var currentDay = 1;
 

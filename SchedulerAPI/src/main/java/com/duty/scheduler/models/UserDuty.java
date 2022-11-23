@@ -55,6 +55,6 @@ public class UserDuty {
 	public void setDay(LocalDate day) {
 		this.day = day;
 	}
-	
+
 	
 }

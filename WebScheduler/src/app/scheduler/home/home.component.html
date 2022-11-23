@@ -1,5 +1,44 @@
 <div class="container">
-    <header class="jumbotron">
-        <p>{{ content }}</p>
-    </header>
+    
+    <form [formGroup]="form" (ngSubmit)="getDataForMonth()">  
+             
+        <div class="form-group">  
+            <label for="month">Mjesec:</label>  
+            <select formControlName="month" class="form-control">  
+                <option *ngFor="let mon of monthList" [value]="mon.value">{{mon.viewValue}}</option>  
+            </select>  
+            <div *ngIf="form.get('month')?.touched && form.get('month')?.invalid" class="alert alert-danger">  
+                <div *ngIf="form.get('month')?.errors">Mjesec je obavezan za odabir.</div>  
+            </div>  
+        </div>  
+         
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Dohvati</button>  
+    </form>  
+
+
+    <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td *ngFor="let i of [0,1,2,3,4,5,6]">{{dayNames[i]}}</td>
+                </tr>
+                <tr *ngFor="let weeks of MonthWeeks">
+                    <td *ngFor="let days of weeks">
+                        <p *ngIf="!days.hidden">
+                            <span type="button" [title]="days.user" [style.background-color]="days.color">
+                                {{days.date | date: 'dd'}}
+                            </span>
+                        </p>                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <div *ngFor="let user of Usernames">
+            <div class="box" [style.background-color]="UserColors.get(user)"></div> {{user}}
+        </div>
+    </div>
+
 </div>
