@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ISchedule } from 'src/app/_models/Schedule';
+import { ColorService } from 'src/app/_services/color.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
 
@@ -45,7 +46,7 @@ export class HomeComponent implements OnInit {
   Usernames: string[] = [];
   UserColors = new Map<string, string>();
 
-  constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private datePipe: DatePipe, private fb: FormBuilder) { }
+  constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private datePipe: DatePipe, private fb: FormBuilder, private colorService: ColorService) { }
 
   ngOnInit(): void {
     
@@ -131,8 +132,10 @@ export class HomeComponent implements OnInit {
 
                     this.UserColors.clear();
 
+                    this.colorService.resetIndex();
+
                     this.Usernames.forEach(username => {
-                      this.UserColors.set(username, '#'+(0x1000000+Math.random()*0xffffff).toString(16).substring(0,6));
+                      this.UserColors.set(username, this.colorService.getNextColor());
                     });
 
                     this.MonthWeeks.forEach( (value) => {
