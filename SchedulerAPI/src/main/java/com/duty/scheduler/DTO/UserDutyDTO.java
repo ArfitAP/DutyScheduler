@@ -12,12 +12,15 @@ public class UserDutyDTO {
     private String username;
 
 	private LocalDate day;
+	
+	private Integer hours;
 
-	public UserDutyDTO(Integer id, String username, LocalDate day) {
+	public UserDutyDTO(Integer id, String username, LocalDate day, Integer hours) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.day = day;
+		this.hours = hours;
 	}
 	
 	public UserDutyDTO(UserDuty userDuty, String username) {
@@ -25,6 +28,7 @@ public class UserDutyDTO {
 		this.id = userDuty.getId();
 		this.username = username;
 		this.day = userDuty.getDay();
+		this.hours = userDuty.getHours();
 	}
 
 	public UserDutyDTO() {
@@ -53,6 +57,14 @@ public class UserDutyDTO {
 
 	public void setDay(LocalDate day) {
 		this.day = day;
+	}
+
+	public Integer getHours() {
+		return hours;
+	}
+
+	public void setHours(Integer hours) {
+		this.hours = hours;
 	}
 	
 	

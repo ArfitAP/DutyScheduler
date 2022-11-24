@@ -16,16 +16,20 @@ import com.duty.scheduler.DTO.UserApplicationDTO;
 import com.duty.scheduler.DTO.UserRoleDTO;
 import com.duty.scheduler.models.ApplicationDay;
 import com.duty.scheduler.models.ERole;
+import com.duty.scheduler.models.Holyday;
 import com.duty.scheduler.models.Role;
 import com.duty.scheduler.models.Schedule;
 import com.duty.scheduler.models.User;
 import com.duty.scheduler.models.UserActive;
 import com.duty.scheduler.models.UserApplication;
+import com.duty.scheduler.models.UserDuty;
 import com.duty.scheduler.repository.ApplicationDayRepository;
 import com.duty.scheduler.repository.ApplicationRepository;
+import com.duty.scheduler.repository.HolydayRepository;
 import com.duty.scheduler.repository.RoleRepository;
 import com.duty.scheduler.repository.ScheduleRepository;
 import com.duty.scheduler.repository.UserActiveRepository;
+import com.duty.scheduler.repository.UserDutyRepository;
 import com.duty.scheduler.repository.UserRepository;
 
 @Service 
@@ -48,6 +52,12 @@ public class ScheduleService implements IScheduleService {
 	
 	@Autowired
 	ScheduleRepository scheduleRepository;
+	
+	@Autowired
+	UserDutyRepository userDutyRepository;
+	
+	@Autowired
+	HolydayRepository holydayRepository;
 	
 	@Override
 	public UserApplicationDTO getApplicationsInMonthForUser(Long userId, LocalDate month) {
@@ -231,10 +241,18 @@ public class ScheduleService implements IScheduleService {
 			
 			List<UserActive> activeUsers = userActiveRepository.findByMonth(month);
 			List<UserApplication> userApplications = applicationRepository.findByMonth(month);			
-					
-			Schedule newSchedule = Utils.generateSchedule(month, generatedBy, activeUsers, userApplications);
+			List<Holyday> holydays = holydayRepository.findByMonth(month);
+			
+			Schedule newSchedule = Utils.generateSchedule(month, generatedBy, activeUsers, userApplications, holydays);
+			
 			scheduleRepository.save(newSchedule);
+			for(UserDuty duty : newSchedule.getUserDuties())
+			{
+				userDutyRepository.save(duty);
+			}
+			
 			scheduleRepository.flush();
+			userDutyRepository.flush();		
 			
 			return true;
 		}
@@ -242,6 +260,11 @@ public class ScheduleService implements IScheduleService {
 		{
 			return false;
 		}	
+	}
+
+	@Override
+	public List<Holyday> getHolydaysInMonth(LocalDate month) {
+		return holydayRepository.findByMonth(month);
 	}
 	
 }

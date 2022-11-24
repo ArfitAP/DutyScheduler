@@ -7,40 +7,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "user_duty")
-public class UserDuty {
+@Table(name = "holyday")
+public class Holyday {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    private User user;
-	
-	@ManyToOne
-    @JoinColumn(name="schedule_id", nullable=false)
-    private Schedule schedule;
-	
 	@Column(columnDefinition = "DATE")
 	private LocalDate day;
 	
-	@Column()
-	private Integer hours;
+	@Column(columnDefinition = "DATE")
+	private LocalDate month;
 
-	public UserDuty(User user, Schedule schedule, LocalDate day, Integer hours) {
+	public Holyday(Integer id, LocalDate day, LocalDate month) {
 		super();
-		this.user = user;
-		this.schedule = schedule;
+		this.id = id;
 		this.day = day;
-		this.hours = hours;
+		this.month = month;
 	}
 
-	public UserDuty() {
+	public Holyday() {
 		super();
 	}
 
@@ -60,13 +50,13 @@ public class UserDuty {
 		this.day = day;
 	}
 
-	public Integer getHours() {
-		return hours;
+	public LocalDate getMonth() {
+		return month;
 	}
 
-	public void setHours(Integer hours) {
-		this.hours = hours;
+	public void setMonth(LocalDate month) {
+		this.month = month;
 	}
-
+	
 	
 }

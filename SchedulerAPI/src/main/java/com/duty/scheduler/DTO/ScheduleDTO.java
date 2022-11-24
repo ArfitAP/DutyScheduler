@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.duty.scheduler.models.Schedule;
-import com.duty.scheduler.models.UserDuty;
 
 public class ScheduleDTO {
 	private Integer id;

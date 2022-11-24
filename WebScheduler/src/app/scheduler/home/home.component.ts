@@ -43,8 +43,10 @@ export class HomeComponent implements OnInit {
 
   MonthWeeks: any[] = [];
 
+  Holydays: any[] = [];
   Usernames: string[] = [];
   UserColors = new Map<string, string>();
+  UserHours = new Map<string, number>();
 
   constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private datePipe: DatePipe, private fb: FormBuilder, private colorService: ColorService) { }
 
@@ -85,7 +87,9 @@ export class HomeComponent implements OnInit {
         hidden: true,
         date: null,
         color: '',
-        user: ''
+        user: '',
+        holyday: false,
+        hours: 0
       });
     }
 
@@ -102,7 +106,9 @@ export class HomeComponent implements OnInit {
         hidden: false,
         date: this.datePipe.transform(new Date(this.selectedMonth.getFullYear(), this.selectedMonth.getMonth(), i), 'yyyy-MM-dd'),
         color: '',
-        user: ''
+        user: '',
+        holyday: false,
+        hours: 0
       });       
     }
 
@@ -114,7 +120,9 @@ export class HomeComponent implements OnInit {
           hidden: true,
           date: null,
           color: '',
-          user: ''
+          user: '',
+          holyday: false,
+          hours: 0
         });
       }
 
@@ -131,21 +139,26 @@ export class HomeComponent implements OnInit {
                     });
 
                     this.UserColors.clear();
+                    this.UserHours.clear();
 
                     this.colorService.resetIndex();
 
                     this.Usernames.forEach(username => {
                       this.UserColors.set(username, this.colorService.getNextColor());
+                      this.UserHours.set(username, 0);
                     });
-
+                 
                     this.MonthWeeks.forEach( (value) => {
-                      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; color: string | undefined; user: string; }) => {
+                      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; color: string | undefined; user: string; holyday: boolean; hours: number;}) => {
                         
                         var duty = this.schedule.userDuties.find(duty => duty.day == dayinweek.date);
                         if(duty != undefined) 
                         {                        
                           dayinweek.user = duty.username;
                           dayinweek.color = this.UserColors.get(duty.username);
+                          dayinweek.hours = duty.hours;
+
+                          this.UserHours.set(duty.username, this.UserHours.get(duty.username) + duty.hours); 
                         }
 
                       });
@@ -156,6 +169,30 @@ export class HomeComponent implements OnInit {
                     
                   }
                 });
+
+    this.http.get("http://localhost:180/api/test/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
+                .subscribe({
+                   next: data => {
+
+                     this.Holydays = JSON.parse(data).map((item: { day: Date; }) => item.day);;  
+
+                     console.log(this.Holydays);
+
+                     this.MonthWeeks.forEach( (value) => {
+                      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; color: string | undefined; user: string; holyday: boolean; hours: number; }) => {
+
+                        if(this.Holydays.includes(dayinweek.date) || dayinweek.dayNo >= 6) 
+                        {                        
+                          dayinweek.holyday = true;
+                        }
+
+                      });
+                    }); 
+                   },
+                   error: err => {
+                     this.Holydays = [];
+                   }
+                 });
   }
 
   getNumberOfDaysInMonth(month: number, year: number) : number {

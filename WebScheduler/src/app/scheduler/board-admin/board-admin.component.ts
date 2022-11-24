@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, timeout } from 'rxjs/operators';
 import { ISchedule } from 'src/app/_models/Schedule';
 import { IUserActivation } from 'src/app/_models/UserActivation';
 import { IUserRole } from 'src/app/_models/UserRole';
@@ -25,6 +26,7 @@ export class BoardAdminComponent implements OnInit {
   userId = 0;
   nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
   selectedMonth = this.nextMonth;
+  loading = false;
 
   username: string = '';
   requestedUser: IUserRole | null = null;
@@ -95,9 +97,13 @@ export class BoardAdminComponent implements OnInit {
   }
   
   generateSchedule() : void {
+    this.loading = true;
     let requestedMonth = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd'); 
-
+    
     this.http.get("http://localhost:180/api/test/schedule/generateSchedule/" + requestedMonth + "/" + this.userId, { responseType: 'text' })
+                .pipe(
+                  timeout(3600000)
+                )            
                 .subscribe({
                    next: data => {
                     let res : Boolean = JSON.parse(data);
@@ -108,9 +114,11 @@ export class BoardAdminComponent implements OnInit {
                       this.getDataForMonth();
                     }
                     else alert("Pogreška !");
+                    this.loading = false;
                    },
                    error: err => {
                     alert("Pogreška !");
+                    this.loading = false;
                    }
                  });
 

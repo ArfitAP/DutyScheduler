@@ -6,3 +6,7 @@
     border: 1px solid black;
     clear: both;
   }
+
+.font-red {
+  color: red;
+}

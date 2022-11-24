@@ -33,6 +33,7 @@ export class BoardUserComponent implements OnInit {
   userDays: Date[] = [];
 
   nextMonthWeeks: any[] = [];
+  Holydays: any[] = [];
 
   constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private datePipe: DatePipe) { }
 
@@ -57,7 +58,8 @@ export class BoardUserComponent implements OnInit {
           dayNo: currentDay++,
           hidden: true,
           date: null,
-          selected: false
+          selected: false,
+          holyday: false
         });
       }
 
@@ -73,7 +75,8 @@ export class BoardUserComponent implements OnInit {
           dayNo: currentDay++,
           hidden: false,
           date: this.datePipe.transform(new Date(this.nextMonth.getFullYear(), this.nextMonth.getMonth(), i), 'yyyy-MM-dd'),
-          selected: false
+          selected: false,
+          holyday: false
         });       
       }
 
@@ -84,7 +87,8 @@ export class BoardUserComponent implements OnInit {
             dayNo: currentDay++,
             hidden: true,
             date: null,
-            selected: false
+            selected: false,
+            holyday: false
           });
         }
 
@@ -102,7 +106,7 @@ export class BoardUserComponent implements OnInit {
                       this.userDays = this.userApplication.applicationDays.map((item: { day: Date; }) => item.day);
 
                       this.nextMonthWeeks.forEach( (value) => {
-                        value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; }) => {
+                        value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; holyday: boolean; }) => {
                           if(this.userDays.includes(dayinweek.date))
                           {
                             dayinweek.selected = true;
@@ -115,14 +119,33 @@ export class BoardUserComponent implements OnInit {
                       this.userDays = [];
                     }
 
-                    //console.log(this.nextMonthWeeks);
-                    //console.log(this.userDays);
-
                   },
                   error: err => {
                     this.userDays = [];
                   }
                 });
+
+      this.http.get("http://localhost:180/api/test/schedule/getHolydaysForMonth/" + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
+                .subscribe({
+                   next: data => {
+
+                    this.Holydays = JSON.parse(data).map((item: { day: Date; }) => item.day);;  
+
+                    this.nextMonthWeeks.forEach( (value) => {
+                      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; holyday: boolean; }) => {
+
+                        if(this.Holydays.includes(dayinweek.date) || dayinweek.dayNo >= 6) 
+                        {                        
+                          dayinweek.holyday = true;
+                        }
+
+                      });
+                    }); 
+                   },
+                   error: err => {
+                     this.Holydays = [];
+                   }
+                 });
 
     }
   }

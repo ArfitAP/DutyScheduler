@@ -25,8 +25,8 @@
                 <tr *ngFor="let weeks of MonthWeeks">
                     <td *ngFor="let days of weeks">
                         <p *ngIf="!days.hidden">
-                            <span type="button" [title]="days.user" [style.background-color]="days.color">
-                                {{days.date | date: 'dd'}}
+                            <span type="button" [title]="days.user" [style.background-color]="days.color" [ngClass]="{'font-red' : days.holyday}">
+                                {{days.date | date: 'dd'}} <br /> ({{days.hours}})
                             </span>
                         </p>                    
                     </td>
@@ -37,7 +37,7 @@
 
     <div>
         <div *ngFor="let user of Usernames">
-            <div class="box" [style.background-color]="UserColors.get(user)"></div> {{user}}
+            <div class="box" [style.background-color]="UserColors.get(user)"></div> {{user}} - {{UserHours.get(user)}} sati
         </div>
     </div>
 
