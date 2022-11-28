@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.duty.scheduler.models.Holyday;
 import com.duty.scheduler.models.Schedule;
 import com.duty.scheduler.models.User;
 import com.duty.scheduler.models.UserActive;
@@ -14,7 +15,7 @@ import com.duty.scheduler.models.UserDuty;
 
 public class Utils {
 
-	public static Schedule generateSchedule(LocalDate month, User generatedBy, List<UserActive> activeUsers, List<UserApplication> userApplications)
+	public static Schedule generateSchedule(LocalDate month, User generatedBy, List<UserActive> activeUsers, List<UserApplication> userApplications, List<Holyday> holydays)
 	{
 		/*for(UserActive ua : activeUsers)
 		{
@@ -30,7 +31,15 @@ public class Utils {
 		
 		Set<UserDuty> userDuties = new HashSet<UserDuty>();
 		
+		userDuties.add(new UserDuty(generatedBy, result, month, 8));
+		
 		result.setUserDuties(userDuties);
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
 		
 		return result;
 	}

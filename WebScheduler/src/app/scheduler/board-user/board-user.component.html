@@ -15,7 +15,7 @@
                 <tr *ngFor="let weeks of nextMonthWeeks">
                     <td *ngFor="let days of weeks">
                         <p *ngIf="!days.hidden">
-                            <button type="button" [ngClass]="{'background-selected' : days.selected}" (click)="dayClick(days.date)">
+                            <button type="button" [ngClass]="{'background-selected' : days.selected, 'font-red' : days.holyday}" (click)="dayClick(days.date)">
                                 {{days.date | date: 'dd'}}
                             </button>
                         </p>                    

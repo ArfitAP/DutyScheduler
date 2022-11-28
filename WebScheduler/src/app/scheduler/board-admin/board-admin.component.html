@@ -12,7 +12,7 @@
             </div>  
         </div>  
          
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Dohvati</button>  
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid || loading">Dohvati</button>  
     </form>  
 
     <div>
@@ -23,7 +23,10 @@
             <p>Raspored za mjesec {{selectedMonth | date: 'MM.yyyy.'}} je generirao korisnik {{schedule.generatedByUser}} dana {{schedule.generatedDateTime | date: 'dd.MM.yyyy. HH:mm'}}</p>
         </div>
     </div>
-    <button class="btn btn-primary" (click)="generateSchedule()">Generiraj raspored</button>  
+    <button class="btn btn-primary" (click)="generateSchedule()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Generiraj raspored
+    </button>  
 
     <div>
         <p>Korisnici aktivni u mjesecu {{selectedMonth | date: 'MM.yyyy.'}}:</p>

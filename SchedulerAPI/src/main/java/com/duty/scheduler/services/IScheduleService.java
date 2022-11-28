@@ -8,6 +8,7 @@ import com.duty.scheduler.DTO.ActiveUsersDTO;
 import com.duty.scheduler.DTO.ScheduleDTO;
 import com.duty.scheduler.DTO.UserApplicationDTO;
 import com.duty.scheduler.DTO.UserRoleDTO;
+import com.duty.scheduler.models.Holyday;
 
 public interface IScheduleService {
 	
@@ -26,4 +27,6 @@ public interface IScheduleService {
 	boolean setUserRole(UserRoleDTO userRole);
 	
 	boolean generateSchedule(LocalDate month, Integer userid);
+	
+	List<Holyday> getHolydaysInMonth(LocalDate month);
 }

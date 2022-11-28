@@ -26,6 +26,7 @@ public class ScheduleController {
 	@Autowired
 	ScheduleService scheduleService;
 	
+	
 	@GetMapping("/userapplications/{userid}/{mon}")
 	public ResponseEntity<?> userApplications(@PathVariable Long userid, @PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
@@ -80,6 +81,10 @@ public class ScheduleController {
 		return ResponseEntity.ok(scheduleService.generateSchedule(month, userid));
 	}
 	
-	
+	@GetMapping("/getHolydaysForMonth/{mon}")
+	public ResponseEntity<?> getHolydaysForMonth(@PathVariable String mon) {
+		LocalDate month = LocalDate.parse(mon);
+		return ResponseEntity.ok(scheduleService.getHolydaysInMonth(month));
+	}
 
 }

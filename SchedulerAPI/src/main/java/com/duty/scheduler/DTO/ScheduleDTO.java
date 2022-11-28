@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.duty.scheduler.models.Schedule;
-import com.duty.scheduler.models.UserDuty;
 
 public class ScheduleDTO {
 	private Integer id;
@@ -19,10 +18,10 @@ public class ScheduleDTO {
 	
 	private Boolean valid;
 
-    private Set<UserDuty> userDuties;
+    private Set<UserDutyDTO> userDuties;
 
 	public ScheduleDTO(Integer id, String generatedByUser, LocalDate month, LocalDateTime generatedDateTime, Boolean valid,
-			Set<UserDuty> userDuties) {
+			Set<UserDutyDTO> userDuties) {
 		this.id = id;
 		this.generatedByUser = generatedByUser;
 		this.month = month;
@@ -37,14 +36,14 @@ public class ScheduleDTO {
 		this.month = sch.getMonth();
 		this.generatedDateTime = sch.getGeneratedDateTime();
 		this.valid = sch.getValid();
-		this.userDuties = sch.getUserDuties();
+		this.userDuties = new HashSet<UserDutyDTO>();
 	}
 	
 	public ScheduleDTO() {
 		this.id = 0;
 		this.generatedByUser = "";
 		this.valid = false;
-		this.userDuties = new HashSet<UserDuty>();
+		this.userDuties = new HashSet<UserDutyDTO>();
 	}
 
 	public Integer getId() {
@@ -87,11 +86,11 @@ public class ScheduleDTO {
 		this.valid = valid;
 	}
 
-	public Set<UserDuty> getUserDuties() {
+	public Set<UserDutyDTO> getUserDuties() {
 		return userDuties;
 	}
 
-	public void setUserDuties(Set<UserDuty> userDuties) {
+	public void setUserDuties(Set<UserDutyDTO> userDuties) {
 		this.userDuties = userDuties;
 	}
     
