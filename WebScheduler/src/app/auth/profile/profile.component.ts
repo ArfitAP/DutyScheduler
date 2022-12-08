@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   userId = 0;
 
   dayNames: string[] = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'];
+  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
 
   thisMonth = new Date(new Date().setMonth(new Date().getMonth(), 1));
   nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
@@ -49,7 +50,7 @@ export class ProfileComponent implements OnInit {
     this.userId = this.currentUser.id;
 
     for (let i = 1; i >= -10; i--) {
-      this.monthList.push({value: new Date(new Date().setMonth(new Date().getMonth() + i, 1)), viewValue: this.datePipe.transform(new Date(new Date().setMonth(new Date().getMonth() + i, 1)), 'yyyy-MM') } );
+      this.monthList.push({value: new Date(new Date().setMonth(new Date().getMonth() + i, 1)), viewValue: this.monthNames[new Date(new Date().setMonth(new Date().getMonth() + i, 1)).getMonth()] + " " + this.datePipe.transform(new Date(new Date().setMonth(new Date().getMonth() + i, 1)), 'yyyy') } );
     }
     
     this.form.patchValue({month: this.thisMonth});

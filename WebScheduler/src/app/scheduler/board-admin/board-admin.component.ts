@@ -22,10 +22,13 @@ export interface SelectedMonth {
 })
 export class BoardAdminComponent implements OnInit {
 
+  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
+
   isLoggedIn = false;
   userId = 0;
   nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
   selectedMonth = this.nextMonth;
+  monthName = "";
   loading = false;
 
   username: string = '';
@@ -56,7 +59,7 @@ export class BoardAdminComponent implements OnInit {
       this.userId = this.tokenStorageService.getUser().id;
 
       for (let i = 1; i >= -10; i--) {
-        this.monthList.push({value: new Date(new Date().setMonth(new Date().getMonth() + i, 1)), viewValue: this.datePipe.transform(new Date(new Date().setMonth(new Date().getMonth() + i, 1)), 'yyyy-MM') } );
+        this.monthList.push({value: new Date(new Date().setMonth(new Date().getMonth() + i, 1)), viewValue: this.monthNames[new Date(new Date().setMonth(new Date().getMonth() + i, 1)).getMonth()] + " " + this.datePipe.transform(new Date(new Date().setMonth(new Date().getMonth() + i, 1)), 'yyyy') } );
       }
       
       this.form.patchValue({month: this.nextMonth});
@@ -70,8 +73,9 @@ export class BoardAdminComponent implements OnInit {
     this.selectedMonth = this.form.value.month;
 
     let requestedMonth = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd'); 
+    this.monthName = this.monthNames[Number(this.datePipe.transform(this.selectedMonth, 'MM')) - 1];
 
-    console.log(requestedMonth);
+    //console.log(requestedMonth);
 
     this.http.get("http://localhost:180/api/test/schedule/schedule/" + requestedMonth, { responseType: 'text' })
                .subscribe({
