@@ -3,22 +3,22 @@
     <a href="#" class="navbar-brand">Duty Scheduler</a>
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
       <li class="nav-item">
-        <a href="/home" class="nav-link" routerLink="home">Home </a>
+        <a href="/home" class="nav-link" routerLink="home">Početna </a>
       </li>
       <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
+        <a href="/admin" class="nav-link" routerLink="admin">Administracija</a>
       </li>
       <li class="nav-item">
-        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">Pick dates for next month</a>
+        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">Odabir termina za sljedeći mjesec</a>
       </li>
     </ul>
 
     <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
       <li class="nav-item">
-        <a href="/register" class="nav-link" routerLink="register">Sign Up</a>
+        <a href="/register" class="nav-link" routerLink="register">Registracija</a>
       </li>
       <li class="nav-item">
-        <a href="/login" class="nav-link" routerLink="login">Login</a>
+        <a href="/login" class="nav-link" routerLink="login">Prijava</a>
       </li>
     </ul>
 
@@ -27,7 +27,7 @@
         <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
       </li>
       <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">LogOut</a>
+        <a href class="nav-link" (click)="logout()">Odjava</a>
       </li>
     </ul>
   </nav>

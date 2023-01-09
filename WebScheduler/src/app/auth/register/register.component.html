@@ -13,7 +13,7 @@
         novalidate
       >
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">Korisničko ime</label>
           <input
             type="text"
             class="form-control"
@@ -25,12 +25,12 @@
             #username="ngModel"
           />
           <div class="alert-danger" *ngIf="username.errors && f.submitted">
-            <div *ngIf="username.errors['required']">Username is required</div>
+            <div *ngIf="username.errors['required']">Korisničko ime je obavezno</div>
             <div *ngIf="username.errors['minlength']">
-              Username must be at least 3 characters
+              Korisničko ime mora biti duljine minimalno 3 znaka
             </div>
             <div *ngIf="username.errors['maxlength']">
-              Username must be at most 20 characters
+              Korisničko ime može biti duljine najviše 20 znakova
             </div>
           </div>
         </div>
@@ -46,14 +46,14 @@
             #email="ngModel"
           />
           <div class="alert-danger" *ngIf="email.errors && f.submitted">
-            <div *ngIf="email.errors['required']">Email is required</div>
+            <div *ngIf="email.errors['required']">Email je obavezan</div>
             <div *ngIf="email.errors['email']">
-              Email must be a valid email address
+              Neispravan Email
             </div>
           </div>
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">Lozinka</label>
           <input
             type="password"
             class="form-control"
@@ -64,23 +64,23 @@
             #password="ngModel"
           />
           <div class="alert-danger" *ngIf="password.errors && f.submitted">
-            <div *ngIf="password.errors['required']">Password is required</div>
+            <div *ngIf="password.errors['required']">Lozinka je obavezna</div>
             <div *ngIf="password.errors['minlength']">
-              Password must be at least 6 characters
+              Lozinka mora biti duljine minimalno 6 znakova
             </div>
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block">Sign Up</button>
+          <button class="btn btn-primary btn-block">Registracija</button>
         </div>
   
         <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-          Signup failed!<br />{{ errorMessage }}
+          Pogreška !<br />{{ errorMessage }}
         </div>
       </form>
   
       <div class="alert alert-success" *ngIf="isSuccessful">
-        Your registration is successful!
+        Registracija uspješna !
       </div>
     </div>
   </div>
