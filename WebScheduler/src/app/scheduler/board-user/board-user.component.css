@@ -1,7 +1,38 @@
 .background-selected {
-    background-color: green;
+    background-color: rgb(90, 197, 90);
 }
 
 .font-red {
     color: red;
+}
+
+.calendar-table {
+    border: 1px solid #dddddd;
+}
+
+.pick-calendar th {
+    min-width: 110px;
+    height: 80px;
+    vertical-align: bottom;
+    text-align: center;
+}
+
+.pick-calendar td {
+    min-width: 110px;
+    height: 110px;    
+}
+
+.calendar-save-margin {
+    margin-top: 85px;
+}
+
+.cell-button {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.cell-font {
+    font-size: 20px;
+    font-weight: 700;
 }

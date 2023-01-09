@@ -1,52 +1,71 @@
 <div class="container">
 
-    <form [formGroup]="form" (ngSubmit)="getDataForMonth()">  
-             
-        <div class="form-group">  
-            <label for="month">Mjesec:</label>  
-            <select formControlName="month" class="form-control">  
-                <option *ngFor="let mon of monthList" [value]="mon.value">{{mon.viewValue}}</option>  
-            </select>  
-            <div *ngIf="form.get('month')?.touched && form.get('month')?.invalid" class="alert alert-danger">  
-                <div *ngIf="form.get('month')?.errors">Mjesec je obavezan za odabir.</div>  
-            </div>  
-        </div>  
-         
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid || loading">Dohvati</button>  
-    </form>  
+    <div class="row mt-4">
 
-    <div>
-        <div *ngIf="!schedule.valid">
-            <p>Raspored za mjesec {{selectedMonth | date: 'MM.yyyy.'}} nije generiran</p>
-        </div>
-        <div *ngIf="schedule.valid">
-            <p>Raspored za mjesec {{selectedMonth | date: 'MM.yyyy.'}} je generirao korisnik {{schedule.generatedByUser}} dana {{schedule.generatedDateTime | date: 'dd.MM.yyyy. HH:mm'}}</p>
-        </div>
+        <form class="w-100" [formGroup]="form" (ngSubmit)="getDataForMonth()">  
+
+             <div class="row">
+                <div class="col-8">
+                    <div class="form-group">  
+                        <label for="month">Mjesec:</label>  
+                        <select formControlName="month" class="form-control">  
+                            <option *ngFor="let mon of monthList" [value]="mon.value">{{mon.viewValue}}</option>  
+                        </select>  
+                        <div *ngIf="form.get('month')?.touched && form.get('month')?.invalid" class="alert alert-danger">  
+                            <div *ngIf="form.get('month')?.errors">Mjesec je obavezan za odabir.</div>  
+                        </div>  
+                    </div>  
+                </div>
+                <div class="col-4 mt-4 pt-2">
+                    <button class="btn btn-primary w-100" type="submit" [disabled]="!form.valid || loading">Dohvati</button> 
+                </div>
+             </div>
+
+        </form>  
+        
     </div>
-    <button class="btn btn-primary" (click)="generateSchedule()" [disabled]="loading">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        Generiraj raspored
-    </button>  
+    <div class="row">
+        <div class="col-8 p-0">
+            <div class="w-100">
+                <div *ngIf="!schedule.valid">
+                    <p>Raspored za mjesec {{monthName}} {{selectedMonth | date: 'yyyy.'}} nije generiran</p>
+                </div>
+                <div *ngIf="schedule.valid">
+                    <p>Raspored za mjesec {{monthName}} {{selectedMonth | date: 'yyyy.'}} je generirao korisnik {{schedule.generatedByUser}} dana {{schedule.generatedDateTime | date: 'dd.MM.yyyy. HH:mm'}}</p>
+                </div>
+            </div>
+            <button class="btn btn-primary w-50" (click)="generateSchedule()" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Generiraj raspored
+            </button> 
 
-    <div>
-        <p>Korisnici aktivni u mjesecu {{selectedMonth | date: 'MM.yyyy.'}}:</p>
-
-        <div>
-            <div *ngFor="let user of userActivations">
-                <input type="checkbox" [(ngModel)]="user.active"> {{user.username}}
+            <div class="row pl-3 mt-5">
+                <div class="col-6 p-0">
+                    <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username">
+                </div>
+                <div class="col-4 p-0">
+                    <button class="btn btn-primary ml-3" type="button" (click)="getUserRole()">Dohvati korisnika</button>
+                </div>
+            </div>
+            <div class="row pl-3 mt-4">
+                <div *ngIf="requestedUser" class="col p-0">
+                    Admin: <input type="checkbox" [(ngModel)]="requestedUser.active">
+                    <button class="btn btn-primary ml-4" type="button" (click)="setAdmin()">Spremi</button>
+                </div>
             </div>
         </div>
-        <button class="btn btn-primary" (click)="saveUsers()">Spremi</button>
+        <div class="col-4 pl-4">
+            <div>
+                <p>Korisnici aktivni u mjesecu {{monthName}} {{selectedMonth | date: 'yyyy.'}}:</p>
+        
+                <div>
+                    <div *ngFor="let user of userActivations">
+                        <input type="checkbox" [(ngModel)]="user.active"> {{user.username}}
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-4" (click)="saveUsers()">Spremi</button>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <p>
-            <input type="text" id="username" name="username" [(ngModel)]="username">
-            <button class="btn btn-primary" type="button" (click)="getUserRole()">Dohvati korisnika</button>
-        </p>
-        <p *ngIf="requestedUser">
-            Admin: <input type="checkbox" [(ngModel)]="requestedUser.active">
-            <button class="btn btn-primary" type="button" (click)="setAdmin()">Spremi</button>
-        </p>
-    </div>
+   
 </div>

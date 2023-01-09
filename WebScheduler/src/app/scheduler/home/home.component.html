@@ -1,44 +1,67 @@
 <div class="container">
     
-    <form [formGroup]="form" (ngSubmit)="getDataForMonth()">  
-             
-        <div class="form-group">  
-            <label for="month">Mjesec:</label>  
-            <select formControlName="month" class="form-control">  
-                <option *ngFor="let mon of monthList" [value]="mon.value">{{mon.viewValue}}</option>  
-            </select>  
-            <div *ngIf="form.get('month')?.touched && form.get('month')?.invalid" class="alert alert-danger">  
-                <div *ngIf="form.get('month')?.errors">Mjesec je obavezan za odabir.</div>  
-            </div>  
-        </div>  
-         
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Dohvati</button>  
-    </form>  
-
-
-    <div>
-        <table>
-            <tbody>
-                <tr>
-                    <td *ngFor="let i of [0,1,2,3,4,5,6]">{{dayNames[i]}}</td>
-                </tr>
-                <tr *ngFor="let weeks of MonthWeeks">
-                    <td *ngFor="let days of weeks">
-                        <p *ngIf="!days.hidden">
-                            <span type="button" [title]="days.user" [style.background-color]="days.color" [ngClass]="{'font-red' : days.holyday}">
-                                {{days.date | date: 'dd'}} <br /> ({{days.hours}})
-                            </span>
-                        </p>                    
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row d-flex justify-content-center mt-4">
+        <h4>Raspored dežurstva</h4>
     </div>
+    <div class="row">
+        <div class="col-10">
 
-    <div>
-        <div *ngFor="let user of Usernames">
-            <div class="box" [style.background-color]="UserColors.get(user)"></div> {{user}} - {{UserHours.get(user)}} sati
+            <div class="pick-calendar">
+                <table class="calndar-table">
+                    <tbody>
+                        <tr>
+                            <th *ngFor="let i of [0,1,2,3,4,5,6]">{{dayNames[i]}}</th>
+                        </tr>
+                        <tr *ngFor="let weeks of MonthWeeks">
+                            <td *ngFor="let days of weeks">
+                                <button *ngIf="!days.hidden" type="button" class="cell-button" [title]="days.user" [style.background-color]="days.color" [ngClass]="{'font-red' : days.holyday}">
+                                    <p class="w-100">
+                                        <label class="ml-5 pl-3 date-font">
+                                            {{days.date | date: 'dd'}}
+                                        </label>                                      
+                                        <br /> 
+                                        <label class="hours-font mt-3">
+                                            {{days.hours}} h
+                                        </label>
+                                    </p>
+                                </button>                  
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>       
+
+        </div>
+        <div class="col-2 mt-5">
+
+            <form [formGroup]="form" (ngSubmit)="getDataForMonth()">  
+        
+                <div class="row">
+
+                    <div class="form-group w-100">  
+                        <label for="month">Mjesec:</label>  
+                        <select formControlName="month" class="form-control">  
+                            <option *ngFor="let mon of monthList" [value]="mon.value">{{mon.viewValue}}</option>  
+                        </select>  
+                        <div *ngIf="form.get('month')?.touched && form.get('month')?.invalid" class="alert alert-danger">  
+                            <div *ngIf="form.get('month')?.errors">Mjesec je obavezan za odabir.</div>  
+                        </div>  
+                    </div>  
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary w-100" type="submit" [disabled]="!form.valid">Dohvati</button>  
+                </div>             
+                
+            </form>  
+
+            <div class="row mt-5">
+                <div *ngFor="let user of Usernames">
+                    <div class="box mr-2" [style.background-color]="UserColors.get(user)"></div> {{user}} - {{UserHours.get(user)}} sati
+                </div>
+            </div>
+
         </div>
     </div>
+
 
 </div>
