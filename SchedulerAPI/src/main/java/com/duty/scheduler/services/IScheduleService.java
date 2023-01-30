@@ -29,4 +29,6 @@ public interface IScheduleService {
 	boolean generateSchedule(LocalDate month, Integer userid);
 	
 	List<Holyday> getHolydaysInMonth(LocalDate month);
+	
+	boolean isServerBusy();
 }

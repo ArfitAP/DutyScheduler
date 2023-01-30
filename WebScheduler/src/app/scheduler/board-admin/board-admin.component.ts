@@ -77,6 +77,16 @@ export class BoardAdminComponent implements OnInit {
 
     //console.log(requestedMonth);
 
+    this.http.get("http://localhost:180/api/test/schedule/isServerBusy", { responseType: 'text' })
+               .subscribe({
+                  next: data => {
+                    this.loading = JSON.parse(data);
+                  },
+                  error: err => {
+                    
+                  }
+                });
+
     this.http.get("http://localhost:180/api/test/schedule/schedule/" + requestedMonth, { responseType: 'text' })
                .subscribe({
                   next: data => {
@@ -114,11 +124,11 @@ export class BoardAdminComponent implements OnInit {
 
                     if(res == true)
                     {
-                      alert("Raspored je generiran");
-                      this.getDataForMonth();
+                      alert("Generiranje rasporeda je pokrenuto !");
+                      //this.getDataForMonth();
                     }
                     else alert("Pogreška !");
-                    this.loading = false;
+                    //this.loading = false;
                    },
                    error: err => {
                     alert("Pogreška !");

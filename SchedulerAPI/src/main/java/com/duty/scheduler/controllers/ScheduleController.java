@@ -78,7 +78,19 @@ public class ScheduleController {
 	@GetMapping("/generateSchedule/{mon}/{userid}")
 	public ResponseEntity<?> generateSchedule(@PathVariable String mon, @PathVariable Integer userid) {
 		LocalDate month = LocalDate.parse(mon);
-		return ResponseEntity.ok(scheduleService.generateSchedule(month, userid));
+		if(scheduleService.generateSchedule(month, userid))
+		{
+			return ResponseEntity.ok(true);
+		}
+		else
+		{
+			return ResponseEntity.badRequest().body("Server is busy generating schedule");
+		}
+	}
+	
+	@GetMapping("/isServerBusy")
+	public ResponseEntity<?> isServerBusy() {
+		return ResponseEntity.ok(scheduleService.isServerBusy());
 	}
 	
 	@GetMapping("/getHolydaysForMonth/{mon}")

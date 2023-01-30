@@ -22,7 +22,6 @@ import com.duty.scheduler.models.Schedule;
 import com.duty.scheduler.models.User;
 import com.duty.scheduler.models.UserActive;
 import com.duty.scheduler.models.UserApplication;
-import com.duty.scheduler.models.UserDuty;
 import com.duty.scheduler.repository.ApplicationDayRepository;
 import com.duty.scheduler.repository.ApplicationRepository;
 import com.duty.scheduler.repository.HolydayRepository;
@@ -31,6 +30,8 @@ import com.duty.scheduler.repository.ScheduleRepository;
 import com.duty.scheduler.repository.UserActiveRepository;
 import com.duty.scheduler.repository.UserDutyRepository;
 import com.duty.scheduler.repository.UserRepository;
+import com.duty.scheduler.schedulers.GeneticAlgorithmScheduler;
+import com.duty.scheduler.schedulers.IScheduler;
 
 @Service 
 public class ScheduleService implements IScheduleService {
@@ -58,6 +59,9 @@ public class ScheduleService implements IScheduleService {
 	
 	@Autowired
 	HolydayRepository holydayRepository;
+	
+	@Autowired
+	DBStatus dbStatus;
 	
 	@Override
 	public UserApplicationDTO getApplicationsInMonthForUser(Long userId, LocalDate month) {
@@ -243,17 +247,16 @@ public class ScheduleService implements IScheduleService {
 			List<UserApplication> userApplications = applicationRepository.findByMonth(month);			
 			List<Holyday> holydays = holydayRepository.findByMonth(month);
 			
-			Schedule newSchedule = Utils.generateSchedule(month, generatedBy, activeUsers, userApplications, holydays);
-			
-			scheduleRepository.save(newSchedule);
-			for(UserDuty duty : newSchedule.getUserDuties())
+			if(dbStatus.isBusy())
 			{
-				userDutyRepository.save(duty);
+				return false;
 			}
-			
-			scheduleRepository.flush();
-			userDutyRepository.flush();		
-			
+			else
+			{
+				IScheduler r = new GeneticAlgorithmScheduler(month, generatedBy, activeUsers, userApplications, holydays, scheduleRepository, userDutyRepository, dbStatus);
+				new Thread(r).start();							
+			}
+									
 			return true;
 		}
 		catch(Exception e)
@@ -265,6 +268,19 @@ public class ScheduleService implements IScheduleService {
 	@Override
 	public List<Holyday> getHolydaysInMonth(LocalDate month) {
 		return holydayRepository.findByMonth(month);
+	}
+	
+	
+	@Override
+	public boolean isServerBusy() {
+		try
+		{
+			return dbStatus.isBusy();
+		}
+		catch(Exception e)
+		{
+			return true;
+		}		
 	}
 	
 }
