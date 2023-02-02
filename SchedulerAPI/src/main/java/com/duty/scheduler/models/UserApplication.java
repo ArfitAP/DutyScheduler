@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class UserApplication {
 	
 	private Boolean grouped;
 	
-	@OneToMany(mappedBy="userApplication")
+	@OneToMany(mappedBy="userApplication", fetch = FetchType.EAGER)
     private Set<ApplicationDay> applicationDays;
 	
 	public UserApplication(User user, @NotBlank LocalDate month, Boolean grouped, Set<ApplicationDay> applicationDays) {
