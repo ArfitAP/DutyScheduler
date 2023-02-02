@@ -55,6 +55,14 @@ public class UserActive {
 	public void setMonth(LocalDate month) {
 		this.month = month;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 	
 }

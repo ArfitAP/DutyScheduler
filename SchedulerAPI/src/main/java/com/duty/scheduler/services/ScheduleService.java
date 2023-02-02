@@ -242,6 +242,7 @@ public class ScheduleService implements IScheduleService {
 			{
 				sch.setValid(false);
 			}
+			scheduleRepository.flush();
 			
 			List<UserActive> activeUsers = userActiveRepository.findByMonth(month);
 			List<UserApplication> userApplications = applicationRepository.findByMonth(month);			
