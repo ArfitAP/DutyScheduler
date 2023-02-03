@@ -30,7 +30,11 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     private static final int tournamentSize = 5;
     private static final boolean elitism = true;
     private static final int populationSize = 50;
-    private static final int generationIterations = 300000;
+    private static final int generationIterations = 200000;
+    private static final int hoursDifferencePenalty = 1000;
+    private static final int notSelectedDayPenalty = 2000;
+    private static final int groupingPenalty = 1900;
+    private static final double notAppliedGroupingPenaltyKoeficient = 0.25;
     
     private static long[] userIndex;
     private static int numOfDutyUsers;
@@ -48,6 +52,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 		
 	public GeneticAlgorithmScheduler(LocalDate month, User generatedBy, List<UserActive> activeUsers,
 			List<UserApplication> userApplications, List<Holyday> holydays, ScheduleRepository scheduleRepository, UserDutyRepository userDutyRepository, DBStatus dbStatus) {
+		
 		GeneticAlgorithmScheduler.month = month;
 		GeneticAlgorithmScheduler.generatedBy = generatedBy;
 		GeneticAlgorithmScheduler.activeUsers = activeUsers;
@@ -94,27 +99,14 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 				userIndex[i] = activeUsers.get(i).getUser().getId();
 	        }
 			
-			hoursInMonth = 0;
-			//LocalDate day = LocalDate.of(month.getYear(), month.getMonth(), month.getDayOfMonth());
-			for (int i = 0; i < month.lengthOfMonth(); i++) {
-				LocalDate dOM = LocalDate.of(month.getYear(), month.getMonth(), i + 1);
-				if(dOM.getDayOfWeek() == DayOfWeek.SATURDAY || dOM.getDayOfWeek() == DayOfWeek.SUNDAY || holydays.stream().anyMatch(h -> h.getDay().equals(dOM)))
-				{
-					hoursInMonth += 16;
-				}
-				else
-				{
-					hoursInMonth += 8;
-				}
-	        }
+			hoursInMonth = getHoursInMonth(month);
+			
 			averageDutyTime = hoursInMonth / numOfDutyUsers;
 			
 			Schedule result = new Schedule(generatedBy, month, LocalDateTime.now(), true);
 			
-			Set<UserDuty> userDuties = new HashSet<UserDuty>();
-			
-			
-			//////////////////////
+							
+			////////  GA  //////////
 					  
 			Population myPop = new Population(populationSize, true);  
 			
@@ -122,56 +114,20 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 	
 			while (generationCount < generationIterations) {
 			
-				//System.out.println("Generation: " + generationCount + " Best score so far: " + myPop.getFittest().getFitness());
 				myPop = evolvePopulation(myPop);
 				generationCount++;
 			
 			}
+			
+			//////////////////////
 				
+			
 			Individual best = myPop.getFittest();
 					
 			// encoding
-			int daytmp = 1;
-	        int cnt = 0;
-	        int value = 0;
-	        for (int i = 0; i < best.getDefaultGeneLength(); i++) {
-	            
-	        	value += best.getSingleGene(i) * (int)Math.pow(2, 4-cnt);
-	        	
-	        	cnt++;
-	        	
-	        	if (cnt == 5) {
-	        		
-	        		int userInd = value % numOfDutyUsers;
-	        		
-	        		long userId = userIndex[userInd];
-	        		LocalDate dutyDay = LocalDate.of(month.getYear(), month.getMonth(), daytmp);
-	        		int dutyHours = 8;
-	        		if(dutyDay.getDayOfWeek() == DayOfWeek.SATURDAY || dutyDay.getDayOfWeek() == DayOfWeek.SUNDAY || holydays.stream().anyMatch(h -> h.getDay().equals(dutyDay)))
-	    			{
-	        			dutyHours = 16;
-	    			}
-	        		
-	        		for (int u = 0; u < numOfDutyUsers; u++) {
-	        			User tmpUserDuty = activeUsers.get(u).getUser();
+			
+			Set<UserDuty> userDuties = encodeIndividual(best, result);
 	        			
-	        			if(tmpUserDuty.getId() == userId)
-	        			{
-	        				userDuties.add(new UserDuty(tmpUserDuty, result, dutyDay, dutyHours));
-	        				break;
-	        			}
-	                }
-	        		
-	        		cnt = 0;
-	        		daytmp++;
-	        		value = 0;
-	            }
-	        	
-	        	if(daytmp > month.lengthOfMonth()) break;
-	        }
-	        
-			//////////////////////
-				
 			result.setUserDuties(userDuties);
 			
 			return result;
@@ -189,8 +145,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 			return result;
 		}
 				
-	}
-	
+	}	
 
 	public Population evolvePopulation(Population pop) {
         int elitismOffset;
@@ -296,7 +251,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
         	
         	if(userDayMapping.containsKey(userIndex[i]) == false)
         	{
-        		penalty += 1000 * (int)Math.abs(averageDutyTime);
+        		penalty += hoursDifferencePenalty * (int)Math.abs(averageDutyTime);
         		continue;
         	}
         	
@@ -313,7 +268,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     			}
         	}
         	        	
-        	penalty += 1000 * (int)Math.abs(averageDutyTime - usersHours);
+        	penalty += hoursDifferencePenalty * (int)Math.abs(averageDutyTime - usersHours);
         }
         
         // PREFERED DUTY DAYS
@@ -335,7 +290,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
             		LocalDate dOM = LocalDate.of(month.getYear(), month.getMonth(), d);
             		if(userAppDays.stream().anyMatch(uad -> uad.getDay().equals(dOM)) == false)
         			{
-            			penalty += 1500;
+            			penalty += notSelectedDayPenalty;
         			}
             	}
         	}
@@ -348,11 +303,16 @@ public class GeneticAlgorithmScheduler implements IScheduler {
         	
         	long tmpUser = userIndex[i];
         	boolean userAppDaysInContinous = true;
+        	double koef = 1.0;
         	
         	if(userApplications.stream().anyMatch(uap -> uap.getUser().getId().equals(tmpUser)))
         	{
         		userAppDaysInContinous = userApplications.stream().filter(uap -> uap.getUser().getId().equals(tmpUser)).findFirst().get().getGrouped();
-        	}  
+        	}
+        	else
+        	{
+        		koef = notAppliedGroupingPenaltyKoeficient;
+        	}
         	
         	if(userAppDaysInContinous)
         	{
@@ -374,11 +334,76 @@ public class GeneticAlgorithmScheduler implements IScheduler {
             		lastNum = d;
             	}
         		
-        		penalty += 1500 * (groups - 1);
+        		penalty += koef * groupingPenalty * (groups - 1);
         	}
         	
         }
         
         return 100000 - penalty;
+    }
+    
+    private Set<UserDuty> encodeIndividual(Individual individual, Schedule parentSchedule)
+	{
+		Set<UserDuty> userDuties = new HashSet<UserDuty>();
+		
+		int daytmp = 1;
+        int cnt = 0;
+        int value = 0;
+        for (int i = 0; i < individual.getDefaultGeneLength(); i++) {
+            
+        	value += individual.getSingleGene(i) * (int)Math.pow(2, 4-cnt);
+        	
+        	cnt++;
+        	
+        	if (cnt == 5) {
+        		
+        		int userInd = value % numOfDutyUsers;
+        		
+        		long userId = userIndex[userInd];
+        		LocalDate dutyDay = LocalDate.of(month.getYear(), month.getMonth(), daytmp);
+        		int dutyHours = 8;
+        		if(dutyDay.getDayOfWeek() == DayOfWeek.SATURDAY || dutyDay.getDayOfWeek() == DayOfWeek.SUNDAY || holydays.stream().anyMatch(h -> h.getDay().equals(dutyDay)))
+    			{
+        			dutyHours = 16;
+    			}
+        		
+        		for (int u = 0; u < numOfDutyUsers; u++) {
+        			User tmpUserDuty = activeUsers.get(u).getUser();
+        			
+        			if(tmpUserDuty.getId() == userId)
+        			{
+        				userDuties.add(new UserDuty(tmpUserDuty, parentSchedule, dutyDay, dutyHours));
+        				break;
+        			}
+                }
+        		
+        		cnt = 0;
+        		daytmp++;
+        		value = 0;
+            }
+        	
+        	if(daytmp > month.lengthOfMonth()) break;
+        }
+        
+        return userDuties;
+	}
+    
+    private int getHoursInMonth(LocalDate month)
+    {
+    	int hoursSum = 0;
+    	
+    	for (int i = 0; i < month.lengthOfMonth(); i++) {
+			LocalDate dOM = LocalDate.of(month.getYear(), month.getMonth(), i + 1);
+			if(dOM.getDayOfWeek() == DayOfWeek.SATURDAY || dOM.getDayOfWeek() == DayOfWeek.SUNDAY || holydays.stream().anyMatch(h -> h.getDay().equals(dOM)))
+			{
+				hoursSum += 16;
+			}
+			else
+			{
+				hoursSum += 8;
+			}
+        }
+    	
+    	return hoursSum;
     }
 }
