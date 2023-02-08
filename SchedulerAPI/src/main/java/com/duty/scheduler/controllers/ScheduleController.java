@@ -20,7 +20,7 @@ import com.duty.scheduler.services.ScheduleService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test/schedule")
+@RequestMapping("/api/schedule")
 public class ScheduleController {
 	
 	@Autowired

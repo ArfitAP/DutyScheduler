@@ -123,7 +123,7 @@ export class ProfileComponent implements OnInit {
       this.MonthWeeks.push(week);
     }
 
-    this.http.get("http://localhost:180/api/test/schedule/schedule/" + requestedMonth, { responseType: 'text' })
+    this.http.get("http://localhost:180/api/schedule/schedule/" + requestedMonth, { responseType: 'text' })
                .subscribe({
                   next: data => {
                     this.schedule = JSON.parse(data);
@@ -151,7 +151,7 @@ export class ProfileComponent implements OnInit {
                   }
                 });
 
-    this.http.get("http://localhost:180/api/test/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
+    this.http.get("http://localhost:180/api/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
                 .subscribe({
                    next: data => {
 

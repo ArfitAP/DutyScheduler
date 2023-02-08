@@ -5,6 +5,8 @@ public class Individual {
 	protected int defaultGeneLength = 31*5;
     private byte[] genes = new byte[defaultGeneLength];
     private int fitness = 0;
+    
+    public boolean debug = false;
 
     public Individual() {
         for (int i = 0; i < genes.length; i++) {

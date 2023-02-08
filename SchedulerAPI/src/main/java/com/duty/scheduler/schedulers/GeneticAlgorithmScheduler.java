@@ -29,12 +29,12 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     private static final double mutationRate = 0.025;
     private static final int tournamentSize = 5;
     private static final boolean elitism = true;
-    private static final int populationSize = 50;
-    private static final int generationIterations = 200000;
+    private static final int populationSize = 40;
+    private static final int generationIterations = 500000;
     private static final int hoursDifferencePenalty = 1000;
-    private static final int notSelectedDayPenalty = 2000;
-    private static final int groupingPenalty = 1900;
-    private static final double notAppliedGroupingPenaltyKoeficient = 0.25;
+    private static final int notSelectedDayPenalty = 6000;
+    private static final int groupingPenalty = 5500;
+    private static final double notAppliedGroupingPenaltyKoeficient = 0.1;
     
     private static long[] userIndex;
     private static int numOfDutyUsers;
@@ -101,7 +101,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 			
 			hoursInMonth = getHoursInMonth(month);
 			
-			averageDutyTime = hoursInMonth / numOfDutyUsers;
+			averageDutyTime = (double)hoursInMonth / numOfDutyUsers;
 			
 			Schedule result = new Schedule(generatedBy, month, LocalDateTime.now(), true);
 			
@@ -123,10 +123,17 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 				
 			
 			Individual best = myPop.getFittest();
-					
-			// encoding
 			
-			Set<UserDuty> userDuties = encodeIndividual(best, result);
+			/*
+			best.setFitness(0);
+			best.debug = true;
+			
+			System.out.println(best.getFitness());
+			*/
+					
+			// decoding
+			
+			Set<UserDuty> userDuties = decodeIndividual(best, result);
 	        			
 			result.setUserDuties(userDuties);
 			
@@ -251,7 +258,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
         	
         	if(userDayMapping.containsKey(userIndex[i]) == false)
         	{
-        		penalty += hoursDifferencePenalty * (int)Math.abs(averageDutyTime);
+        		penalty += (int)(hoursDifferencePenalty * Math.abs(averageDutyTime));
         		continue;
         	}
         	
@@ -267,14 +274,19 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     				usersHours += 8;
     			}
         	}
-        	        	
-        	penalty += hoursDifferencePenalty * (int)Math.abs(averageDutyTime - usersHours);
+        	        
+        	if(individual.debug) System.out.println("User: " + userIndex[i] + ", hours penalty: " +  (int)(hoursDifferencePenalty * Math.abs(averageDutyTime - usersHours)));
+        	
+        	penalty += (int)(hoursDifferencePenalty * Math.abs(averageDutyTime - usersHours));
         }
+        
+        if(individual.debug) System.out.println(penalty);
         
         // PREFERED DUTY DAYS
         for (int i = 0; i < numOfDutyUsers; i++) {
         	
         	long tmpUser = userIndex[i];
+        	int tmpPenalty = 0;
         	
         	if(userApplications.stream().anyMatch(uap -> uap.getUser().getId().equals(tmpUser)))
         	{
@@ -290,11 +302,17 @@ public class GeneticAlgorithmScheduler implements IScheduler {
             		LocalDate dOM = LocalDate.of(month.getYear(), month.getMonth(), d);
             		if(userAppDays.stream().anyMatch(uad -> uad.getDay().equals(dOM)) == false)
         			{
-            			penalty += notSelectedDayPenalty;
+            			tmpPenalty += notSelectedDayPenalty;
         			}
             	}
         	}
+        	
+        	if(individual.debug) System.out.println("User: " + userIndex[i] + ", prefered days penalty: " +  tmpPenalty);
+        	
+        	penalty += tmpPenalty;
         }
+        
+        if(individual.debug) System.out.println(penalty);
         
         // DUTY DAYS IN CONTINOUS
         int groups = 0;
@@ -334,15 +352,20 @@ public class GeneticAlgorithmScheduler implements IScheduler {
             		lastNum = d;
             	}
         		
+        		if(individual.debug) System.out.println("User: " + userIndex[i] + ", grouping penalty: " +  koef * groupingPenalty * (groups - 1));
+        		
         		penalty += koef * groupingPenalty * (groups - 1);
         	}
         	
+        	
         }
+        
+        if(individual.debug) System.out.println(penalty);
         
         return 100000 - penalty;
     }
     
-    private Set<UserDuty> encodeIndividual(Individual individual, Schedule parentSchedule)
+    private Set<UserDuty> decodeIndividual(Individual individual, Schedule parentSchedule)
 	{
 		Set<UserDuty> userDuties = new HashSet<UserDuty>();
 		
