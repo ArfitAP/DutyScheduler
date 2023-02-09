@@ -29,8 +29,8 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     private static final double mutationRate = 0.025;
     private static final int tournamentSize = 5;
     private static final boolean elitism = true;
-    private static final int populationSize = 40;
-    private static final int generationIterations = 500000;
+    private static final int populationSize = 120;
+    private static final int generationIterations = 100000;
     private static final int hoursDifferencePenalty = 1000;
     private static final int notSelectedDayPenalty = 6000;
     private static final int groupingPenalty = 5500;

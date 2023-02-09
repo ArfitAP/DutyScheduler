@@ -33,6 +33,8 @@ export class BoardUserComponent implements OnInit {
   };
   userDays: Date[] = [];
 
+  numOfDays = 0;
+  groupSelected = false;
   nextMonthWeeks: any[] = [];
   Holydays: any[] = [];
 
@@ -47,7 +49,7 @@ export class BoardUserComponent implements OnInit {
       this.userApplication.user_id = this.userId;
       this.userApplication.month = this.nextMonth;
 
-      const numOfDays = this.getNumberOfDaysInMonth(this.nextMonth.getMonth(), this.nextMonth.getFullYear());
+      this.numOfDays = this.getNumberOfDaysInMonth(this.nextMonth.getMonth(), this.nextMonth.getFullYear());
 
       var dayofweekfirstday = this.nextMonth.getDay();
       if(dayofweekfirstday == 0) dayofweekfirstday = 7;
@@ -64,7 +66,7 @@ export class BoardUserComponent implements OnInit {
         });
       }
 
-      for (let i = 1; i <= numOfDays; i++) {
+      for (let i = 1; i <= this.numOfDays; i++) {
         if(currentDay > 7)
         {
           this.nextMonthWeeks.push(week);
@@ -96,7 +98,7 @@ export class BoardUserComponent implements OnInit {
         this.nextMonthWeeks.push(week);
       }
 
-      //console.log(this.nextMonthWeeks);
+      //console.log(this.nextMonthWeeks);    
 
       this.http.get("http://localhost:180/api/schedule/userapplications/" + this.userId + '/' + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
                .subscribe({
@@ -119,6 +121,8 @@ export class BoardUserComponent implements OnInit {
                     } catch (error) {
                       this.userDays = [];
                     }
+
+                    this.checkGroupSelected();
 
                   },
                   error: err => {
@@ -191,6 +195,39 @@ export class BoardUserComponent implements OnInit {
         }
       });
     }); 
+
+    this.checkGroupSelected();
+  }
+
+  checkGroupSelected() : void {
+
+    var days : number[] = [];
+
+    this.nextMonthWeeks.forEach( (value) => {
+      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: Date; selected: boolean; }) => {
+        if(dayinweek.selected == true)
+        {
+          days.push(Number(this.datePipe.transform(dayinweek.date, 'dd')));
+        }
+      });
+    });
+
+    days = days.sort((n1, n2) => n1 - n2);
+
+    this.groupSelected = false;
+
+    var lastDay : number = -1;
+    for(let i=0; i < days.length; i++) {
+        if(days[i] - 1 == lastDay) {
+          this.groupSelected = true;
+          break;
+        }
+        lastDay = days[i];
+    }
+
+    if(this.groupSelected == false) {
+      this.userApplication.grouped = false;
+    }
   }
 
   getNumberOfDaysInMonth(month: number, year: number) : number {
