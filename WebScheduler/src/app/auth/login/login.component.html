@@ -11,6 +11,7 @@
         (ngSubmit)="f.form.valid && onSubmit()"
         #f="ngForm"
         novalidate
+        class="w-50 mt-5 mx-auto"
       >
         <div class="form-group">
           <label for="username">Korisničko ime</label>
@@ -63,12 +64,12 @@
             role="alert"
             *ngIf="f.submitted && isLoginFailed"
           >
-            Pogreška: {{ errorMessage }}
+            Pogreška: Pogrešna lozinka !
           </div>
         </div>
       </form>
   
-      <div class="alert alert-success" *ngIf="isLoggedIn">
+      <div class="alert alert-success w-50 mt-5 mx-auto" *ngIf="isLoggedIn">
         Prijavljen kao {{ roles }}.
       </div>
     </div>

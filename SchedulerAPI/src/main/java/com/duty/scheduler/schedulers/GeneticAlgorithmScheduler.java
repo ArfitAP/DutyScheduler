@@ -25,11 +25,11 @@ import com.duty.scheduler.services.DBStatus;
 
 public class GeneticAlgorithmScheduler implements IScheduler {
 
-	private static final double uniformRate = 0.5;
+	private static final double uniformRate = 0.05;
     private static final double mutationRate = 0.025;
     private static final int tournamentSize = 5;
     private static final boolean elitism = true;
-    private static final int populationSize = 120;
+    private static final int populationSize = 100;
     private static final int generationIterations = 100000;
     private static final int hoursDifferencePenalty = 1000;
     private static final int notSelectedDayPenalty = 6000;
@@ -292,7 +292,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
         	{
         		Set<ApplicationDay> userAppDays = userApplications.stream().filter(uap -> uap.getUser().getId().equals(tmpUser)).findFirst().get().getApplicationDays();
         		
-        		if(userDayMapping.containsKey(userIndex[i]) == false)
+        		if(userDayMapping.containsKey(userIndex[i]) == false || userAppDays.size() == 0)
             	{
             		continue;
             	}

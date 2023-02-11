@@ -177,7 +177,7 @@ export class HomeComponent implements OnInit {
 
                      this.Holydays = JSON.parse(data).map((item: { day: Date; }) => item.day);;  
 
-                     console.log(this.Holydays);
+                     //console.log(this.Holydays);
 
                      this.MonthWeeks.forEach( (value) => {
                       value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; color: string | undefined; user: string; holyday: boolean; hours: number; }) => {
