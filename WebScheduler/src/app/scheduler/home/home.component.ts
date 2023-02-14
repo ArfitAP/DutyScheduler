@@ -6,6 +6,7 @@ import { ISchedule } from 'src/app/_models/Schedule';
 import { ColorService } from 'src/app/_services/color.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { AppSettings } from  'src/app/_services/app.settings';
 
 export interface SelectedMonth {
   value: Date;
@@ -130,7 +131,7 @@ export class HomeComponent implements OnInit {
       this.MonthWeeks.push(week);
     }
 
-    this.http.get("http://localhost:180/api/public/schedule/schedule/" + requestedMonth, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "public/schedule/schedule/" + requestedMonth, { responseType: 'text' })
                .subscribe({
                   next: data => {
                     this.schedule = JSON.parse(data);
@@ -171,7 +172,7 @@ export class HomeComponent implements OnInit {
                   }
                 });
 
-    this.http.get("http://localhost:180/api/public/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "public/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
                 .subscribe({
                    next: data => {
 

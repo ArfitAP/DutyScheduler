@@ -6,6 +6,7 @@ import { SelectedMonth } from 'src/app/scheduler/home/home.component';
 import { ISchedule } from 'src/app/_models/Schedule';
 import { ColorService } from 'src/app/_services/color.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
+import { AppSettings } from  'src/app/_services/app.settings';
 
 @Component({
   selector: 'app-profile',
@@ -123,7 +124,7 @@ export class ProfileComponent implements OnInit {
       this.MonthWeeks.push(week);
     }
 
-    this.http.get("http://localhost:180/api/schedule/schedule/" + requestedMonth, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/schedule/" + requestedMonth, { responseType: 'text' })
                .subscribe({
                   next: data => {
                     this.schedule = JSON.parse(data);
@@ -151,7 +152,7 @@ export class ProfileComponent implements OnInit {
                   }
                 });
 
-    this.http.get("http://localhost:180/api/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
                 .subscribe({
                    next: data => {
 

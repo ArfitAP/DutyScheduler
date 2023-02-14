@@ -2,6 +2,7 @@
 
 # Compiled output
 /dist
+/.vscode
 /tmp
 /out-tsc
 /bazel-out

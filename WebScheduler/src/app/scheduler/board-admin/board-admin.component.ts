@@ -8,6 +8,8 @@ import { IUserActivation } from 'src/app/_models/UserActivation';
 import { IUserRole } from 'src/app/_models/UserRole';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { AppSettings } from  'src/app/_services/app.settings';
+
 
 export interface SelectedMonth {
   value: Date;
@@ -77,7 +79,7 @@ export class BoardAdminComponent implements OnInit {
 
     //console.log(requestedMonth);
 
-    this.http.get("http://localhost:180/api/schedule/isServerBusy", { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/isServerBusy", { responseType: 'text' })
                .subscribe({
                   next: data => {
                     this.loading = JSON.parse(data);
@@ -87,7 +89,7 @@ export class BoardAdminComponent implements OnInit {
                   }
                 });
 
-    this.http.get("http://localhost:180/api/schedule/schedule/" + requestedMonth, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/schedule/" + requestedMonth, { responseType: 'text' })
                .subscribe({
                   next: data => {
                     this.schedule = JSON.parse(data);
@@ -98,7 +100,7 @@ export class BoardAdminComponent implements OnInit {
                   }
                 });
 
-    this.http.get("http://localhost:180/api/schedule/usersforactivation/" + requestedMonth, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/usersforactivation/" + requestedMonth, { responseType: 'text' })
                 .subscribe({
                    next: data => {
                      this.userActivations = JSON.parse(data);
@@ -114,7 +116,7 @@ export class BoardAdminComponent implements OnInit {
     this.loading = true;
     let requestedMonth = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd'); 
     
-    this.http.get("http://localhost:180/api/schedule/generateSchedule/" + requestedMonth + "/" + this.userId, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/generateSchedule/" + requestedMonth + "/" + this.userId, { responseType: 'text' })
                 .pipe(
                   timeout(3600000)
                 )            
@@ -143,7 +145,7 @@ export class BoardAdminComponent implements OnInit {
   saveUsers() : void {
     let requestedMonth = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd'); 
 
-    this.http.post("http://localhost:180/api/schedule/saveUserActivesInMonth/" + requestedMonth + "/" + this.userId, this.userActivations, { responseType: 'text' })
+    this.http.post(AppSettings.API_ENDPOINT + "schedule/saveUserActivesInMonth/" + requestedMonth + "/" + this.userId, this.userActivations, { responseType: 'text' })
                .subscribe({
                   next: data => {
                     let res : Boolean = JSON.parse(data);
@@ -164,7 +166,7 @@ export class BoardAdminComponent implements OnInit {
   getUserRole() : void {
     if(this.username.length == 0) return;
 
-    this.http.get("http://localhost:180/api/schedule/getUserRole/" + this.username, { responseType: 'text' })
+    this.http.get(AppSettings.API_ENDPOINT + "schedule/getUserRole/" + this.username, { responseType: 'text' })
                 .subscribe({
                    next: data => {
                      this.requestedUser = JSON.parse(data);
@@ -176,7 +178,7 @@ export class BoardAdminComponent implements OnInit {
   }
 
   setAdmin() : void {
-    this.http.post("http://localhost:180/api/schedule/setUserRole/", this.requestedUser, { responseType: 'text' })
+    this.http.post(AppSettings.API_ENDPOINT + "schedule/setUserRole/", this.requestedUser, { responseType: 'text' })
     .subscribe({
        next: data => {
          let res : Boolean = JSON.parse(data);

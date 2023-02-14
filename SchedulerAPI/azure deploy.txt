@@ -1,0 +1,5 @@
+az spring app create -n demo -g DutyScheduler -s dutyscheduler-api --assign-endpoint
+
+az spring app deploy --resource-group DutyScheduler --service duty-scheduler-api --name duty-scheduler-api --artifact-path target\scheduler-0.0.1-SNAPSHOT.jar
+
+az spring app update --resource-group DutyScheduler --service duty-scheduler-api --name duty-scheduler-api --disable-probe true --verbose

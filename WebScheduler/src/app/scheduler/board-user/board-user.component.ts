@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { IUserApplication } from 'src/app/_models/UserApplication';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { AppSettings } from  'src/app/_services/app.settings';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -100,7 +101,7 @@ export class BoardUserComponent implements OnInit {
 
       //console.log(this.nextMonthWeeks);    
 
-      this.http.get("http://localhost:180/api/schedule/userapplications/" + this.userId + '/' + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
+      this.http.get(AppSettings.API_ENDPOINT + "schedule/userapplications/" + this.userId + '/' + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
                .subscribe({
                   next: data => {
                     this.userApplication = JSON.parse(data);
@@ -130,7 +131,7 @@ export class BoardUserComponent implements OnInit {
                   }
                 });
 
-      this.http.get("http://localhost:180/api/schedule/getHolydaysForMonth/" + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
+      this.http.get(AppSettings.API_ENDPOINT + "schedule/getHolydaysForMonth/" + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
                 .subscribe({
                    next: data => {
 
@@ -160,7 +161,7 @@ export class BoardUserComponent implements OnInit {
 
     this.userApplication.applicationDays =  this.userDays.map((item) => { return { id: 0, day: this.datePipe.transform(item, 'yyyy-MM-dd') }; });
 
-    this.http.post("http://localhost:180/api/schedule/adduserapplications/", this.userApplication, { responseType: 'text' })
+    this.http.post(AppSettings.API_ENDPOINT + "schedule/adduserapplications/", this.userApplication, { responseType: 'text' })
                .subscribe({
                   next: data => {
                     let res : Boolean = JSON.parse(data);
