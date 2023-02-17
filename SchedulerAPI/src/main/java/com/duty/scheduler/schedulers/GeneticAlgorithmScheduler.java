@@ -25,12 +25,12 @@ import com.duty.scheduler.services.DBStatus;
 
 public class GeneticAlgorithmScheduler implements IScheduler {
 
-	private static final double uniformRate = 0.05;
+	private static final double uniformRate = 0.1;
     private static final double mutationRate = 0.025;
     private static final int tournamentSize = 5;
     private static final boolean elitism = true;
-    private static final int populationSize = 100;
-    private static final int generationIterations = 100000;
+    private static final int populationSize = 350;
+    private static final int generationIterations = 5000;
     private static final int hoursDifferencePenalty = 1000;
     private static final int notSelectedDayPenalty = 6000;
     private static final int groupingPenalty = 5500;
@@ -111,11 +111,17 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 			Population myPop = new Population(populationSize, true);  
 			
 			int generationCount = 0;
-	
+			int currentBest = 0;
 			while (generationCount < generationIterations) {
-			
+								
 				myPop = evolvePopulation(myPop);
 				generationCount++;
+				
+				if(myPop.getFittest().getFitness() > currentBest) 
+				{
+					currentBest = myPop.getFittest().getFitness();
+					System.out.println(generationCount + ": " + currentBest);
+				}
 			
 			}
 			
@@ -123,7 +129,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 				
 			
 			Individual best = myPop.getFittest();
-			
+
 			/*
 			best.setFitness(0);
 			best.debug = true;

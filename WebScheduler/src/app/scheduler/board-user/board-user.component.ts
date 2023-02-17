@@ -26,7 +26,7 @@ export class BoardUserComponent implements OnInit {
 
   userApplication: IUserApplication = {
     id: 0,
-    active: true,
+    active: false,
     month: this.nextMonth,
     grouped: false,
     user_id: 0,

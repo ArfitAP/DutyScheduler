@@ -31,7 +31,7 @@ export class BoardAdminComponent implements OnInit {
   nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1, 1));
   selectedMonth = this.nextMonth;
   monthName = "";
-  loading = false;
+  loading = true;
 
   username: string = '';
   requestedUser: IUserRole | null = null;
