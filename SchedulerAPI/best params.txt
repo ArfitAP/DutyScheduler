@@ -1,5 +1,0 @@
-uniformRate: 0.4, mutationRate: 0.035, tournamentSize: 5, populationSize: 800 
-
-BEST AVG: 84996.0 with params: uniformRate: 0.43, mutationRate: 0.031, tournamentSize: 5, populationSize: 750
-
-BEST AVG: 84886.0 with params: uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000

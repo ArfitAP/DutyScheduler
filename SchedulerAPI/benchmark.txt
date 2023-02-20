@@ -1,0 +1,345 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.5)
+
+2023-02-19 08:49:57.065  INFO 14748 --- [           main] com.duty.scheduler.SchedulerApplication  : Starting SchedulerApplication using Java 17.0.5 on DESKTOP-RT18RLO with PID 14748 (E:\Media\Dokumenti\Projects\DutyScheduler\SchedulerAPI\target\classes started by Antonio in E:\Media\Dokumenti\Projects\DutyScheduler\SchedulerAPI)
+2023-02-19 08:49:57.067  INFO 14748 --- [           main] com.duty.scheduler.SchedulerApplication  : No active profile set, falling back to 1 default profile: "default"
+2023-02-19 08:49:57.977  INFO 14748 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 08:49:58.119  INFO 14748 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 127 ms. Found 8 JPA repository interfaces.
+2023-02-19 08:49:59.070  INFO 14748 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 180 (http)
+2023-02-19 08:49:59.085  INFO 14748 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 08:49:59.086  INFO 14748 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2023-02-19 08:49:59.229  INFO 14748 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 08:49:59.230  INFO 14748 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2114 ms
+2023-02-19 08:49:59.417  INFO 14748 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 08:49:59.479  INFO 14748 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2023-02-19 08:49:59.651  INFO 14748 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 08:49:59.772  INFO 14748 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 08:50:00.020  INFO 14748 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 08:50:00.043  INFO 14748 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2023-02-19 08:50:01.402  INFO 14748 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 08:50:01.411  INFO 14748 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 08:50:02.449  WARN 14748 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 08:50:02.664  INFO 14748 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7d7c05fa, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7dbbf730, org.springframework.security.web.context.SecurityContextPersistenceFilter@29d33f1, org.springframework.security.web.header.HeaderWriterFilter@4d4600fb, org.springframework.web.filter.CorsFilter@7c4a5ef2, org.springframework.security.web.authentication.logout.LogoutFilter@6c25123e, com.duty.scheduler.security.jwt.AuthTokenFilter@f9de1fd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5daa621b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@24a7725d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@299dd381, org.springframework.security.web.session.SessionManagementFilter@51c4992e, org.springframework.security.web.access.ExceptionTranslationFilter@6c2fea95, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@ed1d2cf]
+2023-02-19 08:50:02.929  INFO 14748 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 180 (http) with context path ''
+2023-02-19 08:50:02.940  INFO 14748 --- [           main] com.duty.scheduler.SchedulerApplication  : Started SchedulerApplication in 6.358 seconds (JVM running for 6.897)
+2023-02-19 08:50:05.311  INFO 14748 --- [-nio-180-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 08:50:05.311  INFO 14748 --- [-nio-180-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 08:50:05.313  INFO 14748 --- [-nio-180-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 3, populationSize: 750 -> 84776.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 3, populationSize: 800 -> 83846.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 3, populationSize: 900 -> 84611.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000 -> 82911.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 5, populationSize: 750 -> 81881.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 5, populationSize: 800 -> 82046.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 5, populationSize: 900 -> 80941.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 5, populationSize: 1000 -> 80666.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 7, populationSize: 750 -> 72951.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 7, populationSize: 800 -> 79301.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 7, populationSize: 900 -> 79366.0
+uniformRate: 0.4, mutationRate: 0.02, tournamentSize: 7, populationSize: 1000 -> 82211.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 3, populationSize: 750 -> 83241.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 3, populationSize: 800 -> 82851.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 3, populationSize: 900 -> 81701.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 3, populationSize: 1000 -> 83401.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 5, populationSize: 750 -> 83026.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 5, populationSize: 800 -> 80451.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 5, populationSize: 900 -> 82261.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 5, populationSize: 1000 -> 83576.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 7, populationSize: 750 -> 80396.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 7, populationSize: 800 -> 78491.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 7, populationSize: 900 -> 81706.0
+uniformRate: 0.4, mutationRate: 0.025, tournamentSize: 7, populationSize: 1000 -> 81601.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 3, populationSize: 750 -> 83236.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 3, populationSize: 800 -> 82086.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 3, populationSize: 900 -> 82476.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 3, populationSize: 1000 -> 83131.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 5, populationSize: 750 -> 81661.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 5, populationSize: 800 -> 82206.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 5, populationSize: 900 -> 84721.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 5, populationSize: 1000 -> 83626.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 7, populationSize: 750 -> 76346.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 7, populationSize: 800 -> 76886.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 7, populationSize: 900 -> 81171.0
+uniformRate: 0.4, mutationRate: 0.027, tournamentSize: 7, populationSize: 1000 -> 80506.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 3, populationSize: 750 -> 73186.2
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 3, populationSize: 800 -> 72896.2
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 3, populationSize: 900 -> 71896.3
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 3, populationSize: 1000 -> 78126.1
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 5, populationSize: 750 -> 81046.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 5, populationSize: 800 -> 81221.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 5, populationSize: 900 -> 83406.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 5, populationSize: 1000 -> 84666.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 7, populationSize: 750 -> 77331.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 7, populationSize: 800 -> 82526.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 7, populationSize: 900 -> 81051.0
+uniformRate: 0.4, mutationRate: 0.03, tournamentSize: 7, populationSize: 1000 -> 82311.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 3, populationSize: 750 -> 69881.3
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 3, populationSize: 800 -> 61811.4
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 3, populationSize: 900 -> 62581.7
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 3, populationSize: 1000 -> 65746.1
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 5, populationSize: 750 -> 81766.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 5, populationSize: 800 -> 80996.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 5, populationSize: 900 -> 81551.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 5, populationSize: 1000 -> 83951.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 7, populationSize: 750 -> 79796.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 7, populationSize: 800 -> 81711.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 7, populationSize: 900 -> 83356.0
+uniformRate: 0.4, mutationRate: 0.033, tournamentSize: 7, populationSize: 1000 -> 83076.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 3, populationSize: 750 -> 84666.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 3, populationSize: 800 -> 81656.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 3, populationSize: 900 -> 84501.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000 -> 83791.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 5, populationSize: 750 -> 80291.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 5, populationSize: 800 -> 82311.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 5, populationSize: 900 -> 81216.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 5, populationSize: 1000 -> 82256.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 7, populationSize: 750 -> 76241.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 7, populationSize: 800 -> 80611.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 7, populationSize: 900 -> 81056.0
+uniformRate: 0.43, mutationRate: 0.02, tournamentSize: 7, populationSize: 1000 -> 79796.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 3, populationSize: 750 -> 82256.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 3, populationSize: 800 -> 82146.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 3, populationSize: 900 -> 82856.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 3, populationSize: 1000 -> 82851.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 5, populationSize: 750 -> 83461.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 5, populationSize: 800 -> 81106.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 5, populationSize: 900 -> 82971.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 5, populationSize: 1000 -> 83461.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 7, populationSize: 750 -> 80556.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 7, populationSize: 800 -> 77866.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 7, populationSize: 900 -> 81661.0
+uniformRate: 0.43, mutationRate: 0.025, tournamentSize: 7, populationSize: 1000 -> 81156.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 3, populationSize: 750 -> 83236.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 3, populationSize: 800 -> 82086.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 3, populationSize: 900 -> 81646.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 3, populationSize: 1000 -> 82631.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 5, populationSize: 750 -> 84776.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 5, populationSize: 800 -> 79406.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 5, populationSize: 900 -> 83516.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 5, populationSize: 1000 -> 80826.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 7, populationSize: 750 -> 78651.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 7, populationSize: 800 -> 82916.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 7, populationSize: 900 -> 80116.0
+uniformRate: 0.43, mutationRate: 0.027, tournamentSize: 7, populationSize: 1000 -> 80611.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 3, populationSize: 750 -> 77691.1
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 3, populationSize: 800 -> 78526.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 3, populationSize: 900 -> 74226.2
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 3, populationSize: 1000 -> 77926.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 5, populationSize: 750 -> 77721.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 5, populationSize: 800 -> 77216.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 5, populationSize: 900 -> 84721.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 5, populationSize: 1000 -> 83246.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 7, populationSize: 750 -> 78001.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 7, populationSize: 800 -> 81706.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 7, populationSize: 900 -> 81606.0
+uniformRate: 0.43, mutationRate: 0.03, tournamentSize: 7, populationSize: 1000 -> 81706.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 3, populationSize: 750 -> 63376.5
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 3, populationSize: 800 -> 62681.2
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 3, populationSize: 900 -> 64301.4
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 3, populationSize: 1000 -> 65931.3
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 5, populationSize: 750 -> 82306.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 5, populationSize: 800 -> 82251.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 5, populationSize: 900 -> 81701.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 5, populationSize: 1000 -> 84776.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 7, populationSize: 750 -> 80066.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 7, populationSize: 800 -> 82261.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 7, populationSize: 900 -> 80501.0
+uniformRate: 0.43, mutationRate: 0.033, tournamentSize: 7, populationSize: 1000 -> 81056.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 3, populationSize: 750 -> 83246.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 3, populationSize: 800 -> 83466.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 3, populationSize: 900 -> 84611.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000 -> 83951.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 5, populationSize: 750 -> 80561.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 5, populationSize: 800 -> 80071.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 5, populationSize: 900 -> 83021.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 5, populationSize: 1000 -> 80456.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 7, populationSize: 750 -> 76466.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 7, populationSize: 800 -> 77886.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 7, populationSize: 900 -> 80771.0
+uniformRate: 0.45, mutationRate: 0.02, tournamentSize: 7, populationSize: 1000 -> 79196.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 3, populationSize: 750 -> 82751.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 3, populationSize: 800 -> 82636.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 3, populationSize: 900 -> 83401.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 3, populationSize: 1000 -> 83951.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 5, populationSize: 750 -> 78861.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 5, populationSize: 800 -> 83356.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 5, populationSize: 900 -> 82811.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 5, populationSize: 1000 -> 83461.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 7, populationSize: 750 -> 78861.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 7, populationSize: 800 -> 77661.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 7, populationSize: 900 -> 81771.0
+uniformRate: 0.45, mutationRate: 0.025, tournamentSize: 7, populationSize: 1000 -> 78801.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 3, populationSize: 750 -> 82301.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 3, populationSize: 800 -> 81926.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 3, populationSize: 900 -> 82036.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 3, populationSize: 1000 -> 82086.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 5, populationSize: 750 -> 81771.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 5, populationSize: 800 -> 84066.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 5, populationSize: 900 -> 84011.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 5, populationSize: 1000 -> 83406.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 7, populationSize: 750 -> 83901.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 7, populationSize: 800 -> 81981.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 7, populationSize: 900 -> 81051.0
+uniformRate: 0.45, mutationRate: 0.027, tournamentSize: 7, populationSize: 1000 -> 80621.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 3, populationSize: 750 -> 77211.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 3, populationSize: 800 -> 78916.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 3, populationSize: 900 -> 76141.2
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 3, populationSize: 1000 -> 78906.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 5, populationSize: 750 -> 80451.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 5, populationSize: 800 -> 83296.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 5, populationSize: 900 -> 83511.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 5, populationSize: 1000 -> 83956.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 7, populationSize: 750 -> 78706.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 7, populationSize: 800 -> 82096.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 7, populationSize: 900 -> 80891.0
+uniformRate: 0.45, mutationRate: 0.03, tournamentSize: 7, populationSize: 1000 -> 82866.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 3, populationSize: 750 -> 66946.5
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 3, populationSize: 800 -> 64131.6
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 3, populationSize: 900 -> 67161.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 3, populationSize: 1000 -> 67806.1
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 5, populationSize: 750 -> 82801.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 5, populationSize: 800 -> 79896.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 5, populationSize: 900 -> 80496.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 5, populationSize: 1000 -> 84556.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 7, populationSize: 750 -> 80401.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 7, populationSize: 800 -> 82261.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 7, populationSize: 900 -> 80951.0
+uniformRate: 0.45, mutationRate: 0.033, tournamentSize: 7, populationSize: 1000 -> 81596.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 750 -> 81761.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 800 -> 82916.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 900 -> 81216.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000 -> 84886.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 5, populationSize: 750 -> 82701.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 5, populationSize: 800 -> 83516.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 5, populationSize: 900 -> 84066.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 5, populationSize: 1000 -> 81161.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 7, populationSize: 750 -> 77661.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 7, populationSize: 800 -> 78861.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 7, populationSize: 900 -> 79681.0
+uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 7, populationSize: 1000 -> 80126.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 3, populationSize: 750 -> 83951.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 3, populationSize: 800 -> 82301.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 3, populationSize: 900 -> 82141.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 3, populationSize: 1000 -> 82801.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 5, populationSize: 750 -> 78751.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 5, populationSize: 800 -> 82201.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 5, populationSize: 900 -> 83461.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 5, populationSize: 1000 -> 83296.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 7, populationSize: 750 -> 81051.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 7, populationSize: 800 -> 80566.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 7, populationSize: 900 -> 78316.0
+uniformRate: 0.48, mutationRate: 0.025, tournamentSize: 7, populationSize: 1000 -> 80016.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 3, populationSize: 750 -> 80886.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 3, populationSize: 800 -> 83786.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 3, populationSize: 900 -> 81586.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 3, populationSize: 1000 -> 82636.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 5, populationSize: 750 -> 79461.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 5, populationSize: 800 -> 84721.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 5, populationSize: 900 -> 83076.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 5, populationSize: 1000 -> 83411.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 7, populationSize: 750 -> 81716.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 7, populationSize: 800 -> 79961.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 7, populationSize: 900 -> 80066.0
+uniformRate: 0.48, mutationRate: 0.027, tournamentSize: 7, populationSize: 1000 -> 80671.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 3, populationSize: 750 -> 73921.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 3, populationSize: 800 -> 75276.1
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 3, populationSize: 900 -> 74731.1
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 3, populationSize: 1000 -> 76721.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 5, populationSize: 750 -> 84171.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 5, populationSize: 800 -> 84116.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 5, populationSize: 900 -> 80286.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 5, populationSize: 1000 -> 84061.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 7, populationSize: 750 -> 79361.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 7, populationSize: 800 -> 83356.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 7, populationSize: 900 -> 79571.0
+uniformRate: 0.48, mutationRate: 0.03, tournamentSize: 7, populationSize: 1000 -> 83681.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 3, populationSize: 750 -> 62131.3
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 3, populationSize: 800 -> 68106.4
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 3, populationSize: 900 -> 70081.4
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 3, populationSize: 1000 -> 69241.3
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 5, populationSize: 750 -> 82256.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 5, populationSize: 800 -> 83406.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 5, populationSize: 900 -> 84006.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 5, populationSize: 1000 -> 82146.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 7, populationSize: 750 -> 77391.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 7, populationSize: 800 -> 80561.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 7, populationSize: 900 -> 82911.0
+uniformRate: 0.48, mutationRate: 0.033, tournamentSize: 7, populationSize: 1000 -> 84066.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 3, populationSize: 750 -> 81436.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 3, populationSize: 800 -> 83356.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 3, populationSize: 900 -> 84226.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000 -> 84721.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 5, populationSize: 750 -> 80346.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 5, populationSize: 800 -> 83956.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 5, populationSize: 900 -> 80026.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 5, populationSize: 1000 -> 81766.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 7, populationSize: 750 -> 81106.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 7, populationSize: 800 -> 80941.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 7, populationSize: 900 -> 74146.0
+uniformRate: 0.5, mutationRate: 0.02, tournamentSize: 7, populationSize: 1000 -> 81166.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 3, populationSize: 750 -> 83736.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 3, populationSize: 800 -> 83461.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 3, populationSize: 900 -> 84061.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 3, populationSize: 1000 -> 84061.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 5, populationSize: 750 -> 81116.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 5, populationSize: 800 -> 84011.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 5, populationSize: 900 -> 82146.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 5, populationSize: 1000 -> 82911.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 7, populationSize: 750 -> 79896.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 7, populationSize: 800 -> 78151.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 7, populationSize: 900 -> 77816.0
+uniformRate: 0.5, mutationRate: 0.025, tournamentSize: 7, populationSize: 1000 -> 80896.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 3, populationSize: 750 -> 83786.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 3, populationSize: 800 -> 82191.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 3, populationSize: 900 -> 81486.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 3, populationSize: 1000 -> 83621.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 5, populationSize: 750 -> 80941.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 5, populationSize: 800 -> 81161.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 5, populationSize: 900 -> 83521.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 5, populationSize: 1000 -> 83356.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 7, populationSize: 750 -> 80346.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 7, populationSize: 800 -> 81386.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 7, populationSize: 900 -> 79406.0
+uniformRate: 0.5, mutationRate: 0.027, tournamentSize: 7, populationSize: 1000 -> 81986.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 3, populationSize: 750 -> 73566.2
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 3, populationSize: 800 -> 79770.9
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 3, populationSize: 900 -> 76536.1
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 3, populationSize: 1000 -> 77821.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 5, populationSize: 750 -> 80946.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 5, populationSize: 800 -> 81106.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 5, populationSize: 900 -> 83846.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 5, populationSize: 1000 -> 84776.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 7, populationSize: 750 -> 80401.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 7, populationSize: 800 -> 80836.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 7, populationSize: 900 -> 82806.0
+uniformRate: 0.5, mutationRate: 0.03, tournamentSize: 7, populationSize: 1000 -> 84446.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 3, populationSize: 750 -> 67491.3
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 3, populationSize: 800 -> 67986.5
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 3, populationSize: 900 -> 68416.3
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 3, populationSize: 1000 -> 69016.5
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 5, populationSize: 750 -> 84611.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 5, populationSize: 800 -> 81701.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 5, populationSize: 900 -> 82746.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 5, populationSize: 1000 -> 83351.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 7, populationSize: 750 -> 77601.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 7, populationSize: 800 -> 81216.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 7, populationSize: 900 -> 79256.0
+uniformRate: 0.5, mutationRate: 0.033, tournamentSize: 7, populationSize: 1000 -> 83241.0
+
+BEST AVG: 84886.0 with params: uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000
+
+
+/////////////////
+
+uniformRate: 0.4, mutationRate: 0.035, tournamentSize: 5, populationSize: 800 
+
+BEST AVG: 84996.0 with params: uniformRate: 0.43, mutationRate: 0.031, tournamentSize: 5, populationSize: 750
+
+BEST AVG: 84886.0 with params: uniformRate: 0.48, mutationRate: 0.02, tournamentSize: 3, populationSize: 1000
+

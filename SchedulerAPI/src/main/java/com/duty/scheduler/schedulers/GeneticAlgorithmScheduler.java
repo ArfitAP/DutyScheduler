@@ -25,16 +25,17 @@ import com.duty.scheduler.services.DBStatus;
 
 public class GeneticAlgorithmScheduler implements IScheduler {
 
-	private static double uniformRate = 0.1;
-    private static double mutationRate = 0.025;
+	private static double uniformRate = 0.5;
+    private static double mutationRate = 0.03;
     private static int tournamentSize = 5;
     private static final boolean elitism = true;
-    private static int populationSize = 350;
-    private static final int generationIterations = 5000;
+    private static int populationSize = 1500;
+    private static final int generationIterations = 1000;
     private static final int hoursDifferencePenalty = 1000;
     private static final int notSelectedDayPenalty = 6000;
     private static final int groupingPenalty = 5500;
     private static final double notAppliedGroupingPenaltyKoeficient = 0.1;
+	private static final int algorithmRepetitions = 5;
     
     private static final int benchmarkGenerationIterations = 500;
     private static final int benchmarkTestsForSameParams = 10;
@@ -72,8 +73,8 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 		{
 			dbStatus.setBusy(true);
 			
-			//Schedule newSchedule = generateSchedule(month, generatedBy, activeUsers, userApplications, holydays);
-			Schedule newSchedule = benchmarkParameters(month, generatedBy, activeUsers, userApplications, holydays);
+			Schedule newSchedule = generateSchedule(month, generatedBy, activeUsers, userApplications, holydays);
+			//Schedule newSchedule = benchmarkParameters(month, generatedBy, activeUsers, userApplications, holydays);
 			
 			scheduleRepository.save(newSchedule);
 			for(UserDuty duty : newSchedule.getUserDuties())
@@ -92,114 +93,6 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 		dbStatus.setBusy(false);
     }
 	
-	public Schedule benchmarkParameters(LocalDate month, User generatedBy, List<UserActive> activeUsers, List<UserApplication> userApplications, List<Holyday> holydays )
-	{
-		try 
-		{
-				
-			numOfDutyUsers = activeUsers.size();
-			userIndex = new long[numOfDutyUsers];
-			for (int i = 0; i < numOfDutyUsers; i++) {
-				userIndex[i] = activeUsers.get(i).getUser().getId();
-	        }
-			
-			hoursInMonth = getHoursInMonth(month);
-			
-			averageDutyTime = (double)hoursInMonth / numOfDutyUsers;
-			
-			Schedule result = new Schedule(generatedBy, month, LocalDateTime.now(), false);
-			
-			Set<UserDuty> userDuties = new HashSet<UserDuty>();
-			
-			result.setUserDuties(userDuties);
-			
-							
-			////////  GA  //////////
-			
-			List<Double> uniformRates = List.of(0.4, 0.43, 0.45, 0.48, 0.5);
-			List<Double> mutationsRates = List.of(0.02, 0.025, 0.027, 0.03, 0.033);
-			List<Integer> tournamentSizes = List.of(3, 5, 7);
-			List<Integer> populationSizes = List.of(750, 800, 900, 1000);
-			
-			double bestUni = 0;
-			double bestMut = 0;
-			int bestTour = 0;
-			int bestPop = 0;
-			double bestAvg = 0;
-			
-			for(Double uniRate : uniformRates)
-			{
-				uniformRate = uniRate;
-				
-				for(Double mutRate : mutationsRates)
-				{
-					mutationRate = mutRate;
-					
-					for(Integer tourSize : tournamentSizes)
-					{
-						tournamentSize = tourSize;
-						
-						for(Integer popSize : populationSizes)
-						{
-							populationSize = popSize;
-							
-							List<Integer> scores = new LinkedList<Integer>();
-							for(int i = 0; i < benchmarkTestsForSameParams; i++)
-							{
-								
-								Population myPop = new Population(populationSize, true);  
-								int generationCount = 0;
-								
-								while (generationCount < benchmarkGenerationIterations) {
-									
-									myPop = evolvePopulation(myPop);
-									
-									generationCount++;																
-								}
-								
-								Individual best = myPop.getFittest();
-								
-								scores.add(best.getFitness());
-							}
-							
-							double averageScore = 0;
-							
-							for(Integer s : scores) averageScore += s;
-							
-							averageScore /= ((double)scores.size());
-							
-							System.out.println("uniformRate: " + uniformRate + ", mutationRate: " + mutationRate + ", tournamentSize: " + tournamentSize + ", populationSize: " + populationSize + " -> " + averageScore);
-							
-							if(averageScore > bestAvg)
-							{
-								bestUni = uniRate;
-								bestMut = mutRate;
-								bestTour = tourSize;
-								bestPop = popSize;
-								bestAvg = averageScore;
-							}
-						}
-					}
-				}
-			}
-			
-			System.out.println();
-			System.out.println("BEST AVG: " + bestAvg + " with params: uniformRate: " + bestUni + ", mutationRate: " + bestMut + ", tournamentSize: " + bestTour + ", populationSize: " + bestPop);
-			
-					
-			return result;
-		} 
-		catch (Exception e) 
-		{
-			Schedule result = new Schedule(generatedBy, month, LocalDateTime.now(), false);
-			
-			Set<UserDuty> userDuties = new HashSet<UserDuty>();
-			
-			result.setUserDuties(userDuties);
-			
-			return result;
-		} 
-	}
 
 	public Schedule generateSchedule(LocalDate month, User generatedBy, List<UserActive> activeUsers, List<UserApplication> userApplications, List<Holyday> holydays )
 	{
@@ -220,37 +113,39 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 			
 							
 			////////  GA  //////////
-					  
-			Population myPop = new Population(populationSize, true);  
 			
-			int generationCount = 0;
-			int currentBest = 0;
-			while (generationCount < generationIterations) {
-								
-				myPop = evolvePopulation(myPop);
-				generationCount++;
+			Individual best = new Individual();
+			
+			for (int i = 0; i < algorithmRepetitions; i++) {
 				
-				if(myPop.getFittest().getFitness() > currentBest) 
-				{
-					currentBest = myPop.getFittest().getFitness();
-					System.out.println(generationCount + ": " + currentBest);
+				Population myPop = new Population(populationSize, true);  
+			
+				int generationCount = 0;
+
+				while (generationCount < generationIterations) {									
+					myPop = evolvePopulation(myPop);
+					generationCount++;							
 				}
-			
-			}
-			
+				
+				Individual repetitionBest = myPop.getFittest();
+				
+				if(repetitionBest.getFitness() > best.getFitness())
+				{
+					best = repetitionBest;
+				}
+	        }
+					  
+				
 			//////////////////////
 				
-			
-			Individual best = myPop.getFittest();
 
 			/*
 			best.setFitness(0);
-			best.debug = true;
-			
+			best.debug = true;		
 			System.out.println(best.getFitness());
 			*/
 					
-			// decoding
+			////// decoding //////
 			
 			Set<UserDuty> userDuties = decodeIndividual(best, result);
 	        			
@@ -300,13 +195,13 @@ public class GeneticAlgorithmScheduler implements IScheduler {
 	
 	private Individual crossover(Individual indiv1, Individual indiv2) {
         Individual newSol = new Individual();
-        boolean doCross = false;
+        boolean firstParent = false;
         
         for (int i = 0; i < newSol.getDefaultGeneLength(); i++) {
         	
-        	if(i % 5 == 0) doCross = (Math.random() <= uniformRate);
+        	if(i % 5 == 0) firstParent = (Math.random() <= uniformRate);
         	
-            if (doCross) {
+            if (firstParent) {
                 newSol.setSingleGene(i, indiv1.getSingleGene(i));
             } else {
                 newSol.setSingleGene(i, indiv2.getSingleGene(i));
@@ -548,4 +443,114 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     	
     	return hoursSum;
     }
+	
+	
+	public Schedule benchmarkParameters(LocalDate month, User generatedBy, List<UserActive> activeUsers, List<UserApplication> userApplications, List<Holyday> holydays )
+	{
+		try 
+		{
+				
+			numOfDutyUsers = activeUsers.size();
+			userIndex = new long[numOfDutyUsers];
+			for (int i = 0; i < numOfDutyUsers; i++) {
+				userIndex[i] = activeUsers.get(i).getUser().getId();
+	        }
+			
+			hoursInMonth = getHoursInMonth(month);
+			
+			averageDutyTime = (double)hoursInMonth / numOfDutyUsers;
+			
+			Schedule result = new Schedule(generatedBy, month, LocalDateTime.now(), false);
+			
+			Set<UserDuty> userDuties = new HashSet<UserDuty>();
+			
+			result.setUserDuties(userDuties);
+			
+							
+			////////  GA  //////////
+			
+			List<Double> uniformRates = List.of(0.4, 0.43, 0.45, 0.48, 0.5);
+			List<Double> mutationsRates = List.of(0.02, 0.025, 0.027, 0.03, 0.033);
+			List<Integer> tournamentSizes = List.of(3, 5, 7);
+			List<Integer> populationSizes = List.of(750, 800, 900, 1000);
+			
+			double bestUni = 0;
+			double bestMut = 0;
+			int bestTour = 0;
+			int bestPop = 0;
+			double bestAvg = 0;
+			
+			for(Double uniRate : uniformRates)
+			{
+				uniformRate = uniRate;
+				
+				for(Double mutRate : mutationsRates)
+				{
+					mutationRate = mutRate;
+					
+					for(Integer tourSize : tournamentSizes)
+					{
+						tournamentSize = tourSize;
+						
+						for(Integer popSize : populationSizes)
+						{
+							populationSize = popSize;
+							
+							List<Integer> scores = new LinkedList<Integer>();
+							for(int i = 0; i < benchmarkTestsForSameParams; i++)
+							{
+								
+								Population myPop = new Population(populationSize, true);  
+								int generationCount = 0;
+								
+								while (generationCount < benchmarkGenerationIterations) {
+									
+									myPop = evolvePopulation(myPop);
+									
+									generationCount++;																
+								}
+								
+								Individual best = myPop.getFittest();
+								
+								scores.add(best.getFitness());
+							}
+							
+							double averageScore = 0;
+							
+							for(Integer s : scores) averageScore += s;
+							
+							averageScore /= ((double)scores.size());
+							
+							System.out.println("uniformRate: " + uniformRate + ", mutationRate: " + mutationRate + ", tournamentSize: " + tournamentSize + ", populationSize: " + populationSize + " -> " + averageScore);
+							
+							if(averageScore > bestAvg)
+							{
+								bestUni = uniRate;
+								bestMut = mutRate;
+								bestTour = tourSize;
+								bestPop = popSize;
+								bestAvg = averageScore;
+							}
+						}
+					}
+				}
+			}
+			
+			System.out.println();
+			System.out.println("BEST AVG: " + bestAvg + " with params: uniformRate: " + bestUni + ", mutationRate: " + bestMut + ", tournamentSize: " + bestTour + ", populationSize: " + bestPop);
+			
+					
+			return result;
+		} 
+		catch (Exception e) 
+		{
+			Schedule result = new Schedule(generatedBy, month, LocalDateTime.now(), false);
+			
+			Set<UserDuty> userDuties = new HashSet<UserDuty>();
+			
+			result.setUserDuties(userDuties);
+			
+			return result;
+		} 
+	}
 }
