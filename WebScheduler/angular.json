@@ -64,10 +64,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "WebScheduler:build:production"
+              "browserTarget": "WebScheduler:build:production",
+              "ssl": true
             },
             "development": {
-              "browserTarget": "WebScheduler:build:development"
+              "browserTarget": "WebScheduler:build:development",
+              "ssl": true
             }
           },
           "defaultConfiguration": "development"
