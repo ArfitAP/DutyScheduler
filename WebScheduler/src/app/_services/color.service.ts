@@ -1,26 +1,47 @@
 import { Injectable } from "@angular/core";
 
-const colors: string[] = ['#CD6155', 
-                          '#AF7AC5', 
-                          '#1D8348',   
-                          '#76448A',
-                          '#A93226',
-                          '#D68910',
-                          '#F7DC6F',                        
-                          '#5499C7',
-                          '#EB984E',
-                          '#5D6D7E',
-                          '#E6B0AA',                         
-                          '#48C9B0',
-                          '#D4AC0D',
-                          '#2471A3',
-                          '#148F77',                                                                       
-                          '#99A3A4',
-                          '#BA4A00',
-                          '#979A9A',
-                          '#EDBB99',                         
-                          '#AEB6BF',                         
-                        ];
+const colors: string[] = [
+                          //darkslategray
+                          '#2f4f4f',
+                          //seagreen
+                          '#2e8b57',
+                          //maroon2
+                          '#7f0000',
+                          //midnightblue
+                          '#191970',
+                          //olive
+                          '#808000',
+                          //red
+                          '#ff0000',
+                          //darkorange
+                          '#ff8c00',
+                          //gold
+                          '#ffd700',
+                          //mediumblue
+                          '#0000cd',
+                          //mediumorchid
+                          '#ba55d3',
+                          //springgreen
+                          '#00ff7f',
+                          //darksalmon
+                          '#e9967a',
+                          //greenyellow
+                          '#adff2f',
+                          //fuchsia
+                          '#ff00ff',
+                          //dodgerblue
+                          '#1e90ff',
+                          //palegoldenrod
+                          '#eee8aa',
+                          //plum
+                          '#dda0dd',
+                          //deeppink
+                          '#ff1493',
+                          //lightskyblue
+                          '#87cefa',
+                          //aquamarine
+                          '#7fffd4',
+                          ];
 
 @Injectable({
     providedIn: 'root'
