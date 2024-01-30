@@ -25,10 +25,14 @@ public class ApplicationDay {
 	@Column(columnDefinition = "DATE")
 	private LocalDate day;
 
-	public ApplicationDay(UserApplication userApplication, LocalDate day) {
+	@Column()
+	private Integer wantedDay;
+
+	public ApplicationDay(UserApplication userApplication, LocalDate day, Integer wantedDay) {
 		super();
 		this.userApplication = userApplication;
 		this.day = day;
+		this.wantedDay = wantedDay;
 	}
 
 	public ApplicationDay() {
@@ -49,6 +53,15 @@ public class ApplicationDay {
 
 	public void setDay(LocalDate day) {
 		this.day = day;
+	}
+
+	public Integer getWantedDay()
+	{
+		return this.wantedDay;
+	}
+
+	public void setWantedDay(Integer wantedDay) {
+		this.wantedDay = wantedDay;
 	}
 
 	/*public UserApplication getUserApplication() {

@@ -107,7 +107,7 @@ public class ScheduleService implements IScheduleService {
 			
 			for(ApplicationDay ad : userApplication.getApplicationDays())
 			{
-				applicationDayRepository.save(new ApplicationDay(newUserApplication, ad.getDay()));
+				applicationDayRepository.save(new ApplicationDay(newUserApplication, ad.getDay(), ad.getWantedDay()));
 			}
 			
 			applicationRepository.flush();
