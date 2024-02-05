@@ -33,6 +33,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     private static final int generationIterations = 1000;
     private static final int hoursDifferencePenalty = 1000;
     private static final int notSelectedDayPenalty = 6000;
+    private static final int notWantedDayPenalty = 100000;
     private static final int groupingPenalty = 5500;
     private static final double notAppliedGroupingPenaltyKoeficient = 0.1;
 	private static final int algorithmRepetitions = 5;
@@ -314,7 +315,11 @@ public class GeneticAlgorithmScheduler implements IScheduler {
         		for(int d : userDayMapping.get(userIndex[i]))
             	{
             		LocalDate dOM = LocalDate.of(month.getYear(), month.getMonth(), d);
-            		if(userAppDays.stream().anyMatch(uad -> uad.getDay().equals(dOM)) == false)
+                    if(userAppDays.stream().anyMatch(uad -> uad.getDay().equals(dOM) && uad.getWantedDay() == 0))
+                    {
+                        tmpPenalty += notWantedDayPenalty;
+                    }
+            		if(userAppDays.stream().noneMatch(uad -> uad.getDay().equals(dOM) && uad.getWantedDay() == 1))
         			{
             			tmpPenalty += notSelectedDayPenalty;
         			}

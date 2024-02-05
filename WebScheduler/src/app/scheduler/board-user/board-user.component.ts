@@ -32,7 +32,8 @@ export class BoardUserComponent implements OnInit {
     user_id: 0,
     applicationDays: []
   };
-  userDays: Date[] = [];
+  userSelectedDays: Date[] = [];
+  notWantedDays: Date[] = [];
 
   numOfDays = 0;
   groupSelected = false;
@@ -63,6 +64,7 @@ export class BoardUserComponent implements OnInit {
           hidden: true,
           date: null,
           selected: false,
+          notWanted: false,
           holyday: false
         });
       }
@@ -80,6 +82,7 @@ export class BoardUserComponent implements OnInit {
           hidden: false,
           date: this.datePipe.transform(new Date(this.nextMonth.getFullYear(), this.nextMonth.getMonth(), i), 'yyyy-MM-dd'),
           selected: false,
+          notWanted: false,
           holyday: false
         });       
       }
@@ -92,6 +95,7 @@ export class BoardUserComponent implements OnInit {
             hidden: true,
             date: null,
             selected: false,
+            notWanted: false,
             holyday: false
           });
         }
@@ -107,27 +111,34 @@ export class BoardUserComponent implements OnInit {
                     this.userApplication = JSON.parse(data);
 
                     try {
-                      this.userDays = this.userApplication.applicationDays.map((item: { day: Date; }) => item.day);
+                      this.userSelectedDays = this.userApplication.applicationDays.filter((item) => item.wantedDay == 1).map((item) => item.day);
+                      this.notWantedDays = this.userApplication.applicationDays.filter((item) => item.wantedDay == 0).map((item) => item.day);
 
                       this.nextMonthWeeks.forEach( (value) => {
-                        value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; holyday: boolean; }) => {
-                          if(this.userDays.includes(dayinweek.date))
+                        value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; notWanted: boolean; holyday: boolean; }) => {
+                          if(this.userSelectedDays.includes(dayinweek.date))
                           {
                             dayinweek.selected = true;
+                          }
+                          else if(this.notWantedDays.includes(dayinweek.date))
+                          {
+                            dayinweek.notWanted = true;
                           }
                         });
                       }); 
 
                       
                     } catch (error) {
-                      this.userDays = [];
+                      this.userSelectedDays = [];
+                      this.notWantedDays = [];
                     }
 
                     this.checkGroupSelected();
 
                   },
                   error: err => {
-                    this.userDays = [];
+                    this.userSelectedDays = [];
+                    this.notWantedDays = [];
                   }
                 });
 
@@ -157,9 +168,10 @@ export class BoardUserComponent implements OnInit {
   }
 
   save() : void {
-    console.log(this.userDays);
+    //console.log(this.userDays);
 
-    this.userApplication.applicationDays =  this.userDays.map((item) => { return { id: 0, day: this.datePipe.transform(item, 'yyyy-MM-dd') }; });
+    this.userApplication.applicationDays =  this.userSelectedDays.map((item) => { return { id: 0, day: item, wantedDay: 1 }; }); // this.datePipe.transform(item, 'yyyy-MM-dd')
+    this.userApplication.applicationDays.push(...this.notWantedDays.map((item) => { return { id: 0, day: item, wantedDay: 0 }; }));
 
     this.http.post(AppSettings.API_ENDPOINT + "schedule/adduserapplications/", this.userApplication, { responseType: 'text' })
                .subscribe({
@@ -180,18 +192,30 @@ export class BoardUserComponent implements OnInit {
 
   dayClick(date: string) : void {
     this.nextMonthWeeks.forEach( (value) => {
-      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; }) => {
+      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; notWanted: boolean; }) => {
         if(dayinweek.date == date)
         {
           dayinweek.selected = !dayinweek.selected;
 
-          if(this.userDays.includes(dayinweek.date))
+          if(this.userSelectedDays.includes(dayinweek.date))
           {
-            this.userDays = this.userDays.filter(obj => obj !== dayinweek.date);
+            dayinweek.selected = false;
+            dayinweek.notWanted = true;
+            this.userSelectedDays = this.userSelectedDays.filter(obj => obj !== dayinweek.date);
+            this.notWantedDays.push(dayinweek.date);
+          }
+          else if(this.notWantedDays.includes(dayinweek.date))
+          {
+            dayinweek.selected = false;
+            dayinweek.notWanted = false;
+            this.notWantedDays = this.notWantedDays.filter(obj => obj !== dayinweek.date);
+            this.userSelectedDays = this.userSelectedDays.filter(obj => obj !== dayinweek.date);
           }
           else
           {
-            this.userDays.push(dayinweek.date);
+            dayinweek.selected = true;
+            dayinweek.notWanted = false;
+            this.userSelectedDays.push(dayinweek.date);
           }
         }
       });
