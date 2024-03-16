@@ -17,10 +17,10 @@ public class Holyday {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "HolydayDay")
 	private LocalDate day;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "HolydayMonth")
 	private LocalDate month;
 
 	public Holyday(Integer id, LocalDate day, LocalDate month) {

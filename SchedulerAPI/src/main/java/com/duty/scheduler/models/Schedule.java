@@ -27,9 +27,10 @@ public class Schedule {
     @JoinColumn(name="generatedby", nullable=false)
     private User generatedBy;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "ScheduleMonth")
 	private LocalDate month;
 	
+	//@Column(columnDefinition = "TIMESTAMP")
 	@Column(columnDefinition = "DATETIME")
 	private LocalDateTime generatedDateTime;
 	

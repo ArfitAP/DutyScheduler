@@ -26,7 +26,7 @@ public class UserActive {
     @JoinColumn(name="activatedby", nullable=false)
     private User activatedBy;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "UserActiveMonth")
 	private LocalDate month;
 
 	public UserActive(User user, User activatedBy, LocalDate month) {

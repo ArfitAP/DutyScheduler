@@ -26,7 +26,7 @@ public class UserDuty {
     @JoinColumn(name="schedule_id", nullable=false)
     private Schedule schedule;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "UserDutyDay")
 	private LocalDate day;
 	
 	@Column()

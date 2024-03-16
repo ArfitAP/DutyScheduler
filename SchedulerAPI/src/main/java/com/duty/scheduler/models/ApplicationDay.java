@@ -22,7 +22,7 @@ public class ApplicationDay {
     @JoinColumn(name="application_id", nullable=false)
     private UserApplication userApplication;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "ApplicationDay")
 	private LocalDate day;
 
 	@Column()

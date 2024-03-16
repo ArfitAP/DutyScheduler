@@ -26,7 +26,7 @@ public class UserApplication {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 	
-	@Column(columnDefinition = "DATE")
+	@Column(columnDefinition = "DATE", name = "UserApplicationMonth")
 	private LocalDate month;
 	
 	private Boolean grouped;

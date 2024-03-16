@@ -1,0 +1,25 @@
+HOLYDAY:
+day -> holyday_day
+month -> holyday_month
+
+
+APPLICATION_DAY:
+day -> application_day
+
+
+SCHEDULE:
+month -> schedule_month
+
+
+USER_ACTIVE:
+month -> user_active_month
+
+
+USER_APPLICATIONS:
+month -> user_application_month
+
+
+USER_DUTY:
+day -> user_duty_day
+
+
