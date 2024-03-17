@@ -251,7 +251,26 @@ export class BoardUserComponent implements OnInit {
     }
 
     if(this.groupSelected == false) {
-      this.userApplication.grouped = false;
+
+      var notWantedSelected : boolean = false;
+      this.nextMonthWeeks.forEach( (value) => {
+        value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: Date; selected: boolean; notWanted: boolean;}) => {
+          if(dayinweek.notWanted == true)
+          {
+            notWantedSelected = true;
+          }
+        });
+      });
+
+      if(notWantedSelected)
+      {
+        this.groupSelected = true;
+      }
+      else
+      {
+        this.userApplication.grouped = false;
+      }
+      
     }
   }
 

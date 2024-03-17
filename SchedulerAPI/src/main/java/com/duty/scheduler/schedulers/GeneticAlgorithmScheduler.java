@@ -30,7 +30,7 @@ public class GeneticAlgorithmScheduler implements IScheduler {
     private static int tournamentSize = 5;
     private static final boolean elitism = true;
     private static int populationSize = 1500;
-    private static final int generationIterations = 1000;
+    private static final int generationIterations = 1500;
     private static final int hoursDifferencePenalty = 1000;
     private static final int notSelectedDayPenalty = 6000;
     private static final int notWantedDayPenalty = 100000;
