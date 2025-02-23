@@ -17,10 +17,11 @@ export interface SelectedMonth {
 }
 
 @Component({
-  selector: 'app-board-admin',
-  templateUrl: './board-admin.component.html',
-  styleUrls: ['./board-admin.component.css'],
-  providers: [DatePipe]
+    selector: 'app-board-admin',
+    templateUrl: './board-admin.component.html',
+    styleUrls: ['./board-admin.component.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class BoardAdminComponent implements OnInit {
 

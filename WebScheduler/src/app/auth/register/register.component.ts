@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../_services/auth.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.css'],
+    standalone: false
 })
 export class RegisterComponent implements OnInit {
   form: any = {

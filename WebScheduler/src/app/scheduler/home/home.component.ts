@@ -14,10 +14,11 @@ export interface SelectedMonth {
 }
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
-  providers: [DatePipe]
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class HomeComponent implements OnInit {
   content?: string;

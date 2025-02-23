@@ -10,10 +10,11 @@ const httpOptions = {
 };
 
 @Component({
-  selector: 'app-board-user',
-  templateUrl: './board-user.component.html',
-  styleUrls: ['./board-user.component.css'],
-  providers: [DatePipe]
+    selector: 'app-board-user',
+    templateUrl: './board-user.component.html',
+    styleUrls: ['./board-user.component.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class BoardUserComponent implements OnInit {
 

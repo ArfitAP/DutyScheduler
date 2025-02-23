@@ -9,10 +9,11 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 import { AppSettings } from  'src/app/_services/app.settings';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
-  providers: [DatePipe]
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class ProfileComponent implements OnInit {
   currentUser: any;
