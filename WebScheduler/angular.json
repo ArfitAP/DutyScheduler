@@ -64,12 +64,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "WebScheduler:build:production",
-              "ssl": true
+              "ssl": true,
+              "buildTarget": "WebScheduler:build:production"
             },
             "development": {
-              "browserTarget": "WebScheduler:build:development",
-              "ssl": true
+              "ssl": true,
+              "buildTarget": "WebScheduler:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +77,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "WebScheduler:build"
+            "buildTarget": "WebScheduler:build"
           }
         },
         "test": {
