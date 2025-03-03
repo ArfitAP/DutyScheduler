@@ -1,0 +1,40 @@
+
+services:
+  web:
+    image: 'web-scheduler:latest'
+    container_name: web
+    build:
+        context: ./WebScheduler
+    ports:
+        - "4200:4200"
+    depends_on:
+        - backend
+        
+  backend:
+    image: 'scheduler-api:latest'
+    build:
+      context: ./SchedulerAPI
+    container_name: backend
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=0000
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/DutyScheduler
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=0000
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+    ports:
+      - "1800:180"
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=0000
+      - POSTGRES_DB=DutyScheduler
+      
+    ports:
+      - "54320:5432"

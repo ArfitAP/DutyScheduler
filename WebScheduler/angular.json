@@ -66,11 +66,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "ssl": true,
+              "ssl": false,
               "buildTarget": "WebScheduler:build:production"
             },
             "development": {
-              "ssl": true,
+              "ssl": false,
               "buildTarget": "WebScheduler:build:development"
             }
           },

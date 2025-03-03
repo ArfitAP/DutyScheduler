@@ -30,8 +30,8 @@ public class Schedule {
 	@Column(columnDefinition = "DATE", name = "ScheduleMonth")
 	private LocalDate month;
 	
-	//@Column(columnDefinition = "TIMESTAMP")
-	@Column(columnDefinition = "DATETIME")
+	@Column(columnDefinition = "TIMESTAMP")
+	//@Column(columnDefinition = "DATETIME")
 	private LocalDateTime generatedDateTime;
 	
 	private Boolean valid;
