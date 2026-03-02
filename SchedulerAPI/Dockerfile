@@ -1,13 +1,28 @@
-# the base image
-FROM amazoncorretto:17
+# ---------- Stage 1: Build ----------
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
-# the JAR file path
-ARG JAR_FILE=target/*.jar
+# Set working directory
+WORKDIR /app
 
-# Copy the JAR file from the build context into the Docker image
-COPY ${JAR_FILE} application.jar
+# Copy only pom.xml first (for dependency caching)
+COPY pom.xml .
 
-CMD apt-get update -y
+# Download dependencies (cached layer if pom.xml unchanged)
+RUN mvn -B dependency:go-offline
 
-# Set the default command to run the Java application
-ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/application.jar"]
+# Copy source code
+COPY src ./src
+
+# Build the application
+RUN mvn -B clean package -DskipTests
+
+# ---------- Stage 2: Runtime ----------
+FROM eclipse-temurin:17-jdk-jammy
+
+WORKDIR /app
+
+# Copy the built jar from builder stage
+COPY --from=builder /app/target/*.jar app.jar
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
