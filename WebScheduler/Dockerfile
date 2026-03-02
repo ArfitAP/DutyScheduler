@@ -1,15 +1,19 @@
-FROM node:alpine
+# Stage 1 — Build Angular
+FROM node:20-alpine AS build
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . /usr/src/app
+COPY package*.json ./
+RUN npm ci
 
-RUN npm install -g @angular/cli
+COPY . .
+RUN npx ng build WebScheduler --configuration production
 
-RUN npm install
+# Stage 2 — Serve with Nginx
+FROM nginx:alpine
 
-EXPOSE 4200
+COPY --from=build /app/dist/web-scheduler /usr/share/nginx/html
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+EXPOSE 80
 
-
+CMD ["nginx", "-g", "daemon off;"]
