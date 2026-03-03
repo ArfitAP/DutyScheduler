@@ -1,43 +1,51 @@
 <div class="d-flex justify-content-center mt-3">
-    <h4>Odabir termina dežurstva za mjesec: {{monthNames[nextMonth.getMonth()]}} {{nextMonth | date: 'yyyy.'}}</h4>
+  <h4>Odabir termina dežurstva za mjesec: {{monthNames[nextMonth.getMonth()]}} {{nextMonth | date: 'yyyy.'}}</h4>
 </div>
 
-<div *ngIf="!userApplication.active">
+@if (!userApplication.active) {
+  <div>
     <p>Niste uključeni u dežurstvo za sljedeći mjesec !</p>
-</div>
-<div class="row" *ngIf="userApplication.active">
+  </div>
+}
+@if (userApplication.active) {
+  <div class="row">
     <div class="col-9">
-
-        <div class="pick-calendar">
-            <table class="calndar-table">
-                <thead>
-                    <tr>
-                        <th *ngFor="let i of [0,1,2,3,4,5,6]">{{dayNames[i]}}</th>
-                    </tr>
-                </thead>
-                <tbody>                   
-                    <tr *ngFor="let weeks of nextMonthWeeks">
-                        <td *ngFor="let days of weeks">
-                            <button type="button" class="cell-button" *ngIf="!days.hidden" [ngClass]="{'background-selected' : days.selected, 'background-not-wanted' : days.notWanted, 'font-red' : days.holyday}" (click)="dayClick(days.date)">
-                                <span class="cell-font">
-                                    {{days.date | date: 'dd'}}
-                                </span>
-                            </button>                  
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    
+      <div class="pick-calendar">
+        <table class="calndar-table">
+          <thead>
+            <tr>
+              @for (i of [0,1,2,3,4,5,6]; track i) {
+                <th>{{dayNames[i]}}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (weeks of nextMonthWeeks; track weeks) {
+              <tr>
+                @for (days of weeks; track days) {
+                  <td>
+                    @if (!days.hidden) {
+                      <button type="button" class="cell-button" [ngClass]="{'background-selected' : days.selected, 'background-not-wanted' : days.notWanted, 'font-red' : days.holyday}" (click)="dayClick(days.date)">
+                        <span class="cell-font">
+                          {{days.date | date: 'dd'}}
+                        </span>
+                      </button>
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="col calendar-save-margin">
-
-        <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> Želim dežurstvo grupirano
-
-        <div class="mt-2">
-            <button class="btn btn-primary w-100" type="button" (click)="save()">
-                Spremi odabir
-            </button>
-        </div>
+      <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> Želim dežurstvo grupirano
+      <div class="mt-2">
+        <button class="btn btn-primary w-100" type="button" (click)="save()">
+          Spremi odabir
+        </button>
+      </div>
     </div>
-</div>
+  </div>
+}

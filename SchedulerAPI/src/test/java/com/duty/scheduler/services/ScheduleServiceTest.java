@@ -10,7 +10,7 @@ import com.duty.scheduler.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,13 +28,13 @@ class ScheduleServiceTest {
     @Autowired
     ScheduleService scheduleService;
 
-    @MockBean
+    @MockitoBean
     HolydayRepository repository;
 
-    @MockBean
+    @MockitoBean
     UserActiveRepository userActiveRepository;
 
-    @MockBean
+    @MockitoBean
     UserRepository userRepository;
 
     @Test

@@ -5,31 +5,39 @@
       <li class="nav-item">
         <a href="/home" class="nav-link" routerLink="home">Početna </a>
       </li>
-      <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/admin" class="nav-link" routerLink="admin">Administracija</a>
-      </li>
+      @if (showAdminBoard) {
+        <li class="nav-item">
+          <a href="/admin" class="nav-link" routerLink="admin">Administracija</a>
+        </li>
+      }
       <li class="nav-item">
-        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">Odabir termina za sljedeći mjesec</a>
+        @if (isLoggedIn) {
+          <a href="/user" class="nav-link" routerLink="user">Odabir termina za sljedeći mjesec</a>
+        }
       </li>
     </ul>
 
-    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-      <li class="nav-item">
-        <a href="/register" class="nav-link" routerLink="register">Registracija</a>
-      </li>
-      <li class="nav-item">
-        <a href="/login" class="nav-link" routerLink="login">Prijava</a>
-      </li>
-    </ul>
+    @if (!isLoggedIn) {
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="/register" class="nav-link" routerLink="register">Registracija</a>
+        </li>
+        <li class="nav-item">
+          <a href="/login" class="nav-link" routerLink="login">Prijava</a>
+        </li>
+      </ul>
+    }
 
-    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-      <li class="nav-item">
-        <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
-      </li>
-      <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">Odjava</a>
-      </li>
-    </ul>
+    @if (isLoggedIn) {
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
+        </li>
+        <li class="nav-item">
+          <a href class="nav-link" (click)="logout()">Odjava</a>
+        </li>
+      </ul>
+    }
   </nav>
 
   <div class="container">

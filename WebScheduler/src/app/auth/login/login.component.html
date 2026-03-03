@@ -1,76 +1,86 @@
 <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
+  <div class="card card-container">
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
       />
-      <form
-        *ngIf="!isLoggedIn"
-        name="form"
-        (ngSubmit)="f.form.valid && onSubmit()"
-        #f="ngForm"
-        novalidate
-        class="w-50 mt-5 mx-auto"
-      >
-        <div class="form-group">
-          <label for="username">Korisničko ime</label>
-          <input
-            type="text"
-            class="form-control"
-            name="username"
-            [(ngModel)]="form.username"
-            required
-            #username="ngModel"
-          />
-          <div
-            class="alert alert-danger"
-            role="alert"
-            *ngIf="username.errors && f.submitted"
+      @if (!isLoggedIn) {
+        <form
+          name="form"
+          (ngSubmit)="f.form.valid && onSubmit()"
+          #f="ngForm"
+          novalidate
+          class="w-50 mt-5 mx-auto"
           >
-            Korisničko ime je obavezno!
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password">Lozinka</label>
-          <input
-            type="password"
-            class="form-control"
-            name="password"
-            [(ngModel)]="form.password"
-            required
-            minlength="6"
-            #password="ngModel"
-          />
-          <div
-            class="alert alert-danger"
-            role="alert"
-            *ngIf="password.errors && f.submitted"
-          >
-            <div *ngIf="password.errors['required']">Lozinka je obavezna</div>
-            <div *ngIf="password.errors['minlength']">
-              Lozinka mora biti duljine minimalno 6 znakova
+          <div class="form-group">
+            <label for="username">Korisničko ime</label>
+            <input
+              type="text"
+              class="form-control"
+              name="username"
+              [(ngModel)]="form.username"
+              required
+              #username="ngModel"
+              />
+              @if (username.errors && f.submitted) {
+                <div
+                  class="alert alert-danger"
+                  role="alert"
+                  >
+                  Korisničko ime je obavezno!
+                </div>
+              }
             </div>
-          </div>
+            <div class="form-group">
+              <label for="password">Lozinka</label>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                [(ngModel)]="form.password"
+                required
+                minlength="6"
+                #password="ngModel"
+                />
+                @if (password.errors && f.submitted) {
+                  <div
+                    class="alert alert-danger"
+                    role="alert"
+                    >
+                    @if (password.errors['required']) {
+                      <div>Lozinka je obavezna</div>
+                    }
+                    @if (password.errors['minlength']) {
+                      <div>
+                        Lozinka mora biti duljine minimalno 6 znakova
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary btn-block">
+                  Prijava
+                </button>
+              </div>
+              <div class="form-group">
+                @if (f.submitted && isLoginFailed) {
+                  <div
+                    class="alert alert-danger"
+                    role="alert"
+                    >
+                    Pogreška: Pogrešna lozinka !
+                  </div>
+                }
+              </div>
+            </form>
+          }
+
+          @if (isLoggedIn) {
+            <div class="alert alert-success w-50 mt-5 mx-auto">
+              Prijavljen kao {{ roles }}.
+            </div>
+          }
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary btn-block">
-            Prijava
-          </button>
-        </div>
-        <div class="form-group">
-          <div
-            class="alert alert-danger"
-            role="alert"
-            *ngIf="f.submitted && isLoginFailed"
-          >
-            Pogreška: Pogrešna lozinka !
-          </div>
-        </div>
-      </form>
-  
-      <div class="alert alert-success w-50 mt-5 mx-auto" *ngIf="isLoggedIn">
-        Prijavljen kao {{ roles }}.
       </div>
-    </div>
-  </div>

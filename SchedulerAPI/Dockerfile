@@ -1,5 +1,5 @@
 # ---------- Stage 1: Build ----------
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+FROM maven:3.9.12-eclipse-temurin-25-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn -B clean package -DskipTests
 
 # ---------- Stage 2: Runtime ----------
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:25-jre-jammy
 
 WORKDIR /app
 

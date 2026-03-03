@@ -1,87 +1,111 @@
 <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
+  <div class="card card-container">
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
       />
-      <form
-        *ngIf="!isSuccessful"
-        name="form"
-        (ngSubmit)="f.form.valid && onSubmit()"
-        #f="ngForm"
-        novalidate
-        class="w-50 mt-5 mx-auto"
-      >
-        <div class="form-group">
-          <label for="username">Korisničko ime</label>
-          <input
-            type="text"
-            class="form-control"
-            name="username"
-            [(ngModel)]="form.username"
-            required
-            minlength="3"
-            maxlength="20"
-            #username="ngModel"
-          />
-          <div class="alert-danger" *ngIf="username.errors && f.submitted">
-            <div *ngIf="username.errors['required']">Korisničko ime je obavezno</div>
-            <div *ngIf="username.errors['minlength']">
-              Korisničko ime mora biti duljine minimalno 3 znaka
+      @if (!isSuccessful) {
+        <form
+          name="form"
+          (ngSubmit)="f.form.valid && onSubmit()"
+          #f="ngForm"
+          novalidate
+          class="w-50 mt-5 mx-auto"
+          >
+          <div class="form-group">
+            <label for="username">Korisničko ime</label>
+            <input
+              type="text"
+              class="form-control"
+              name="username"
+              [(ngModel)]="form.username"
+              required
+              minlength="3"
+              maxlength="20"
+              #username="ngModel"
+              />
+              @if (username.errors && f.submitted) {
+                <div class="alert-danger">
+                  @if (username.errors['required']) {
+                    <div>Korisničko ime je obavezno</div>
+                  }
+                  @if (username.errors['minlength']) {
+                    <div>
+                      Korisničko ime mora biti duljine minimalno 3 znaka
+                    </div>
+                  }
+                  @if (username.errors['maxlength']) {
+                    <div>
+                      Korisničko ime može biti duljine najviše 20 znakova
+                    </div>
+                  }
+                </div>
+              }
             </div>
-            <div *ngIf="username.errors['maxlength']">
-              Korisničko ime može biti duljine najviše 20 znakova
-            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="form.email"
+                required
+                email
+                #email="ngModel"
+                />
+                @if (email.errors && f.submitted) {
+                  <div class="alert-danger">
+                    @if (email.errors['required']) {
+                      <div>Email je obavezan</div>
+                    }
+                    @if (email.errors['email']) {
+                      <div>
+                        Neispravan Email
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="form-group">
+                <label for="password">Lozinka</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  [(ngModel)]="form.password"
+                  required
+                  minlength="6"
+                  #password="ngModel"
+                  />
+                  @if (password.errors && f.submitted) {
+                    <div class="alert-danger">
+                      @if (password.errors['required']) {
+                        <div>Lozinka je obavezna</div>
+                      }
+                      @if (password.errors['minlength']) {
+                        <div>
+                          Lozinka mora biti duljine minimalno 6 znakova
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary btn-block">Registracija</button>
+                </div>
+                @if (f.submitted && isSignUpFailed) {
+                  <div class="alert alert-warning">
+                    Pogreška !<br />{{ errorMessage }}
+                  </div>
+                }
+              </form>
+            }
+
+            @if (isSuccessful) {
+              <div class="alert alert-success w-50 mt-5 mx-auto">
+                Registracija uspješna !
+              </div>
+            }
           </div>
         </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            name="email"
-            [(ngModel)]="form.email"
-            required
-            email
-            #email="ngModel"
-          />
-          <div class="alert-danger" *ngIf="email.errors && f.submitted">
-            <div *ngIf="email.errors['required']">Email je obavezan</div>
-            <div *ngIf="email.errors['email']">
-              Neispravan Email
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password">Lozinka</label>
-          <input
-            type="password"
-            class="form-control"
-            name="password"
-            [(ngModel)]="form.password"
-            required
-            minlength="6"
-            #password="ngModel"
-          />
-          <div class="alert-danger" *ngIf="password.errors && f.submitted">
-            <div *ngIf="password.errors['required']">Lozinka je obavezna</div>
-            <div *ngIf="password.errors['minlength']">
-              Lozinka mora biti duljine minimalno 6 znakova
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <button class="btn btn-primary btn-block">Registracija</button>
-        </div>
-  
-        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-          Pogreška !<br />{{ errorMessage }}
-        </div>
-      </form>
-  
-      <div class="alert alert-success w-50 mt-5 mx-auto" *ngIf="isSuccessful">
-        Registracija uspješna !
-      </div>
-    </div>
-  </div>
