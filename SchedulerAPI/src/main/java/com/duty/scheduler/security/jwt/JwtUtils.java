@@ -22,10 +22,10 @@ import javax.crypto.SecretKey;
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-  @Value("${demo.app.jwtSecret}")
+  @Value("${dutyscheduler.app.jwtSecret}")
   private String jwtSecret;
 
-  @Value("${demo.app.jwtExpirationMs}")
+  @Value("${dutyscheduler.app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
   public String generateJwtToken(Authentication authentication) {

@@ -1,7 +1,5 @@
+import { environment } from '../../environments/environment';
 
 export class AppSettings {
-    //public static API_ENDPOINT = 'https://dutyschedulerapi-duty-scheduler-api.azuremicroservices.io/api/';
-    public static API_ENDPOINT = 'https://schedulerapi-bm12.onrender.com/api/';
-    //public static API_ENDPOINT =  'http://localhost:180/api/';
-    //public static API_ENDPOINT =  'http://localhost:1800/api/';
+    public static API_ENDPOINT = environment.apiBaseUrl;
 }
