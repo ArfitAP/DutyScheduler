@@ -10,37 +10,39 @@ import com.duty.scheduler.models.UserApplication;
 
 public class UserApplicationDTO {
 	private Integer id;
-	
+
 	private Boolean active;
-	
+
     private Long user_id;
 
+	private Long roomId;
+
 	private LocalDate month;
-	
+
 	private Boolean grouped;
-	
+
     private Set<ApplicationDay> applicationDays;
 
 	public UserApplicationDTO(UserApplication uap, Long user_id) {
 		this.id = uap.getId();
-		this.user_id =  user_id;
+		this.user_id = user_id;
+		this.roomId = uap.getRoom() != null ? uap.getRoom().getId() : null;
 		this.month = uap.getMonth();
 		this.grouped = uap.getGrouped();
 		this.applicationDays = uap.getApplicationDays();
 	}
-	
-	public UserApplicationDTO(Long userId, LocalDate month) {
+
+	public UserApplicationDTO(Long userId, Long roomId, LocalDate month) {
 		this.id = 0;
 		this.user_id = userId;
+		this.roomId = roomId;
 		this.month = month;
 		this.grouped = false;
 		this.applicationDays = new HashSet<ApplicationDay>();
 		this.active = false;
 	}
-	
 
 	public UserApplicationDTO() {
-
 	}
 
 	public Integer getId() {
@@ -57,6 +59,14 @@ public class UserApplicationDTO {
 
 	public void setUser_id(Long user_id) {
 		this.user_id = user_id;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
 	}
 
 	public LocalDate getMonth() {
@@ -90,6 +100,4 @@ public class UserApplicationDTO {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-    
-    
 }

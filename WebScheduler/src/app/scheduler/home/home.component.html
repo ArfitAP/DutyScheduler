@@ -1,70 +1,42 @@
-<div class="calendar-layout">
+<div class="container mt-4">
 
-  <div class="calendar-sidebar">
-    <div class="sidebar-month-name">
-      {{ monthNames[selectedMonth.getMonth()] }}
+  @if (!isLoggedIn) {
+    <div class="text-center mt-5">
+      <h3>Duty Scheduler</h3>
+      <p>Prijavite se za pristup sustavu.</p>
     </div>
-    <div class="sidebar-year">
-      {{ selectedMonth.getFullYear() }}
-    </div>
+  }
 
-    <div class="sidebar-nav">
-      <button class="nav-btn" (click)="prevMonth()" title="Prethodni mjesec">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <button class="nav-btn" (click)="today()" title="Trenutni mjesec">Danas</button>
-      <button class="nav-btn" (click)="nextMonthNav()" title="Sljedeći mjesec">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+  @if (isLoggedIn) {
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4>Moje sobe</h4>
+      <a routerLink="/room/create" class="btn btn-primary">+ Nova soba</a>
     </div>
 
-    <div class="sidebar-legend">
-      <div class="legend-title">Raspored</div>
-      @for (user of Usernames; track user) {
-        <div class="legend-item">
-          <span class="legend-color" [style.background-color]="UserColors.get(user)"></span>
-          <span class="legend-text">{{ user }}</span>
-          <span class="legend-hours">{{ UserHours.get(user) }}h</span>
+    @if (rooms.length === 0) {
+      <div class="alert alert-info">
+        Nemate niti jednu sobu. Kreirajte novu sobu ili pričekajte da vas netko pozove.
+      </div>
+    }
+
+    <div class="row">
+      @for (room of rooms; track room.id) {
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ room.name }}</h5>
+              <p class="card-text text-muted" style="font-size: 0.9rem;">{{ room.description || 'Bez opisa' }}</p>
+              <p class="card-text" style="font-size: 0.85rem;">
+                Vlasnik: {{ room.ownerUsername }}
+                <br>Članova: {{ room.memberCount }}
+              </p>
+              <a [routerLink]="['/room', room.id, 'calendar']" class="btn btn-sm btn-primary">Kalendar</a>
+              <a [routerLink]="['/room', room.id]" class="btn btn-sm btn-secondary ml-1">Upravljaj</a>
+            </div>
+          </div>
         </div>
       }
     </div>
-  </div>
-
-  <div class="calendar-main">
-    <table class="calendar-grid">
-      <thead>
-        <tr>
-          @for (i of [0,1,2,3,4,5,6]; track i) {
-            <th>
-              <span class="day-full">{{ dayNames[i] }}</span>
-              <span class="day-short">{{ dayNamesShort[i] }}</span>
-            </th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (weeks of MonthWeeks; track weeks) {
-          <tr>
-            @for (days of weeks; track days) {
-              <td [class.empty-cell]="days.hidden">
-                @if (!days.hidden) {
-                  <div class="day-cell" [style.background-color]="days.color || null" [class.holiday]="days.holyday" [class.has-duty]="days.user" [title]="days.user">
-                    <span class="day-number">{{ days.date | date: 'dd' }}</span>
-                    @if (days.hours) {
-                      <span class="day-hours">{{ days.hours }}h</span>
-                    }
-                  </div>
-                }
-              </td>
-            }
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+  }
 
 </div>

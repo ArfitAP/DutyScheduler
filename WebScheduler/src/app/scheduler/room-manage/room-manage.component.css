@@ -1,0 +1,278 @@
+/* ── Page header ── */
+.room-header {
+  margin-bottom: 1.5rem;
+}
+
+.room-header h3 {
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.room-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.header-nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ── Two-column layout ── */
+.manage-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.panel-left {
+  flex: 0 0 320px;
+  min-width: 0;
+}
+
+.panel-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Cards ── */
+.manage-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.manage-card h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f2f5;
+}
+
+/* ── Members list ── */
+.member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.member-row:last-child {
+  border-bottom: none;
+}
+
+.member-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a2e;
+}
+
+.badge-owner {
+  background: #e8f4fd;
+  color: #0d6efd;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* ── Invite search ── */
+.invite-results {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.invite-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #f0f2f5;
+  font-size: 0.875rem;
+}
+
+.invite-row:last-child {
+  border-bottom: none;
+}
+
+/* ── Month selector ── */
+.month-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.month-selector label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.month-selector select {
+  flex: 1;
+  max-width: 220px;
+}
+
+/* ── Right sub-columns: day hours + activation/generation ── */
+.right-columns {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.right-col-left {
+  flex: 0 0 340px;
+  min-width: 0;
+}
+
+.right-col-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Activation + Generation side by side ── */
+.activation-generation-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.activation-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.generation-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Day hours table ── */
+.day-hours-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+}
+
+.day-hours-scroll table {
+  margin-bottom: 0;
+}
+
+.day-hours-scroll th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6c757d;
+}
+
+.day-hours-scroll td {
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.weekend-row {
+  background-color: #fff8e1;
+}
+
+.hours-input {
+  width: 70px;
+  text-align: center;
+}
+
+/* ── Activation list ── */
+.activation-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  font-size: 0.9rem;
+}
+
+.activation-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Generation area ── */
+.generation-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.generation-area .btn {
+  white-space: nowrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  .activation-generation-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1100px) {
+  .right-columns {
+    flex-direction: column;
+  }
+
+  .right-col-left,
+  .right-col-right {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .manage-layout {
+    flex-direction: column;
+  }
+
+  .panel-left {
+    flex: none;
+    width: 100%;
+  }
+
+  .header-nav {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-nav {
+    margin-top: 0.5rem;
+  }
+}

@@ -26,7 +26,11 @@ public class Schedule {
 	@ManyToOne
     @JoinColumn(name="generatedby", nullable=false)
     private User generatedBy;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "room_id", nullable = false)
+	private Room room;
+
 	@Column(columnDefinition = "DATE", name = "ScheduleMonth")
 	private LocalDate month;
 	
@@ -39,9 +43,10 @@ public class Schedule {
 	@OneToMany(mappedBy="schedule", fetch = FetchType.LAZY)
     private Set<UserDuty> userDuties;
 	
-	public Schedule(User generatedBy, LocalDate month, LocalDateTime generatedDateTime, Boolean valid) {
+	public Schedule(User generatedBy, Room room, LocalDate month, LocalDateTime generatedDateTime, Boolean valid) {
 		super();
 		this.generatedBy = generatedBy;
+		this.room = room;
 		this.month = month;
 		this.generatedDateTime = generatedDateTime;
 		this.valid = valid;
@@ -82,6 +87,14 @@ public class Schedule {
 
 	public void setValid(Boolean valid) {
 		this.valid = valid;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 
 	public Set<UserDuty> getUserDuties() {

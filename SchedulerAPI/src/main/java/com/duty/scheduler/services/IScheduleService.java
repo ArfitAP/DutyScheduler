@@ -11,24 +11,24 @@ import com.duty.scheduler.DTO.UserRoleDTO;
 import com.duty.scheduler.models.Holyday;
 
 public interface IScheduleService {
-	
-	UserApplicationDTO getApplicationsInMonthForUser(Long userId, LocalDate month);
-	
+
+	UserApplicationDTO getApplicationsInMonthForUser(Long userId, Long roomId, LocalDate month);
+
 	boolean updateApplicationsInMonthForUser(UserApplicationDTO userApplication);
-	
-	ScheduleDTO getScheduleForMonth(LocalDate month);
-	
-	List<ActiveUsersDTO> getUsersListForActivation(LocalDate month);
-	
-	boolean updateUserActivesInMonth(LocalDate month, Integer userid, List<ActiveUsersDTO> userActives);
-	
+
+	ScheduleDTO getScheduleForRoomAndMonth(Long roomId, LocalDate month);
+
+	List<ActiveUsersDTO> getUsersListForActivation(Long roomId, LocalDate month);
+
+	boolean updateUserActivesInMonth(Long roomId, LocalDate month, Integer userid, List<ActiveUsersDTO> userActives);
+
 	Optional<UserRoleDTO> getUserRole(String username);
-	
+
 	boolean setUserRole(UserRoleDTO userRole);
-	
-	boolean generateSchedule(LocalDate month, Integer userid);
-	
+
+	boolean generateSchedule(Long roomId, LocalDate month, Integer userid);
+
 	List<Holyday> getHolydaysInMonth(LocalDate month);
-	
-	boolean isServerBusy();
+
+	boolean isServerBusy(Long roomId, LocalDate month);
 }

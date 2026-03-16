@@ -9,13 +9,17 @@ import com.duty.scheduler.models.Schedule;
 
 public class ScheduleDTO {
 	private Integer id;
-	
+
     private String generatedByUser;
-	
+
+	private Long roomId;
+
+	private String roomName;
+
 	private LocalDate month;
-	
+
 	private LocalDateTime generatedDateTime;
-	
+
 	private Boolean valid;
 
     private Set<UserDutyDTO> userDuties;
@@ -29,16 +33,18 @@ public class ScheduleDTO {
 		this.valid = valid;
 		this.userDuties = userDuties;
 	}
-	
+
 	public ScheduleDTO(Schedule sch, String generatedByUser) {
 		this.id = sch.getId();
 		this.generatedByUser = generatedByUser;
+		this.roomId = sch.getRoom() != null ? sch.getRoom().getId() : null;
+		this.roomName = sch.getRoom() != null ? sch.getRoom().getName() : null;
 		this.month = sch.getMonth();
 		this.generatedDateTime = sch.getGeneratedDateTime();
 		this.valid = sch.getValid();
 		this.userDuties = new HashSet<UserDutyDTO>();
 	}
-	
+
 	public ScheduleDTO() {
 		this.id = 0;
 		this.generatedByUser = "";
@@ -60,6 +66,22 @@ public class ScheduleDTO {
 
 	public void setGeneratedByUser(String generatedByUser) {
 		this.generatedByUser = generatedByUser;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
+
+	public String getRoomName() {
+		return roomName;
+	}
+
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
 
 	public LocalDate getMonth() {
@@ -93,6 +115,4 @@ public class ScheduleDTO {
 	public void setUserDuties(Set<UserDutyDTO> userDuties) {
 		this.userDuties = userDuties;
 	}
-    
-    
 }

@@ -1,0 +1,20 @@
+<div class="container mt-4">
+  <h3>Kreiraj novu sobu</h3>
+
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  <div class="form-group mt-3">
+    <label for="name">Naziv sobe:</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="name" maxlength="100">
+  </div>
+
+  <div class="form-group mt-3">
+    <label for="description">Opis:</label>
+    <textarea class="form-control" id="description" [(ngModel)]="description" maxlength="500" rows="3"></textarea>
+  </div>
+
+  <button class="btn btn-primary mt-3" (click)="create()" [disabled]="!name.trim()">Kreiraj</button>
+  <a class="btn btn-secondary mt-3 ml-2" routerLink="/home">Odustani</a>
+</div>

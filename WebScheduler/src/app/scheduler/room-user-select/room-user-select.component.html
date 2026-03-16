@@ -1,0 +1,59 @@
+<div class="container mt-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4>Odabir termina - {{ roomName }}</h4>
+    <a [routerLink]="['/room', roomId]" class="btn btn-sm btn-secondary">Natrag</a>
+  </div>
+
+  <div class="form-group mt-2" style="max-width: 300px;">
+    <label>Mjesec:</label>
+    <select class="form-control" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange()">
+      @for (mon of monthList; track mon.label) {
+        <option [ngValue]="mon.value">{{ mon.label }}</option>
+      }
+    </select>
+  </div>
+
+  @if (!userApplication.active) {
+    <div>
+      <p>Niste aktivirani za odabrani mjesec.</p>
+    </div>
+  }
+  @if (userApplication.active) {
+    <div class="row">
+      <div class="col-9">
+        <div class="pick-calendar">
+          <table class="calndar-table">
+            <thead>
+              <tr>
+                @for (i of [0,1,2,3,4,5,6]; track i) {
+                  <th>{{ dayNames[i] }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (weeks of monthWeeks; track weeks) {
+                <tr>
+                  @for (days of weeks; track days) {
+                    <td>
+                      @if (!days.hidden) {
+                        <button type="button" class="cell-button" [ngClass]="{'background-selected': days.selected, 'background-not-wanted': days.notWanted, 'font-red': days.holyday}" (click)="dayClick(days.date)">
+                          <span class="cell-font">{{ days.date | date: 'dd' }}</span>
+                        </button>
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col calendar-save-margin">
+        <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> Želim dežurstvo grupirano
+        <div class="mt-2">
+          <button class="btn btn-primary w-100" type="button" (click)="save()">Spremi odabir</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

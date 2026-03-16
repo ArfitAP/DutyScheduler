@@ -1,0 +1,160 @@
+<div class="container mt-4">
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  @if (room) {
+    <!-- Header -->
+    <div class="room-header">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h3>{{ room.name }}</h3>
+          @if (room.description) {
+            <p class="text-muted mb-1">{{ room.description }}</p>
+          }
+          <div class="room-meta">
+            <span>Vlasnik: {{ room.ownerUsername }}</span>
+            <span>Članova: {{ room.memberCount }}</span>
+          </div>
+        </div>
+        <div class="header-nav">
+          <a class="btn btn-sm btn-secondary" routerLink="/home">Natrag</a>
+          <a class="btn btn-sm btn-info" [routerLink]="['/room', roomId, 'calendar']">Kalendar</a>
+          <a class="btn btn-sm btn-success" [routerLink]="['/room', roomId, 'select']">Odaberi termine</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="manage-layout">
+      <!-- ════════ LEFT PANEL: Invite & Members ════════ -->
+      <div class="panel-left">
+
+        <!-- Invite (owner only) -->
+        @if (room.isOwner) {
+          <div class="manage-card">
+            <h5>Pozovi korisnika</h5>
+            @if (inviteMessage) {
+              <div class="alert alert-info py-1 px-2 mb-2" style="font-size: 0.85rem;">{{ inviteMessage }}</div>
+            }
+            <input type="text" class="form-control form-control-sm" placeholder="Pretraži korisnike..." [(ngModel)]="searchText" (ngModelChange)="filterUsers()">
+            @if (searchText.trim()) {
+              <div class="invite-results">
+                @for (user of filteredUsers; track user.id) {
+                  <div class="invite-row">
+                    <span>{{ user.username }}</span>
+                    <button class="btn btn-sm btn-primary" (click)="invite(user.id)">Pozovi</button>
+                  </div>
+                }
+                @if (filteredUsers.length === 0) {
+                  <div class="invite-row text-muted">Nema rezultata</div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Members -->
+        <div class="manage-card">
+          <h5>Članovi</h5>
+          @for (member of room.members; track member.id) {
+            <div class="member-row">
+              <span class="member-name">{{ member.username }}</span>
+              <span>
+                @if (member.id === room.ownerId) {
+                  <span class="badge-owner">Vlasnik</span>
+                }
+                @if (room.isOwner && member.id !== room.ownerId) {
+                  <button class="btn btn-sm btn-outline-danger" (click)="removeMember(member.id)">Ukloni</button>
+                }
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ════════ RIGHT PANEL: Schedule management (owner only) ════════ -->
+      @if (room.isOwner) {
+        <div class="panel-right">
+
+          <!-- Month selector -->
+          <div class="month-selector">
+            <label>Mjesec:</label>
+            <select class="form-control form-control-sm" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange()">
+              @for (mon of monthList; track mon.label) {
+                <option [ngValue]="mon.value">{{ mon.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Day Hours + Activation/Generation side by side -->
+          <div class="right-columns">
+            <!-- Day Hours -->
+            <div class="manage-card right-col-left">
+              <h5>Sati po danima</h5>
+              <p class="text-muted mb-2" style="font-size: 0.8rem;">Zadano: 8h radni dan, 16h vikend/praznik</p>
+              <div class="day-hours-scroll">
+                <table class="table table-sm mb-0">
+                  <thead>
+                    <tr>
+                      <th>Dan</th>
+                      <th>Dan u tjednu</th>
+                      <th>Sati</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (dh of dayHours; track dh.day) {
+                      <tr [class.weekend-row]="isWeekendOrHoliday(dh.dayOfWeek)">
+                        <td>{{ dh.day | date: 'dd.MM.' }}</td>
+                        <td>{{ dayNames[dh.dayOfWeek] }}</td>
+                        <td><input type="number" class="form-control form-control-sm hours-input" [(ngModel)]="dh.hours" min="0" max="24"></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn btn-primary btn-sm mt-2" (click)="saveDayHours()">Spremi sate</button>
+            </div>
+
+            <!-- Activation & Generation side by side -->
+            <div class="manage-card right-col-right">
+              <h5>Aktivacija i generiranje</h5>
+              <div class="activation-generation-row">
+                <div class="activation-col">
+                  <p class="section-label">Aktivni korisnici</p>
+                  @if (userActivations.length === 0) {
+                    <p class="text-muted" style="font-size: 0.85rem;">Nema korisnika za aktivaciju</p>
+                  }
+                  @for (user of userActivations; track user.userid) {
+                    <div class="activation-item">
+                      <input type="checkbox" [(ngModel)]="user.active" id="act-{{user.userid}}">
+                      <label for="act-{{user.userid}}" style="margin: 0; cursor: pointer;">{{ user.username }}</label>
+                    </div>
+                  }
+                  <button class="btn btn-primary btn-sm mt-2" (click)="saveActivations()">Spremi aktivne</button>
+                </div>
+                <div class="generation-col">
+                  <p class="section-label">Generiranje rasporeda</p>
+                  <div class="generation-area">
+                    <button class="btn btn-primary btn-sm" (click)="generateSchedule()" [disabled]="loading">
+                      @if (loading) {
+                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                      }
+                      Generiraj raspored
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" (click)="checkBusy()">Provjeri status</button>
+                  </div>
+                  @if (generationMessage) {
+                    <div class="alert alert-info mt-2 py-1 px-2" style="font-size: 0.85rem;">{{ generationMessage }}</div>
+                  }
+                  @if (statusMessage) {
+                    <div class="alert alert-secondary mt-2 py-1 px-2" style="font-size: 0.85rem;">{{ statusMessage }}</div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
