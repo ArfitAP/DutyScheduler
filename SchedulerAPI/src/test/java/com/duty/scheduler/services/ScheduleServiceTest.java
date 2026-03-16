@@ -2,6 +2,7 @@ package com.duty.scheduler.services;
 
 import com.duty.scheduler.DTO.ActiveUsersDTO;
 import com.duty.scheduler.models.Holyday;
+import com.duty.scheduler.models.Room;
 import com.duty.scheduler.models.User;
 import com.duty.scheduler.models.UserActive;
 import com.duty.scheduler.repository.HolydayRepository;
@@ -64,10 +65,10 @@ class ScheduleServiceTest {
         when(userRepository.getReferenceById(anyLong())).thenReturn(user);
 
         // Mocking behavior of userActiveRepository
-        when(userActiveRepository.findByMonth(any(LocalDate.class))).thenReturn(new ArrayList<>());
+        when(userActiveRepository.findByRoomAndMonth(any(Room.class), any(LocalDate.class))).thenReturn(new ArrayList<>());
 
         // Act
-        boolean result = scheduleService.updateUserActivesInMonth(localDate, userId, userActives);
+        boolean result = scheduleService.updateUserActivesInMonth(1L, localDate, userId, userActives);
 
         // Assert
         assertTrue(result);

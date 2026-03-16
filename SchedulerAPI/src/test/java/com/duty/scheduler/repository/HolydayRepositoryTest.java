@@ -22,9 +22,9 @@ public class HolydayRepositoryTest {
     public void givenHolydayList_whenFindByMonth_thenHolydayList(){
 
         // Given : Setup object or precondition
-        Holyday holydayOne = new Holyday(1, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 1));
-        Holyday holydayTwo = new Holyday(2, LocalDate.of(2024, 1, 6), LocalDate.of(2024, 1, 1));
-        Holyday holydayThree = new Holyday(3, LocalDate.of(2024, 5, 1), LocalDate.of(2024, 5, 1));
+        Holyday holydayOne = new Holyday(null, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 1));
+        Holyday holydayTwo = new Holyday(null, LocalDate.of(2024, 1, 6), LocalDate.of(2024, 1, 1));
+        Holyday holydayThree = new Holyday(null, LocalDate.of(2024, 5, 1), LocalDate.of(2024, 5, 1));
 
         holydayRepository.save(holydayOne);
         holydayRepository.save(holydayTwo);
