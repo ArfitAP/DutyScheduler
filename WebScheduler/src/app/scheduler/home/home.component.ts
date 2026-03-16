@@ -1,192 +1,35 @@
-import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ISchedule } from 'src/app/_models/Schedule';
-import { ColorService } from 'src/app/_services/color.service';
+import { IRoom } from 'src/app/_models/Room';
+import { RoomService } from 'src/app/_services/room.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
-import { UserService } from '../../_services/user.service';
-import { AppSettings } from  'src/app/_services/app.settings';
-
-export interface SelectedMonth {
-  value: Date;
-  viewValue: string | null;
-}
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
-    providers: [DatePipe],
     standalone: false
 })
 export class HomeComponent implements OnInit {
-  content?: string;
 
-  dayNames: string[] = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'];
-  dayNamesShort: string[] = ['Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub', 'Ned'];
-  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
+  isLoggedIn = false;
+  rooms: IRoom[] = [];
 
-  selectedMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-
-  schedule: ISchedule = {
-    id: 0,
-    valid: false,
-    month: new Date(),
-    generatedDateTime: new Date(),
-    generatedByUser: "",
-    userDuties: []
-  };
-
-  MonthWeeks: any[] = [];
-
-  Holydays: any[] = [];
-  Usernames: string[] = [];
-  UserColors = new Map<string, string>();
-  UserHours = new Map<string, number>();
-
-  constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private datePipe: DatePipe, private colorService: ColorService) { }
+  constructor(
+    private tokenStorageService: TokenStorageService,
+    private roomService: RoomService
+  ) { }
 
   ngOnInit(): void {
-    this.loadMonth();
-  }
-
-  prevMonth(): void {
-    this.selectedMonth = new Date(this.selectedMonth.getFullYear(), this.selectedMonth.getMonth() - 1, 1);
-    this.loadMonth();
-  }
-
-  nextMonthNav(): void {
-    this.selectedMonth = new Date(this.selectedMonth.getFullYear(), this.selectedMonth.getMonth() + 1, 1);
-    this.loadMonth();
-  }
-
-  today(): void {
-    this.selectedMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    this.loadMonth();
-  }
-
-  loadMonth(): void {
-    let requestedMonth = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd');
-
-    var numOfDays = this.getNumberOfDaysInMonth(this.selectedMonth.getMonth(), this.selectedMonth.getFullYear());
-    var dayofweekfirstday = this.selectedMonth.getDay();
-    if(dayofweekfirstday == 0) dayofweekfirstday = 7;
-
-    var week: any[] = [];
-    var currentDay = 1;
-    this.MonthWeeks = [];
-
-    for (let i = 1; i < dayofweekfirstday; i++) {
-      week.push({
-        dayNo: currentDay++,
-        hidden: true,
-        date: null,
-        color: '',
-        user: '',
-        holyday: false,
-        hours: 0
-      });
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    if (this.isLoggedIn) {
+      this.loadRooms();
     }
-
-    for (let i = 1; i <= numOfDays; i++) {
-      if(currentDay > 7) {
-        this.MonthWeeks.push(week);
-        week = [];
-        currentDay = 1;
-      }
-
-      week.push({
-        dayNo: currentDay++,
-        hidden: false,
-        date: this.datePipe.transform(new Date(this.selectedMonth.getFullYear(), this.selectedMonth.getMonth(), i), 'yyyy-MM-dd'),
-        color: '',
-        user: '',
-        holyday: false,
-        hours: 0
-      });
-    }
-
-    if(currentDay > 1) {
-      for (let i = currentDay; i <= 7; i++) {
-        week.push({
-          dayNo: currentDay++,
-          hidden: true,
-          date: null,
-          color: '',
-          user: '',
-          holyday: false,
-          hours: 0
-        });
-      }
-
-      this.MonthWeeks.push(week);
-    }
-
-    this.http.get(AppSettings.API_ENDPOINT + "public/schedule/schedule/" + requestedMonth, { responseType: 'text' })
-               .subscribe({
-                  next: data => {
-                    this.schedule = JSON.parse(data);
-
-                    this.Usernames = this.schedule.userDuties.map(duty => duty.username).filter(function(elem, index, self) {
-                      return index === self.indexOf(elem);
-                    });
-
-                    this.UserColors.clear();
-                    this.UserHours.clear();
-
-                    this.colorService.resetIndex();
-
-                    this.Usernames.forEach(username => {
-                      this.UserColors.set(username, this.colorService.getNextColor());
-                      this.UserHours.set(username, 0);
-                    });
-
-                    this.MonthWeeks.forEach( (value) => {
-                      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; color: string | undefined; user: string; holyday: boolean; hours: number;}) => {
-
-                        var duty = this.schedule.userDuties.find(duty => duty.day == dayinweek.date);
-                        if(duty != undefined) {
-                          dayinweek.user = duty.username;
-                          dayinweek.color = this.UserColors.get(duty.username);
-                          dayinweek.hours = duty.hours;
-
-                          this.UserHours.set(duty.username, (this.UserHours.get(duty.username) || 0) + duty.hours);
-                        }
-
-                      });
-                    });
-
-                  },
-                  error: err => {
-
-                  }
-                });
-
-    this.http.get(AppSettings.API_ENDPOINT + "public/schedule/getHolydaysForMonth/" + requestedMonth, { responseType: 'text' })
-                .subscribe({
-                   next: data => {
-
-                     this.Holydays = JSON.parse(data).map((item: { day: Date; }) => item.day);
-
-                     this.MonthWeeks.forEach( (value) => {
-                      value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; color: string | undefined; user: string; holyday: boolean; hours: number; }) => {
-
-                        if(this.Holydays.includes(dayinweek.date) || dayinweek.dayNo >= 6) {
-                          dayinweek.holyday = true;
-                        }
-
-                      });
-                    });
-                   },
-                   error: err => {
-                     this.Holydays = [];
-                   }
-                 });
   }
 
-  getNumberOfDaysInMonth(month: number, year: number) : number {
-    var selectedmonth = new Date(year, month, 1);
-    var nextMonth = new Date(selectedmonth.setMonth(selectedmonth.getMonth() + 1, 1));
-    return new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 0).getDate();
+  loadRooms(): void {
+    this.roomService.getMyRooms().subscribe({
+      next: (data) => { this.rooms = data; },
+      error: () => { this.rooms = []; }
+    });
   }
 }

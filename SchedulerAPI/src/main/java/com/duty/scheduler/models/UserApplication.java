@@ -25,7 +25,11 @@ public class UserApplication {
 	@ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "room_id", nullable = false)
+	private Room room;
+
 	@Column(columnDefinition = "DATE", name = "UserApplicationMonth")
 	private LocalDate month;
 	
@@ -34,9 +38,10 @@ public class UserApplication {
 	@OneToMany(mappedBy="userApplication", fetch = FetchType.EAGER)
     private Set<ApplicationDay> applicationDays;
 	
-	public UserApplication(User user, @NotBlank LocalDate month, Boolean grouped, Set<ApplicationDay> applicationDays) {
+	public UserApplication(User user, Room room, @NotBlank LocalDate month, Boolean grouped, Set<ApplicationDay> applicationDays) {
 		super();
 		this.user = user;
+		this.room = room;
 		this.month = month;
 		this.grouped = grouped;
 		this.applicationDays = applicationDays;
@@ -85,8 +90,12 @@ public class UserApplication {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
-	
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
 }

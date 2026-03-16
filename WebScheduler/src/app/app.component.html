@@ -10,11 +10,6 @@
           <a href="/admin" class="nav-link" routerLink="admin">Administracija</a>
         </li>
       }
-      <li class="nav-item">
-        @if (isLoggedIn) {
-          <a href="/user" class="nav-link" routerLink="user">Odabir termina za sljedeći mjesec</a>
-        }
-      </li>
     </ul>
 
     @if (!isLoggedIn) {
@@ -30,6 +25,33 @@
 
     @if (isLoggedIn) {
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item" style="position: relative;">
+          <a href="javascript:void(0)" class="nav-link" (click)="toggleInvitations()">
+            Pozivnice
+            @if (invitations.length > 0) {
+              <span class="badge badge-danger">{{ invitations.length }}</span>
+            }
+          </a>
+          @if (showInvitations) {
+            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 300px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              @if (invitations.length === 0) {
+                <div style="padding: 10px; color: #666; font-size: 0.9rem;">Nema novih pozivnica</div>
+              }
+              @for (inv of invitations; track inv.id) {
+                <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                  <div style="color: #333; font-size: 0.9rem;">
+                    <strong>{{ inv.roomName }}</strong>
+                    <br><span style="color: #666;">Od: {{ inv.invitedByUsername }}</span>
+                  </div>
+                  <div style="margin-top: 5px;">
+                    <button class="btn btn-sm btn-success mr-1" (click)="acceptInvitation(inv.id)">Prihvati</button>
+                    <button class="btn btn-sm btn-danger" (click)="declineInvitation(inv.id)">Odbij</button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </li>
         <li class="nav-item">
           <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
         </li>

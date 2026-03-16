@@ -16,16 +16,16 @@ import com.duty.scheduler.services.ScheduleService;
 @RestController
 @RequestMapping("/api/public/schedule")
 public class PublicController {
-	
+
 	@Autowired
 	ScheduleService scheduleService;
-	
-	@GetMapping("/schedule/{mon}")
-	public ResponseEntity<?> getSchedule(@PathVariable String mon) {
+
+	@GetMapping("/rooms/{roomId}/schedule/{mon}")
+	public ResponseEntity<?> getSchedule(@PathVariable Long roomId, @PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
-		return ResponseEntity.ok(scheduleService.getScheduleForMonth(month));
+		return ResponseEntity.ok(scheduleService.getScheduleForRoomAndMonth(roomId, month));
 	}
-	
+
 	@GetMapping("/getHolydaysForMonth/{mon}")
 	public ResponseEntity<?> getHolydaysForMonth(@PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);

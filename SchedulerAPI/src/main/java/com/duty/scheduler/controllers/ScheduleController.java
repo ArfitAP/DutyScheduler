@@ -22,81 +22,72 @@ import com.duty.scheduler.services.ScheduleService;
 @RestController
 @RequestMapping("/api/schedule")
 public class ScheduleController {
-	
+
 	@Autowired
 	ScheduleService scheduleService;
-	
-	
-	@GetMapping("/userapplications/{userid}/{mon}")
-	public ResponseEntity<?> userApplications(@PathVariable Long userid, @PathVariable String mon) {
+
+	@GetMapping("/rooms/{roomId}/userapplications/{userid}/{mon}")
+	public ResponseEntity<?> userApplications(@PathVariable Long roomId, @PathVariable Long userid, @PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
-		return ResponseEntity.ok(scheduleService.getApplicationsInMonthForUser(userid, month));
+		return ResponseEntity.ok(scheduleService.getApplicationsInMonthForUser(userid, roomId, month));
 	}
-	
-	@PostMapping("/adduserapplications")
-	public ResponseEntity<?> addUserApplications(@RequestBody UserApplicationDTO userApplication) {
-				
+
+	@PostMapping("/rooms/{roomId}/adduserapplications")
+	public ResponseEntity<?> addUserApplications(@PathVariable Long roomId, @RequestBody UserApplicationDTO userApplication) {
+		userApplication.setRoomId(roomId);
 		var res = scheduleService.updateApplicationsInMonthForUser(userApplication);
-		
 		return ResponseEntity.ok(res);
 	}
-	
-	@GetMapping("/schedule/{mon}")
-	public ResponseEntity<?> getSchedule(@PathVariable String mon) {
+
+	@GetMapping("/rooms/{roomId}/schedule/{mon}")
+	public ResponseEntity<?> getSchedule(@PathVariable Long roomId, @PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
-		return ResponseEntity.ok(scheduleService.getScheduleForMonth(month));
+		return ResponseEntity.ok(scheduleService.getScheduleForRoomAndMonth(roomId, month));
 	}
-	
-	@GetMapping("/usersforactivation/{mon}")
-	public ResponseEntity<?> getUsersForActivation(@PathVariable String mon) {
+
+	@GetMapping("/rooms/{roomId}/usersforactivation/{mon}")
+	public ResponseEntity<?> getUsersForActivation(@PathVariable Long roomId, @PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
-		return ResponseEntity.ok(scheduleService.getUsersListForActivation(month));
+		return ResponseEntity.ok(scheduleService.getUsersListForActivation(roomId, month));
 	}
-	
-	@PostMapping("/saveUserActivesInMonth/{mon}/{userid}")
-	public ResponseEntity<?> saveUserActivesInMonth(@PathVariable String mon, @PathVariable Integer userid, @RequestBody List<ActiveUsersDTO> userActives) {
+
+	@PostMapping("/rooms/{roomId}/saveUserActivesInMonth/{mon}/{userid}")
+	public ResponseEntity<?> saveUserActivesInMonth(@PathVariable Long roomId, @PathVariable String mon, @PathVariable Integer userid, @RequestBody List<ActiveUsersDTO> userActives) {
 		LocalDate month = LocalDate.parse(mon);
-		
-		var res = scheduleService.updateUserActivesInMonth(month, userid, userActives);
-		
+		var res = scheduleService.updateUserActivesInMonth(roomId, month, userid, userActives);
 		return ResponseEntity.ok(res);
 	}
-	
+
 	@GetMapping("/getUserRole/{username}")
 	public ResponseEntity<?> getUserRole(@PathVariable String username) {
 		return ResponseEntity.ok(scheduleService.getUserRole(username));
 	}
-	
+
 	@PostMapping("/setUserRole")
 	public ResponseEntity<?> setUserRole(@RequestBody UserRoleDTO userRole) {
-		
 		var res = scheduleService.setUserRole(userRole);
-		
 		return ResponseEntity.ok(res);
 	}
-	
-	@GetMapping("/generateSchedule/{mon}/{userid}")
-	public ResponseEntity<?> generateSchedule(@PathVariable String mon, @PathVariable Integer userid) {
+
+	@GetMapping("/rooms/{roomId}/generateSchedule/{mon}/{userid}")
+	public ResponseEntity<?> generateSchedule(@PathVariable Long roomId, @PathVariable String mon, @PathVariable Integer userid) {
 		LocalDate month = LocalDate.parse(mon);
-		if(scheduleService.generateSchedule(month, userid))
-		{
+		if (scheduleService.generateSchedule(roomId, month, userid)) {
 			return ResponseEntity.ok(true);
-		}
-		else
-		{
-			return ResponseEntity.badRequest().body("Server is busy generating schedule");
+		} else {
+			return ResponseEntity.badRequest().body("Server is busy generating schedule or not room owner");
 		}
 	}
-	
-	@GetMapping("/isServerBusy")
-	public ResponseEntity<?> isServerBusy() {
-		return ResponseEntity.ok(scheduleService.isServerBusy());
+
+	@GetMapping("/rooms/{roomId}/isServerBusy/{mon}")
+	public ResponseEntity<?> isServerBusy(@PathVariable Long roomId, @PathVariable String mon) {
+		LocalDate month = LocalDate.parse(mon);
+		return ResponseEntity.ok(scheduleService.isServerBusy(roomId, month));
 	}
-	
+
 	@GetMapping("/getHolydaysForMonth/{mon}")
 	public ResponseEntity<?> getHolydaysForMonth(@PathVariable String mon) {
 		LocalDate month = LocalDate.parse(mon);
 		return ResponseEntity.ok(scheduleService.getHolydaysInMonth(month));
 	}
-
 }
