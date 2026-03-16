@@ -2,6 +2,7 @@ package com.duty.scheduler.repository;
 
 import com.duty.scheduler.DTO.ScheduleDTO;
 import com.duty.scheduler.DTO.UserDutyDTO;
+import com.duty.scheduler.models.Room;
 import com.duty.scheduler.models.Schedule;
 import com.duty.scheduler.models.User;
 import com.duty.scheduler.models.UserDuty;
@@ -25,6 +26,9 @@ public class ScheduleRepositoryTest {
     private UserRepository userRepository;
 
     @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
     private UserDutyRepository userDutyRepository;
 
     @Test
@@ -32,19 +36,21 @@ public class ScheduleRepositoryTest {
 
         // Given : Setup object or precondition
         User user = new User("TestUser", "user@test.com", "123");
-
         userRepository.save(user);
 
-        Schedule schedule1 = new Schedule(user, LocalDate.of(2024, 1, 1)
+        Room room = new Room("room1", "room desc",user);
+        roomRepository.save(room);
+
+        Schedule schedule1 = new Schedule(user, room, LocalDate.of(2024, 1, 1)
                                             , LocalDateTime.of(2024, 1, 1, 10, 0), true);
-        Schedule schedule2 = new Schedule(user, LocalDate.of(2024, 1, 1)
+        Schedule schedule2 = new Schedule(user, room, LocalDate.of(2024, 1, 1)
                 , LocalDateTime.of(2024, 1, 1, 12, 0), true);
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
 
         // When : Action of behavious that we are going to test
-        ScheduleDTO scheduleJanuary = scheduleRepository.getScheduleForMonth(LocalDate.of(2024, 1, 1));
+        ScheduleDTO scheduleJanuary = scheduleRepository.getScheduleForRoomAndMonth(room, LocalDate.of(2024, 1, 1));
 
         // Then : Verify the output
         assertThat(scheduleJanuary.getId()).isGreaterThan(0);
@@ -58,14 +64,16 @@ public class ScheduleRepositoryTest {
 
         // Given : Setup object or precondition
         User user = new User("TestUser", "user@test.com", "123");
-
         userRepository.save(user);
 
-        Schedule schedule1 = new Schedule(user, LocalDate.of(2024, 1, 1)
+        Room room = new Room("room1", "room desc",user);
+        roomRepository.save(room);
+
+        Schedule schedule1 = new Schedule(user, room, LocalDate.of(2024, 1, 1)
                 , LocalDateTime.of(2024, 1, 1, 10, 0), true);
-        Schedule schedule2 = new Schedule(user, LocalDate.of(2024, 1, 1)
+        Schedule schedule2 = new Schedule(user, room, LocalDate.of(2024, 1, 1)
                 , LocalDateTime.of(2024, 1, 1, 12, 0), true);
-        Schedule schedule3 = new Schedule(user, LocalDate.of(2024, 2, 1)
+        Schedule schedule3 = new Schedule(user, room, LocalDate.of(2024, 2, 1)
                 , LocalDateTime.of(2024, 1, 1, 12, 0), true);
 
         scheduleRepository.save(schedule1);
@@ -73,8 +81,8 @@ public class ScheduleRepositoryTest {
         scheduleRepository.save(schedule3);
 
         // When : Action of behavious that we are going to test
-        List<Schedule> schedulesJanuary = scheduleRepository.findByMonth(LocalDate.of(2024, 1, 1));
-        List<Schedule> schedulesFebruary = scheduleRepository.findByMonth(LocalDate.of(2024, 2, 1));
+        List<Schedule> schedulesJanuary = scheduleRepository.findByRoomAndMonth(room, LocalDate.of(2024, 1, 1));
+        List<Schedule> schedulesFebruary = scheduleRepository.findByRoomAndMonth(room, LocalDate.of(2024, 2, 1));
 
         // Then : Verify the output
         assertThat(schedulesJanuary).isNotEmpty();
@@ -92,9 +100,12 @@ public class ScheduleRepositoryTest {
         User user = new User("TestUser", "user@test.com", "123");
         userRepository.save(user);
 
-        Schedule schedule1 = new Schedule(user, LocalDate.of(2024, 1, 1)
+        Room room = new Room("room1", "room desc",user);
+        roomRepository.save(room);
+
+        Schedule schedule1 = new Schedule(user, room, LocalDate.of(2024, 1, 1)
                 , LocalDateTime.of(2024, 1, 1, 10, 0), true);
-        Schedule schedule2 = new Schedule(user, LocalDate.of(2024, 1, 1)
+        Schedule schedule2 = new Schedule(user, room, LocalDate.of(2024, 1, 1)
                 , LocalDateTime.of(2024, 1, 1, 12, 0), true);
 
         scheduleRepository.save(schedule1);
