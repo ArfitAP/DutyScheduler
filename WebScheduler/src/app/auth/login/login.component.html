@@ -70,11 +70,26 @@
                     class="alert alert-danger"
                     role="alert"
                     >
-                    Pogreška: Pogrešna lozinka !
+                    Pogreška: {{ errorMessage }}
                   </div>
                 }
               </div>
             </form>
+
+            <div class="divider w-50 mx-auto my-3">
+              <hr class="d-inline-block w-100" />
+              <span class="divider-text">ili</span>
+            </div>
+
+            <div class="w-50 mx-auto mb-4">
+              <div id="google-signin-btn"></div>
+            </div>
+
+            @if (isLoginFailed && !f.submitted) {
+              <div class="alert alert-danger w-50 mx-auto" role="alert">
+                Pogreška: {{ errorMessage }}
+              </div>
+            }
           }
 
           @if (isLoggedIn) {

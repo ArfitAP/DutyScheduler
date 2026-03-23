@@ -1,14 +1,21 @@
 package com.duty.scheduler.controllers;
 
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,8 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.duty.scheduler.models.ERole;
 import com.duty.scheduler.models.Role;
 import com.duty.scheduler.models.User;
+import com.duty.scheduler.payload.request.GoogleLoginRequest;
 import com.duty.scheduler.payload.request.LoginRequest;
 import com.duty.scheduler.payload.request.SignupRequest;
+import com.duty.scheduler.payload.request.UsernameSetupRequest;
 import com.duty.scheduler.payload.response.JwtResponse;
 import com.duty.scheduler.payload.response.MessageResponse;
 import com.duty.scheduler.repository.RoleRepository;
@@ -51,6 +60,9 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+
+	@Value("${dutyscheduler.app.googleClientId}")
+	private String googleClientId;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -120,5 +132,115 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+
+	@PostMapping("/google")
+	public ResponseEntity<?> googleAuth(@Valid @RequestBody GoogleLoginRequest googleLoginRequest) {
+		try {
+			GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+					new NetHttpTransport(), GsonFactory.getDefaultInstance())
+					.setAudience(Collections.singletonList(googleClientId))
+					.build();
+
+			GoogleIdToken idToken = verifier.verify(googleLoginRequest.getCredential());
+			if (idToken == null) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Error: Invalid Google token!"));
+			}
+
+			GoogleIdToken.Payload payload = idToken.getPayload();
+			String email = payload.getEmail();
+			String googleId = payload.getSubject();
+
+			Optional<User> existingUser = userRepository.findByEmail(email);
+
+			if (existingUser.isPresent()) {
+				User user = existingUser.get();
+
+				if (googleLoginRequest.isRegistration()) {
+					return ResponseEntity.badRequest()
+							.body(new MessageResponse("Email je već registriran. Koristite prijavu."));
+				}
+
+				boolean usernameRequired = user.getUsername() == null || user.getUsername().isBlank();
+
+				List<String> roles = user.getRoles().stream()
+						.map(role -> role.getName().name())
+						.collect(Collectors.toList());
+
+				String jwt = usernameRequired ? "" : jwtUtils.generateJwtTokenForUsername(user.getUsername());
+
+				return ResponseEntity.ok(new JwtResponse(jwt,
+						user.getId(),
+						user.getUsername(),
+						user.getEmail(),
+						roles,
+						usernameRequired));
+			} else {
+				User newUser = User.createGoogleUser(email, googleId);
+
+				Set<Role> roles = new HashSet<>();
+				Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+						.orElseThrow(() -> new RuntimeException("Role is not found."));
+				roles.add(userRole);
+				newUser.setRoles(roles);
+				userRepository.save(newUser);
+
+				List<String> roleNames = roles.stream()
+						.map(role -> role.getName().name())
+						.collect(Collectors.toList());
+
+				return ResponseEntity.ok(new JwtResponse("",
+						newUser.getId(),
+						null,
+						newUser.getEmail(),
+						roleNames,
+						true));
+			}
+		} catch (Exception e) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Google authentication failed - " + e.getMessage()));
+		}
+	}
+
+	@PostMapping("/set-username/{userId}")
+	public ResponseEntity<?> setUsernameForUser(@Valid @RequestBody UsernameSetupRequest request,
+												@org.springframework.web.bind.annotation.PathVariable Long userId) {
+		if (userRepository.existsByUsername(request.getUsername())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
+		}
+
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if (optionalUser.isEmpty()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: User not found!"));
+		}
+
+		User user = optionalUser.get();
+		if (!"google".equals(user.getProvider())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Username can only be set for Google accounts."));
+		}
+
+		if (user.getUsername() != null && !user.getUsername().isBlank()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Username is already set."));
+		}
+
+		user.setUsername(request.getUsername());
+		userRepository.save(user);
+
+		List<String> roles = user.getRoles().stream()
+				.map(role -> role.getName().name())
+				.collect(Collectors.toList());
+
+		String jwt = jwtUtils.generateJwtTokenForUsername(user.getUsername());
+
+		return ResponseEntity.ok(new JwtResponse(jwt,
+				user.getId(),
+				user.getUsername(),
+				user.getEmail(),
+				roles));
 	}
 }

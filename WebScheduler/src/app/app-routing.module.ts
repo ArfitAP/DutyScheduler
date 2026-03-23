@@ -5,6 +5,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './scheduler/home/home.component';
 import { ProfileComponent } from './auth/profile/profile.component';
+import { UsernameSetupComponent } from './auth/username-setup/username-setup.component';
 import { BoardAdminComponent } from './scheduler/board-admin/board-admin.component';
 import { RoomCreateComponent } from './scheduler/room-create/room-create.component';
 import { RoomManageComponent } from './scheduler/room-manage/room-manage.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'set-username', component: UsernameSetupComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'admin', component: BoardAdminComponent },
   { path: 'room/create', component: RoomCreateComponent },

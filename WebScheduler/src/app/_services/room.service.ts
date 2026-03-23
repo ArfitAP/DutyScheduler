@@ -57,6 +57,26 @@ export class RoomService {
     return this.http.get(this.baseUrl + '/users', { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
   }
 
+  getMyJoinRequests(): Observable<any[]> {
+    return this.http.get(this.baseUrl + '/my-join-requests', { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
+  }
+
+  requestToJoin(roomCode: string): Observable<any> {
+    return this.http.post(this.baseUrl + '/join-request', { roomCode }, { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
+  }
+
+  getPendingJoinRequests(roomId: number): Observable<any[]> {
+    return this.http.get(this.baseUrl + '/' + roomId + '/join-requests', { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
+  }
+
+  approveJoinRequest(requestId: number): Observable<any> {
+    return this.http.post(this.baseUrl + '/join-requests/' + requestId + '/approve', {}, { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
+  }
+
+  rejectJoinRequest(requestId: number): Observable<any> {
+    return this.http.post(this.baseUrl + '/join-requests/' + requestId + '/reject', {}, { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
+  }
+
   getDayHours(roomId: number, month: string): Observable<any[]> {
     return this.http.get(this.baseUrl + '/' + roomId + '/day-hours/' + month, { responseType: 'text' }).pipe(map(data => JSON.parse(data)));
   }

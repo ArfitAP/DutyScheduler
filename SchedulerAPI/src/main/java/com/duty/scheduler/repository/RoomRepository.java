@@ -19,4 +19,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 	List<Room> findByMember(User user);
 
 	Optional<Room> findByIdAndOwner(Long id, User owner);
+
+	Optional<Room> findByRoomCode(String roomCode);
 }

@@ -100,6 +100,21 @@
                   </div>
                 }
               </form>
+
+              <div class="divider w-50 mx-auto my-3">
+                <hr class="d-inline-block w-100" />
+                <span class="divider-text">ili</span>
+              </div>
+
+              <div class="w-50 mx-auto mb-4">
+                <div id="google-signup-btn"></div>
+              </div>
+
+              @if (isGoogleSignUpFailed && googleErrorMessage) {
+                <div class="alert alert-warning w-50 mx-auto">
+                  Pogreška !<br />{{ googleErrorMessage }}
+                </div>
+              }
             }
 
             @if (isSuccessful) {

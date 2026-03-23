@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IRoomDetail, IRoomUser } from 'src/app/_models/Room';
+import { IRoomDetail, IRoomJoinRequest, IRoomUser } from 'src/app/_models/Room';
 import { IUserActivation } from 'src/app/_models/UserActivation';
 import { RoomService } from 'src/app/_services/room.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
@@ -28,6 +28,9 @@ export class RoomManageComponent implements OnInit {
   filteredUsers: IRoomUser[] = [];
   searchText = '';
   inviteMessage = '';
+
+  // Join Requests
+  joinRequests: IRoomJoinRequest[] = [];
 
   // Activation & Generation
   selectedMonth: Date = new Date();
@@ -73,6 +76,9 @@ export class RoomManageComponent implements OnInit {
         this.room = data;
         // Load users after room is loaded so filterUsers() works
         this.loadUsers();
+        if (data.isOwner) {
+          this.loadJoinRequests();
+        }
       },
       error: () => { this.error = 'Greška pri učitavanju sobe'; }
     });
@@ -114,6 +120,27 @@ export class RoomManageComponent implements OnInit {
     this.roomService.removeMember(this.roomId, userId).subscribe({
       next: () => { this.loadRoom(); },
       error: () => { alert('Greška pri uklanjanju člana'); }
+    });
+  }
+
+  loadJoinRequests(): void {
+    this.roomService.getPendingJoinRequests(this.roomId).subscribe({
+      next: (data) => { this.joinRequests = data; },
+      error: () => { this.joinRequests = []; }
+    });
+  }
+
+  approveJoinRequest(requestId: number): void {
+    this.roomService.approveJoinRequest(requestId).subscribe({
+      next: () => { this.loadRoom(); },
+      error: () => { alert('Greška pri odobravanju zahtjeva'); }
+    });
+  }
+
+  rejectJoinRequest(requestId: number): void {
+    this.roomService.rejectJoinRequest(requestId).subscribe({
+      next: () => { this.loadJoinRequests(); },
+      error: () => { alert('Greška pri odbijanju zahtjeva'); }
     });
   }
 

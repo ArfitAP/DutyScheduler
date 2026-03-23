@@ -32,9 +32,13 @@ public class JwtUtils {
 
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
+    return generateJwtTokenForUsername(userPrincipal.getUsername());
+  }
+
+  public String generateJwtTokenForUsername(String username) {
     Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     return Jwts.builder()
-            .setSubject((userPrincipal.getUsername()))
+            .setSubject(username)
             .setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
             .signWith(key, SignatureAlgorithm.HS256)

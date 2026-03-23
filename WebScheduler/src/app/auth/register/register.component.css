@@ -5,3 +5,16 @@
     margin-right: auto;
     margin-top: 50px;
 }
+
+.divider {
+    position: relative;
+    text-align: center;
+}
+
+.divider .divider-text {
+    background-color: white;
+    padding: 0 10px;
+    position: relative;
+    top: -10px;
+    color: #6c757d;
+}

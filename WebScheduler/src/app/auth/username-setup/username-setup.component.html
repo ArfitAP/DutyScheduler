@@ -1,0 +1,60 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
+      />
+    <div class="w-50 mt-5 mx-auto">
+      <h4 class="text-center mb-3">Postavi korisničko ime</h4>
+      <p class="text-center text-muted mb-4">
+        Odaberite jedinstveno korisničko ime za svoj račun.
+      </p>
+      <form
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+        >
+        <div class="form-group">
+          <label for="username">Korisničko ime</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            minlength="3"
+            maxlength="20"
+            #username="ngModel"
+            />
+            @if (username.errors && f.submitted) {
+              <div class="alert-danger mt-1">
+                @if (username.errors['required']) {
+                  <div>Korisničko ime je obavezno</div>
+                }
+                @if (username.errors['minlength']) {
+                  <div>
+                    Korisničko ime mora biti duljine minimalno 3 znaka
+                  </div>
+                }
+                @if (username.errors['maxlength']) {
+                  <div>
+                    Korisničko ime može biti duljine najviše 20 znakova
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="form-group mt-3">
+            <button class="btn btn-primary btn-block">Spremi</button>
+          </div>
+          @if (f.submitted && isSubmitted && errorMessage) {
+            <div class="alert alert-warning mt-2">
+              Pogreška !<br />{{ errorMessage }}
+            </div>
+          }
+        </form>
+      </div>
+    </div>
+  </div>

@@ -13,13 +13,17 @@ import com.duty.scheduler.DTO.RoomDTO;
 import com.duty.scheduler.DTO.RoomDayHoursDTO;
 import com.duty.scheduler.DTO.RoomDetailDTO;
 import com.duty.scheduler.DTO.RoomInvitationDTO;
+import com.duty.scheduler.DTO.RoomJoinRequestDTO;
 import com.duty.scheduler.models.Room;
 import com.duty.scheduler.models.RoomDayHours;
 import com.duty.scheduler.models.RoomInvitation;
 import com.duty.scheduler.models.RoomInvitation.InvitationStatus;
+import com.duty.scheduler.models.RoomJoinRequest;
+import com.duty.scheduler.models.RoomJoinRequest.JoinRequestStatus;
 import com.duty.scheduler.models.User;
 import com.duty.scheduler.repository.RoomDayHoursRepository;
 import com.duty.scheduler.repository.RoomInvitationRepository;
+import com.duty.scheduler.repository.RoomJoinRequestRepository;
 import com.duty.scheduler.repository.RoomRepository;
 import com.duty.scheduler.repository.UserRepository;
 
@@ -34,6 +38,9 @@ public class RoomService implements IRoomService {
 
 	@Autowired
 	RoomInvitationRepository roomInvitationRepository;
+
+	@Autowired
+	RoomJoinRequestRepository roomJoinRequestRepository;
 
 	@Autowired
 	UserRepository userRepository;
@@ -181,6 +188,7 @@ public class RoomService implements IRoomService {
 				.toList();
 	}
 
+	@Transactional
 	public boolean respondToInvitation(Long invitationId, boolean accept, User user) {
 		Optional<RoomInvitation> invOpt = roomInvitationRepository.findById(invitationId);
 		if (invOpt.isPresent()) {
@@ -197,6 +205,7 @@ public class RoomService implements IRoomService {
 				Room room = inv.getRoom();
 				room.getMembers().add(user);
 				roomRepository.save(room);
+				roomJoinRequestRepository.deleteByRoomAndUser(room, user);
 			} else {
 				inv.setStatus(InvitationStatus.DECLINED);
 			}
@@ -208,5 +217,73 @@ public class RoomService implements IRoomService {
 
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
+	}
+
+	public List<RoomJoinRequestDTO> getMyJoinRequests(User user) {
+		return roomJoinRequestRepository.findByUser(user)
+				.stream()
+                .filter(req -> req.getStatus() == JoinRequestStatus.PENDING)
+				.map(RoomJoinRequestDTO::new)
+				.toList();
+	}
+
+	public String requestToJoinRoom(String roomCode, User user) {
+		Optional<Room> roomOpt = roomRepository.findByRoomCode(roomCode);
+		if (roomOpt.isEmpty()) {
+			return "Soba s tim identifikatorom ne postoji.";
+		}
+
+		Room room = roomOpt.get();
+
+		if (room.getMembers().stream().anyMatch(m -> m.getId().equals(user.getId()))) {
+			return "Već ste član ove sobe.";
+		}
+
+		if (roomJoinRequestRepository.existsByRoomAndUserAndStatus(room, user, JoinRequestStatus.PENDING)) {
+			return "Već ste poslali zahtjev za ovu sobu. Pričekajte odobrenje.";
+		}
+
+		roomJoinRequestRepository.save(new RoomJoinRequest(room, user));
+		return null;
+	}
+
+	public List<RoomJoinRequestDTO> getPendingJoinRequests(Long roomId, User owner) {
+		Optional<Room> roomOpt = roomRepository.findByIdAndOwner(roomId, owner);
+		if (roomOpt.isEmpty()) {
+			return List.of();
+		}
+
+		return roomJoinRequestRepository.findByRoomAndStatus(roomOpt.get(), JoinRequestStatus.PENDING)
+				.stream()
+				.map(RoomJoinRequestDTO::new)
+				.toList();
+	}
+
+	@Transactional
+	public boolean respondToJoinRequest(Long requestId, boolean approve, User owner) {
+		Optional<RoomJoinRequest> reqOpt = roomJoinRequestRepository.findById(requestId);
+		if (reqOpt.isEmpty()) {
+			return false;
+		}
+
+		RoomJoinRequest req = reqOpt.get();
+		if (!req.getRoom().getOwner().getId().equals(owner.getId())) {
+			return false;
+		}
+		if (req.getStatus() != JoinRequestStatus.PENDING) {
+			return false;
+		}
+
+		if (approve) {
+			req.setStatus(JoinRequestStatus.APPROVED);
+			Room room = req.getRoom();
+			room.getMembers().add(req.getUser());
+			roomRepository.save(room);
+			roomInvitationRepository.deleteByRoomAndInvitedUser(room, req.getUser());
+		} else {
+			req.setStatus(JoinRequestStatus.REJECTED);
+		}
+		roomJoinRequestRepository.save(req);
+		return true;
 	}
 }

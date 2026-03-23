@@ -85,6 +85,35 @@
   border-radius: 4px;
 }
 
+/* ── Room code ── */
+.room-code {
+  background: #e8f4fd;
+  color: #0d6efd;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ── Join requests ── */
+.join-request-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.join-request-row:last-child {
+  border-bottom: none;
+}
+
+.join-request-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
 /* ── Invite search ── */
 .invite-results {
   max-height: 180px;

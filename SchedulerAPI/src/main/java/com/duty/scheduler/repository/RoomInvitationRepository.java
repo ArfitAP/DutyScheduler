@@ -19,4 +19,6 @@ public interface RoomInvitationRepository extends JpaRepository<RoomInvitation, 
 	Optional<RoomInvitation> findByRoomAndInvitedUserAndStatus(Room room, User invitedUser, InvitationStatus status);
 
 	boolean existsByRoomAndInvitedUserAndStatus(Room room, User invitedUser, InvitationStatus status);
+
+	void deleteByRoomAndInvitedUser(Room room, User invitedUser);
 }
