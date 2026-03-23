@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IRoomInvitation } from './_models/Room';
+import { IRoomInvitation, IRoomJoinRequest } from './_models/Room';
 import { RoomService } from './_services/room.service';
 import { TokenStorageService } from './_services/token-storage.service';
 
@@ -16,6 +16,8 @@ export class AppComponent {
   username?: string;
   invitations: IRoomInvitation[] = [];
   showInvitations = false;
+  joinRequests: IRoomJoinRequest[] = [];
+  showJoinRequests = false;
 
   constructor(private tokenStorageService: TokenStorageService, private roomService: RoomService) { }
 
@@ -28,6 +30,7 @@ export class AppComponent {
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.username = user.username;
       this.loadInvitations();
+      this.loadJoinRequests();
     }
   }
 
@@ -40,6 +43,19 @@ export class AppComponent {
 
   toggleInvitations(): void {
     this.showInvitations = !this.showInvitations;
+    if (this.showInvitations) this.showJoinRequests = false;
+  }
+
+  loadJoinRequests(): void {
+    this.roomService.getMyJoinRequests().subscribe({
+      next: (data) => { this.joinRequests = data; },
+      error: () => { this.joinRequests = []; }
+    });
+  }
+
+  toggleJoinRequests(): void {
+    this.showJoinRequests = !this.showJoinRequests;
+    if (this.showJoinRequests) this.showInvitations = false;
   }
 
   acceptInvitation(id: number): void {

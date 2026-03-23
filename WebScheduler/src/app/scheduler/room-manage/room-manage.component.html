@@ -15,6 +15,7 @@
           <div class="room-meta">
             <span>Vlasnik: {{ room.ownerUsername }}</span>
             <span>Članova: {{ room.memberCount }}</span>
+            <span>Identifikator: <code class="room-code">{{ room.roomCode }}</code></span>
           </div>
         </div>
         <div class="header-nav">
@@ -48,6 +49,22 @@
                 @if (filteredUsers.length === 0) {
                   <div class="invite-row text-muted">Nema rezultata</div>
                 }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Join Requests (owner only) -->
+        @if (room.isOwner && joinRequests.length > 0) {
+          <div class="manage-card">
+            <h5>Zahtjevi za pridruživanje</h5>
+            @for (req of joinRequests; track req.id) {
+              <div class="join-request-row">
+                <span class="member-name">{{ req.username }}</span>
+                <span class="join-request-actions">
+                  <button class="btn btn-sm btn-success" (click)="approveJoinRequest(req.id)">Odobri</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="rejectJoinRequest(req.id)">Odbij</button>
+                </span>
               </div>
             }
           </div>

@@ -27,4 +27,17 @@ export class AuthService {
       password
     }, httpOptions);
   }
+
+  googleAuth(credential: string, registration: boolean = false): Observable<any> {
+    return this.http.post(AppSettings.API_ENDPOINT + 'auth/google', {
+      credential,
+      registration
+    }, httpOptions);
+  }
+
+  setUsername(userId: number, username: string): Observable<any> {
+    return this.http.post(AppSettings.API_ENDPOINT + 'auth/set-username/' + userId, {
+      username
+    }, httpOptions);
+  }
 }

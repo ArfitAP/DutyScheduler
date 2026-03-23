@@ -10,17 +10,16 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(	name = "users", 
-		uniqueConstraints = { 
+@Table(	name = "users",
+		uniqueConstraints = {
 			@UniqueConstraint(columnNames = "username"),
-			@UniqueConstraint(columnNames = "email") 
+			@UniqueConstraint(columnNames = "email")
 		})
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
 	@Size(max = 20)
 	private String username;
 
@@ -29,16 +28,21 @@ public class User {
 	@Email
 	private String email;
 
-	@NotBlank
 	@Size(max = 120)
 	private String password;
 
+	@Size(max = 20)
+	private String provider;
+
+	@Size(max = 255)
+	private String providerId;
+
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "user_id"), 
+	@JoinTable(	name = "user_roles",
+				joinColumns = @JoinColumn(name = "user_id"),
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-	
+
 	@OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     private Set<UserApplication> userApplications;
 
@@ -49,6 +53,15 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.provider = "local";
+	}
+
+	public static User createGoogleUser(String email, String providerId) {
+		User user = new User();
+		user.email = email;
+		user.provider = "google";
+		user.providerId = providerId;
+		return user;
 	}
 
 	public Long getId() {
@@ -81,6 +94,22 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getProvider() {
+		return provider;
+	}
+
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+
+	public String getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(String providerId) {
+		this.providerId = providerId;
 	}
 
 	public Set<Role> getRoles() {

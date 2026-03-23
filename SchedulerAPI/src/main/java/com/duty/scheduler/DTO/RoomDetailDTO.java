@@ -12,6 +12,7 @@ public class RoomDetailDTO {
 	private Long id;
 	private String name;
 	private String description;
+	private String roomCode;
 	private String ownerUsername;
 	private Long ownerId;
 	private LocalDateTime createdAt;
@@ -26,6 +27,7 @@ public class RoomDetailDTO {
 		this.id = room.getId();
 		this.name = room.getName();
 		this.description = room.getDescription();
+		this.roomCode = room.getRoomCode();
 		this.ownerUsername = room.getOwner().getUsername();
 		this.ownerId = room.getOwner().getId();
 		this.createdAt = room.getCreatedAt();
@@ -58,6 +60,14 @@ public class RoomDetailDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getRoomCode() {
+		return roomCode;
+	}
+
+	public void setRoomCode(String roomCode) {
+		this.roomCode = roomCode;
 	}
 
 	public String getOwnerUsername() {

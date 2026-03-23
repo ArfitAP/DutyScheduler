@@ -52,6 +52,39 @@
             </div>
           }
         </li>
+        <li class="nav-item" style="position: relative;">
+          <a href="javascript:void(0)" class="nav-link" (click)="toggleJoinRequests()">
+            Moji zahtjevi
+            @if (joinRequests.length > 0) {
+              <span class="badge badge-info">{{ joinRequests.length }}</span>
+            }
+          </a>
+          @if (showJoinRequests) {
+            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 300px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              @if (joinRequests.length === 0) {
+                <div style="padding: 10px; color: #666; font-size: 0.9rem;">Nema poslanih zahtjeva</div>
+              }
+              @for (req of joinRequests; track req.id) {
+                <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                  <div style="color: #333; font-size: 0.9rem;">
+                    <strong>{{ req.roomName }}</strong>
+                  </div>
+                  <div style="margin-top: 3px;">
+                    @if (req.status === 'PENDING') {
+                      <span class="badge badge-warning">Na čekanju</span>
+                    }
+                    @if (req.status === 'APPROVED') {
+                      <span class="badge badge-success">Odobreno</span>
+                    }
+                    @if (req.status === 'REJECTED') {
+                      <span class="badge badge-danger">Odbijeno</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </li>
         <li class="nav-item">
           <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
         </li>

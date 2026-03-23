@@ -10,8 +10,21 @@
   @if (isLoggedIn) {
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4>Moje sobe</h4>
-      <a routerLink="/room/create" class="btn btn-primary">+ Nova soba</a>
+      <div class="d-flex align-items-center" style="gap: 0.5rem;">
+        <div class="input-group input-group-sm" style="width: 320px;">
+          <input type="text" class="form-control" placeholder="Identifikator sobe" [(ngModel)]="joinCode" maxlength="10">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="requestToJoin()" [disabled]="!joinCode.trim()">Zatraži pristup</button>
+          </div>
+        </div>
+        <a routerLink="/room/create" class="btn btn-primary btn-sm">+ Nova soba</a>
+      </div>
     </div>
+    @if (joinMessage) {
+      <div class="alert py-1 px-2 mb-2" [class.alert-success]="!joinError" [class.alert-danger]="joinError" style="font-size: 0.85rem;">
+        {{ joinMessage }}
+      </div>
+    }
 
     @if (rooms.length === 0) {
       <div class="alert alert-info">
