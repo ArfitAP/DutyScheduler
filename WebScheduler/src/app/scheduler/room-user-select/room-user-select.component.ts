@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { IUserApplication } from 'src/app/_models/UserApplication';
+import { LanguageService } from 'src/app/_services/language.service';
 import { RoomService } from 'src/app/_services/room.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
@@ -14,8 +16,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 })
 export class RoomUserSelectComponent implements OnInit {
 
-  dayNames: string[] = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'];
-  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
+  dayNames: string[] = [];
 
   roomId = 0;
   roomName = '';
@@ -39,13 +40,16 @@ export class RoomUserSelectComponent implements OnInit {
     private route: ActivatedRoute,
     private roomService: RoomService,
     private tokenStorageService: TokenStorageService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private translate: TranslateService,
+    private languageService: LanguageService
   ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
     if (!this.isLoggedIn) return;
 
+    this.dayNames = this.languageService.getDayNames();
     this.userId = this.tokenStorageService.getUser().id;
     this.roomId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -53,15 +57,24 @@ export class RoomUserSelectComponent implements OnInit {
       next: (data) => { this.roomName = data.name; }
     });
 
-    // Build month list: current month + 12 future months
+    const monthNames = this.languageService.getMonthNames();
     for (let i = 0; i <= 12; i++) {
       let d = new Date(new Date().getFullYear(), new Date().getMonth() + i, 1);
       this.monthList.push({
         value: d,
-        label: this.monthNames[d.getMonth()] + ' ' + d.getFullYear()
+        label: monthNames[d.getMonth()] + ' ' + d.getFullYear()
       });
     }
     this.selectedMonth = this.monthList[0].value;
+
+    this.translate.onLangChange.subscribe(() => {
+      this.dayNames = this.languageService.getDayNames();
+      const newMonthNames = this.languageService.getMonthNames();
+      this.monthList = this.monthList.map(m => ({
+        ...m,
+        label: newMonthNames[m.value.getMonth()] + ' ' + m.value.getFullYear()
+      }));
+    });
 
     this.loadMonth();
   }
@@ -141,10 +154,10 @@ export class RoomUserSelectComponent implements OnInit {
 
     this.roomService.saveUserApplications(this.roomId, this.userApplication).subscribe({
       next: (res) => {
-        if (res) alert('Vaš izbor je spremljen');
-        else alert('Greška!');
+        if (res) alert(this.translate.instant('USER_SELECT.SELECTION_SAVED'));
+        else alert(this.translate.instant('USER_SELECT.ERROR'));
       },
-      error: () => { alert('Greška!'); }
+      error: () => { alert(this.translate.instant('USER_SELECT.ERROR')); }
     });
   }
 

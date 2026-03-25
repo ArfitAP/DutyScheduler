@@ -2,22 +2,22 @@
 
   @if (!isLoggedIn) {
     <div class="text-center mt-5">
-      <h3>Duty Scheduler</h3>
-      <p>Prijavite se za pristup sustavu.</p>
+      <h3>{{ 'HOME.TITLE' | translate }}</h3>
+      <p>{{ 'HOME.LOGIN_PROMPT' | translate }}</p>
     </div>
   }
 
   @if (isLoggedIn) {
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4>Moje sobe</h4>
+      <h4>{{ 'HOME.MY_ROOMS' | translate }}</h4>
       <div class="d-flex align-items-center" style="gap: 0.5rem;">
         <div class="input-group input-group-sm" style="width: 320px;">
-          <input type="text" class="form-control" placeholder="Identifikator sobe" [(ngModel)]="joinCode" maxlength="10">
+          <input type="text" class="form-control" [placeholder]="'HOME.ROOM_CODE_PLACEHOLDER' | translate" [(ngModel)]="joinCode" maxlength="10">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" (click)="requestToJoin()" [disabled]="!joinCode.trim()">Zatraži pristup</button>
+            <button class="btn btn-outline-secondary" (click)="requestToJoin()" [disabled]="!joinCode.trim()">{{ 'HOME.REQUEST_ACCESS' | translate }}</button>
           </div>
         </div>
-        <a routerLink="/room/create" class="btn btn-primary btn-sm">+ Nova soba</a>
+        <a routerLink="/room/create" class="btn btn-primary btn-sm">{{ 'HOME.NEW_ROOM' | translate }}</a>
       </div>
     </div>
     @if (joinMessage) {
@@ -28,7 +28,7 @@
 
     @if (rooms.length === 0) {
       <div class="alert alert-info">
-        Nemate niti jednu sobu. Kreirajte novu sobu ili pričekajte da vas netko pozove.
+        {{ 'HOME.NO_ROOMS' | translate }}
       </div>
     }
 
@@ -38,13 +38,13 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{{ room.name }}</h5>
-              <p class="card-text text-muted" style="font-size: 0.9rem;">{{ room.description || 'Bez opisa' }}</p>
+              <p class="card-text text-muted" style="font-size: 0.9rem;">{{ room.description || ('HOME.NO_DESCRIPTION' | translate) }}</p>
               <p class="card-text" style="font-size: 0.85rem;">
-                Vlasnik: {{ room.ownerUsername }}
-                <br>Članova: {{ room.memberCount }}
+                {{ 'HOME.OWNER' | translate }} {{ room.ownerUsername }}
+                <br>{{ 'HOME.MEMBERS' | translate }} {{ room.memberCount }}
               </p>
-              <a [routerLink]="['/room', room.id, 'calendar']" class="btn btn-sm btn-primary">Kalendar</a>
-              <a [routerLink]="['/room', room.id]" class="btn btn-sm btn-secondary ml-1">Upravljaj</a>
+              <a [routerLink]="['/room', room.id, 'calendar']" class="btn btn-sm btn-primary">{{ 'HOME.CALENDAR' | translate }}</a>
+              <a [routerLink]="['/room', room.id]" class="btn btn-sm btn-secondary ml-1">{{ 'HOME.MANAGE' | translate }}</a>
             </div>
           </div>
         </div>

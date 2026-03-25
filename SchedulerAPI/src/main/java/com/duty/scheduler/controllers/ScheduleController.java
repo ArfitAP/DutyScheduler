@@ -2,8 +2,10 @@ package com.duty.scheduler.controllers;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,9 @@ public class ScheduleController {
 
 	@Autowired
 	ScheduleService scheduleService;
+
+	@Autowired
+	MessageSource messageSource;
 
 	@GetMapping("/rooms/{roomId}/userapplications/{userid}/{mon}")
 	public ResponseEntity<?> userApplications(@PathVariable Long roomId, @PathVariable Long userid, @PathVariable String mon) {
@@ -70,12 +75,12 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/rooms/{roomId}/generateSchedule/{mon}/{userid}")
-	public ResponseEntity<?> generateSchedule(@PathVariable Long roomId, @PathVariable String mon, @PathVariable Integer userid) {
+	public ResponseEntity<?> generateSchedule(@PathVariable Long roomId, @PathVariable String mon, @PathVariable Integer userid, Locale locale) {
 		LocalDate month = LocalDate.parse(mon);
 		if (scheduleService.generateSchedule(roomId, month, userid)) {
 			return ResponseEntity.ok(true);
 		} else {
-			return ResponseEntity.badRequest().body("Server is busy generating schedule or not room owner");
+			return ResponseEntity.badRequest().body(messageSource.getMessage("error.server.busy", null, locale));
 		}
 	}
 

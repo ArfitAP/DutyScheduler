@@ -4,6 +4,7 @@ package com.duty.scheduler.controllers;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,6 +63,9 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	MessageSource messageSource;
+
 	@Value("${dutyscheduler.app.googleClientId}")
 	private String googleClientId;
 
@@ -72,35 +77,35 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
+
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
+		return ResponseEntity.ok(new JwtResponse(jwt,
+												 userDetails.getId(),
+												 userDetails.getUsername(),
+												 userDetails.getEmail(),
 												 roles));
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, Locale locale) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
+					.body(new MessageResponse(messageSource.getMessage("error.username.taken", null, locale)));
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
+					.body(new MessageResponse(messageSource.getMessage("error.email.taken", null, locale)));
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), 
+		User user = new User(signUpRequest.getUsername(),
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()));
 
@@ -109,20 +114,20 @@ public class AuthController {
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					.orElseThrow(() -> new RuntimeException(messageSource.getMessage("error.role.not.found", null, locale)));
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new RuntimeException(messageSource.getMessage("error.role.not.found", null, locale)));
 					roles.add(adminRole);
 
-					break;				
+					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new RuntimeException(messageSource.getMessage("error.role.not.found", null, locale)));
 					roles.add(userRole);
 				}
 			});
@@ -131,11 +136,11 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.ok(new MessageResponse(messageSource.getMessage("success.user.registered", null, locale)));
 	}
 
 	@PostMapping("/google")
-	public ResponseEntity<?> googleAuth(@Valid @RequestBody GoogleLoginRequest googleLoginRequest) {
+	public ResponseEntity<?> googleAuth(@Valid @RequestBody GoogleLoginRequest googleLoginRequest, Locale locale) {
 		try {
 			GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
 					new NetHttpTransport(), GsonFactory.getDefaultInstance())
@@ -145,7 +150,7 @@ public class AuthController {
 			GoogleIdToken idToken = verifier.verify(googleLoginRequest.getCredential());
 			if (idToken == null) {
 				return ResponseEntity.badRequest()
-						.body(new MessageResponse("Error: Invalid Google token!"));
+						.body(new MessageResponse(messageSource.getMessage("error.google.invalid.token", null, locale)));
 			}
 
 			GoogleIdToken.Payload payload = idToken.getPayload();
@@ -159,7 +164,7 @@ public class AuthController {
 
 				if (googleLoginRequest.isRegistration()) {
 					return ResponseEntity.badRequest()
-							.body(new MessageResponse("Email je već registriran. Koristite prijavu."));
+							.body(new MessageResponse(messageSource.getMessage("error.google.email.registered", null, locale)));
 				}
 
 				boolean usernameRequired = user.getUsername() == null || user.getUsername().isBlank();
@@ -181,7 +186,7 @@ public class AuthController {
 
 				Set<Role> roles = new HashSet<>();
 				Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-						.orElseThrow(() -> new RuntimeException("Role is not found."));
+						.orElseThrow(() -> new RuntimeException(messageSource.getMessage("error.role.not.found", null, locale)));
 				roles.add(userRole);
 				newUser.setRoles(roles);
 				userRepository.save(newUser);
@@ -199,33 +204,34 @@ public class AuthController {
 			}
 		} catch (Exception e) {
 			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Error: Google authentication failed - " + e.getMessage()));
+					.body(new MessageResponse(messageSource.getMessage("error.google.auth.failed", null, locale) + " " + e.getMessage()));
 		}
 	}
 
 	@PostMapping("/set-username/{userId}")
 	public ResponseEntity<?> setUsernameForUser(@Valid @RequestBody UsernameSetupRequest request,
-												@org.springframework.web.bind.annotation.PathVariable Long userId) {
+												@org.springframework.web.bind.annotation.PathVariable Long userId,
+												Locale locale) {
 		if (userRepository.existsByUsername(request.getUsername())) {
 			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
+					.body(new MessageResponse(messageSource.getMessage("error.username.already.taken", null, locale)));
 		}
 
 		Optional<User> optionalUser = userRepository.findById(userId);
 		if (optionalUser.isEmpty()) {
 			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Error: User not found!"));
+					.body(new MessageResponse(messageSource.getMessage("error.user.not.found", null, locale)));
 		}
 
 		User user = optionalUser.get();
 		if (!"google".equals(user.getProvider())) {
 			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Error: Username can only be set for Google accounts."));
+					.body(new MessageResponse(messageSource.getMessage("error.username.google.only", null, locale)));
 		}
 
 		if (user.getUsername() != null && !user.getUsername().isBlank()) {
 			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Error: Username is already set."));
+					.body(new MessageResponse(messageSource.getMessage("error.username.already.set", null, locale)));
 		}
 
 		user.setUsername(request.getUsername());

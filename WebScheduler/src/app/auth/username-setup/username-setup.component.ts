@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-username-setup',
@@ -20,7 +21,8 @@ export class UsernameSetupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -43,7 +45,8 @@ export class UsernameSetupComponent implements OnInit {
 
     const { username } = this.form;
 
-    if (!confirm(`Vaše korisničko ime će biti: "${username}". Jeste li sigurni?`)) {
+    const confirmMsg = this.translate.instant('USERNAME_SETUP.CONFIRM', { username });
+    if (!confirm(confirmMsg)) {
       return;
     }
 

@@ -1,23 +1,23 @@
 <div class="container mt-4">
-  <h4>Administracija</h4>
-  <p class="text-muted">Upravljanje korisničkim ulogama. Generiranje rasporeda i aktivacija korisnika vrši se unutar svake sobe.</p>
+  <h4>{{ 'ADMIN.TITLE' | translate }}</h4>
+  <p class="text-muted">{{ 'ADMIN.DESCRIPTION' | translate }}</p>
 
   <hr>
 
-  <h5>Upravljanje ulogama korisnika</h5>
+  <h5>{{ 'ADMIN.ROLE_MANAGEMENT' | translate }}</h5>
   <div class="row mt-3">
     <div class="col-6">
-      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" placeholder="Korisničko ime">
+      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" [placeholder]="'ADMIN.USERNAME_PLACEHOLDER' | translate">
     </div>
     <div class="col-4">
-      <button class="btn btn-primary" type="button" (click)="getUserRole()">Dohvati korisnika</button>
+      <button class="btn btn-primary" type="button" (click)="getUserRole()">{{ 'ADMIN.GET_USER' | translate }}</button>
     </div>
   </div>
   <div class="row mt-3">
     @if (requestedUser) {
       <div class="col">
-        Admin: <input type="checkbox" [(ngModel)]="requestedUser.active">
-        <button class="btn btn-primary ml-4" type="button" (click)="setAdmin()">Spremi</button>
+        {{ 'ADMIN.ADMIN_LABEL' | translate }} <input type="checkbox" [(ngModel)]="requestedUser.active">
+        <button class="btn btn-primary ml-4" type="button" (click)="setAdmin()">{{ 'ADMIN.SAVE' | translate }}</button>
       </div>
     }
   </div>

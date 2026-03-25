@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { IUserRole } from 'src/app/_models/UserRole';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { AppSettings } from 'src/app/_services/app.settings';
@@ -16,7 +17,7 @@ export class BoardAdminComponent implements OnInit {
   username: string = '';
   requestedUser: IUserRole | null = null;
 
-  constructor(private tokenStorageService: TokenStorageService, private http: HttpClient) { }
+  constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private translate: TranslateService) { }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
@@ -38,12 +39,12 @@ export class BoardAdminComponent implements OnInit {
         next: data => {
           let res: Boolean = JSON.parse(data);
           if (res == true) {
-            alert("Korisnik je spremljen");
+            alert(this.translate.instant('ADMIN.USER_SAVED'));
             this.requestedUser = null;
             this.username = '';
-          } else alert("Pogreška!");
+          } else alert(this.translate.instant('ADMIN.ERROR'));
         },
-        error: () => { alert("Pogreška!"); }
+        error: () => { alert(this.translate.instant('ADMIN.ERROR')); }
       });
   }
 }

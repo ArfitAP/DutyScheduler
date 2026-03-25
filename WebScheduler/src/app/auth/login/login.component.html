@@ -14,7 +14,7 @@
           class="w-50 mt-5 mx-auto"
           >
           <div class="form-group">
-            <label for="username">Korisničko ime</label>
+            <label for="username">{{ 'LOGIN.USERNAME' | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -28,12 +28,12 @@
                   class="alert alert-danger"
                   role="alert"
                   >
-                  Korisničko ime je obavezno!
+                  {{ 'LOGIN.USERNAME_REQUIRED' | translate }}
                 </div>
               }
             </div>
             <div class="form-group">
-              <label for="password">Lozinka</label>
+              <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
               <input
                 type="password"
                 class="form-control"
@@ -49,11 +49,11 @@
                     role="alert"
                     >
                     @if (password.errors['required']) {
-                      <div>Lozinka je obavezna</div>
+                      <div>{{ 'LOGIN.PASSWORD_REQUIRED' | translate }}</div>
                     }
                     @if (password.errors['minlength']) {
                       <div>
-                        Lozinka mora biti duljine minimalno 6 znakova
+                        {{ 'LOGIN.PASSWORD_MIN_LENGTH' | translate }}
                       </div>
                     }
                   </div>
@@ -61,7 +61,7 @@
               </div>
               <div class="form-group">
                 <button class="btn btn-primary btn-block">
-                  Prijava
+                  {{ 'LOGIN.SUBMIT' | translate }}
                 </button>
               </div>
               <div class="form-group">
@@ -70,7 +70,7 @@
                     class="alert alert-danger"
                     role="alert"
                     >
-                    Pogreška: {{ errorMessage }}
+                    {{ 'LOGIN.ERROR' | translate }} {{ errorMessage }}
                   </div>
                 }
               </div>
@@ -78,7 +78,7 @@
 
             <div class="divider w-50 mx-auto my-3">
               <hr class="d-inline-block w-100" />
-              <span class="divider-text">ili</span>
+              <span class="divider-text">{{ 'LOGIN.OR' | translate }}</span>
             </div>
 
             <div class="w-50 mx-auto mb-4">
@@ -87,14 +87,14 @@
 
             @if (isLoginFailed && !f.submitted) {
               <div class="alert alert-danger w-50 mx-auto" role="alert">
-                Pogreška: {{ errorMessage }}
+                {{ 'LOGIN.ERROR' | translate }} {{ errorMessage }}
               </div>
             }
           }
 
           @if (isLoggedIn) {
             <div class="alert alert-success w-50 mt-5 mx-auto">
-              Prijavljen kao {{ roles }}.
+              {{ 'LOGIN.LOGGED_IN_AS' | translate }} {{ roles }}.
             </div>
           }
         </div>

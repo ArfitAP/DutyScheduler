@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-center mt-3">
-  <h4>Odabir termina dežurstva za mjesec: {{monthNames[nextMonth.getMonth()]}} {{nextMonth | date: 'yyyy.'}}</h4>
+  <h4>{{ 'BOARD_USER.TITLE' | translate }} {{monthNames[nextMonth.getMonth()]}} {{nextMonth | date: 'yyyy.'}}</h4>
 </div>
 
 @if (!userApplication.active) {
   <div>
-    <p>Niste uključeni u dežurstvo za sljedeći mjesec !</p>
+    <p>{{ 'BOARD_USER.NOT_INCLUDED' | translate }}</p>
   </div>
 }
 @if (userApplication.active) {
@@ -40,10 +40,10 @@
       </div>
     </div>
     <div class="col calendar-save-margin">
-      <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> Želim dežurstvo grupirano
+      <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> {{ 'BOARD_USER.GROUP_DUTY' | translate }}
       <div class="mt-2">
         <button class="btn btn-primary w-100" type="button" (click)="save()">
-          Spremi odabir
+          {{ 'BOARD_USER.SAVE_SELECTION' | translate }}
         </button>
       </div>
     </div>

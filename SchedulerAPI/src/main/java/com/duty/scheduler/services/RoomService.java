@@ -3,9 +3,11 @@ package com.duty.scheduler.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,9 @@ public class RoomService implements IRoomService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	MessageSource messageSource;
 
 	@Override
 	public Room createRoom(String name, String description, User owner) {
@@ -227,20 +232,20 @@ public class RoomService implements IRoomService {
 				.toList();
 	}
 
-	public String requestToJoinRoom(String roomCode, User user) {
+	public String requestToJoinRoom(String roomCode, User user, Locale locale) {
 		Optional<Room> roomOpt = roomRepository.findByRoomCode(roomCode);
 		if (roomOpt.isEmpty()) {
-			return "Soba s tim identifikatorom ne postoji.";
+			return messageSource.getMessage("error.room.code.not.found", null, locale);
 		}
 
 		Room room = roomOpt.get();
 
 		if (room.getMembers().stream().anyMatch(m -> m.getId().equals(user.getId()))) {
-			return "Već ste član ove sobe.";
+			return messageSource.getMessage("error.already.member", null, locale);
 		}
 
 		if (roomJoinRequestRepository.existsByRoomAndUserAndStatus(room, user, JoinRequestStatus.PENDING)) {
-			return "Već ste poslali zahtjev za ovu sobu. Pričekajte odobrenje.";
+			return messageSource.getMessage("error.request.already.sent", null, locale);
 		}
 
 		roomJoinRequestRepository.save(new RoomJoinRequest(room, user));

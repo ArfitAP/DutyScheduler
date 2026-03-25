@@ -14,7 +14,7 @@
           class="w-50 mt-5 mx-auto"
           >
           <div class="form-group">
-            <label for="username">Korisničko ime</label>
+            <label for="username">{{ 'REGISTER.USERNAME' | translate }}</label>
             <input
               type="text"
               class="form-control"
@@ -28,23 +28,23 @@
               @if (username.errors && f.submitted) {
                 <div class="alert-danger">
                   @if (username.errors['required']) {
-                    <div>Korisničko ime je obavezno</div>
+                    <div>{{ 'REGISTER.USERNAME_REQUIRED' | translate }}</div>
                   }
                   @if (username.errors['minlength']) {
                     <div>
-                      Korisničko ime mora biti duljine minimalno 3 znaka
+                      {{ 'REGISTER.USERNAME_MIN_LENGTH' | translate }}
                     </div>
                   }
                   @if (username.errors['maxlength']) {
                     <div>
-                      Korisničko ime može biti duljine najviše 20 znakova
+                      {{ 'REGISTER.USERNAME_MAX_LENGTH' | translate }}
                     </div>
                   }
                 </div>
               }
             </div>
             <div class="form-group">
-              <label for="email">Email</label>
+              <label for="email">{{ 'REGISTER.EMAIL' | translate }}</label>
               <input
                 type="email"
                 class="form-control"
@@ -57,18 +57,18 @@
                 @if (email.errors && f.submitted) {
                   <div class="alert-danger">
                     @if (email.errors['required']) {
-                      <div>Email je obavezan</div>
+                      <div>{{ 'REGISTER.EMAIL_REQUIRED' | translate }}</div>
                     }
                     @if (email.errors['email']) {
                       <div>
-                        Neispravan Email
+                        {{ 'REGISTER.EMAIL_INVALID' | translate }}
                       </div>
                     }
                   </div>
                 }
               </div>
               <div class="form-group">
-                <label for="password">Lozinka</label>
+                <label for="password">{{ 'REGISTER.PASSWORD' | translate }}</label>
                 <input
                   type="password"
                   class="form-control"
@@ -81,29 +81,29 @@
                   @if (password.errors && f.submitted) {
                     <div class="alert-danger">
                       @if (password.errors['required']) {
-                        <div>Lozinka je obavezna</div>
+                        <div>{{ 'REGISTER.PASSWORD_REQUIRED' | translate }}</div>
                       }
                       @if (password.errors['minlength']) {
                         <div>
-                          Lozinka mora biti duljine minimalno 6 znakova
+                          {{ 'REGISTER.PASSWORD_MIN_LENGTH' | translate }}
                         </div>
                       }
                     </div>
                   }
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-primary btn-block">Registracija</button>
+                  <button class="btn btn-primary btn-block">{{ 'REGISTER.SUBMIT' | translate }}</button>
                 </div>
                 @if (f.submitted && isSignUpFailed) {
                   <div class="alert alert-warning">
-                    Pogreška !<br />{{ errorMessage }}
+                    {{ 'REGISTER.ERROR' | translate }}<br />{{ errorMessage }}
                   </div>
                 }
               </form>
 
               <div class="divider w-50 mx-auto my-3">
                 <hr class="d-inline-block w-100" />
-                <span class="divider-text">ili</span>
+                <span class="divider-text">{{ 'REGISTER.OR' | translate }}</span>
               </div>
 
               <div class="w-50 mx-auto mb-4">
@@ -112,14 +112,14 @@
 
               @if (isGoogleSignUpFailed && googleErrorMessage) {
                 <div class="alert alert-warning w-50 mx-auto">
-                  Pogreška !<br />{{ googleErrorMessage }}
+                  {{ 'REGISTER.ERROR' | translate }}<br />{{ googleErrorMessage }}
                 </div>
               }
             }
 
             @if (isSuccessful) {
               <div class="alert alert-success w-50 mt-5 mx-auto">
-                Registracija uspješna !
+                {{ 'REGISTER.SUCCESS' | translate }}
               </div>
             }
           </div>

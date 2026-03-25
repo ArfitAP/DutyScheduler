@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { IUserApplication } from 'src/app/_models/UserApplication';
+import { LanguageService } from 'src/app/_services/language.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { AppSettings } from  'src/app/_services/app.settings';
 
@@ -18,8 +20,8 @@ const httpOptions = {
 })
 export class BoardUserComponent implements OnInit {
 
-  dayNames: string[] = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'];
-  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
+  dayNames: string[] = [];
+  monthNames: string[] = [];
 
   isLoggedIn = false;
   userId = 0;
@@ -41,11 +43,24 @@ export class BoardUserComponent implements OnInit {
   nextMonthWeeks: any[] = [];
   Holydays: any[] = [];
 
-  constructor(private tokenStorageService: TokenStorageService, private http: HttpClient, private datePipe: DatePipe) { }
+  constructor(
+    private tokenStorageService: TokenStorageService,
+    private http: HttpClient,
+    private datePipe: DatePipe,
+    private translate: TranslateService,
+    private languageService: LanguageService
+  ) { }
 
   ngOnInit(): void {
+    this.dayNames = this.languageService.getDayNames();
+    this.monthNames = this.languageService.getMonthNames();
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-    
+
+    this.translate.onLangChange.subscribe(() => {
+      this.dayNames = this.languageService.getDayNames();
+      this.monthNames = this.languageService.getMonthNames();
+    });
+
     if (this.isLoggedIn) {
       this.userId = this.tokenStorageService.getUser().id;
 
@@ -85,7 +100,7 @@ export class BoardUserComponent implements OnInit {
           selected: false,
           notWanted: false,
           holyday: false
-        });       
+        });
       }
 
       if(currentDay > 1)
@@ -103,8 +118,6 @@ export class BoardUserComponent implements OnInit {
 
         this.nextMonthWeeks.push(week);
       }
-
-      //console.log(this.nextMonthWeeks);    
 
       this.http.get(AppSettings.API_ENDPOINT + "schedule/userapplications/" + this.userId + '/' + this.datePipe.transform(this.nextMonth, 'yyyy-MM-dd'), { responseType: 'text' })
                .subscribe({
@@ -126,9 +139,9 @@ export class BoardUserComponent implements OnInit {
                             dayinweek.notWanted = true;
                           }
                         });
-                      }); 
+                      });
 
-                      
+
                     } catch (error) {
                       this.userSelectedDays = [];
                       this.notWantedDays = [];
@@ -147,18 +160,18 @@ export class BoardUserComponent implements OnInit {
                 .subscribe({
                    next: data => {
 
-                    this.Holydays = JSON.parse(data).map((item: { day: Date; }) => item.day);;  
+                    this.Holydays = JSON.parse(data).map((item: { day: Date; }) => item.day);;
 
                     this.nextMonthWeeks.forEach( (value) => {
                       value.forEach( (dayinweek: { dayNo: number; hidden: boolean; date: any; selected: boolean; holyday: boolean; }) => {
 
-                        if(this.Holydays.includes(dayinweek.date) || dayinweek.dayNo >= 6) 
-                        {                        
+                        if(this.Holydays.includes(dayinweek.date) || dayinweek.dayNo >= 6)
+                        {
                           dayinweek.holyday = true;
                         }
 
                       });
-                    }); 
+                    });
                    },
                    error: err => {
                      this.Holydays = [];
@@ -169,9 +182,7 @@ export class BoardUserComponent implements OnInit {
   }
 
   save() : void {
-    //console.log(this.userDays);
-
-    this.userApplication.applicationDays =  this.userSelectedDays.map((item) => { return { id: 0, day: item, wantedDay: 1 }; }); // this.datePipe.transform(item, 'yyyy-MM-dd')
+    this.userApplication.applicationDays =  this.userSelectedDays.map((item) => { return { id: 0, day: item, wantedDay: 1 }; });
     this.userApplication.applicationDays.push(...this.notWantedDays.map((item) => { return { id: 0, day: item, wantedDay: 0 }; }));
 
     this.http.post(AppSettings.API_ENDPOINT + "schedule/adduserapplications/", this.userApplication, { responseType: 'text' })
@@ -181,12 +192,12 @@ export class BoardUserComponent implements OnInit {
 
                     if(res == true)
                     {
-                      alert("Vaš izbor je spremljen");
+                      alert(this.translate.instant('BOARD_USER.SELECTION_SAVED'));
                     }
-                    else alert("Pogreška !");
+                    else alert(this.translate.instant('BOARD_USER.ERROR'));
                   },
                   error: err => {
-                    alert("Pogreška !");
+                    alert(this.translate.instant('BOARD_USER.ERROR'));
                   }
                 });
   }
@@ -220,7 +231,7 @@ export class BoardUserComponent implements OnInit {
           }
         }
       });
-    }); 
+    });
 
     this.checkGroupSelected();
   }
@@ -271,7 +282,7 @@ export class BoardUserComponent implements OnInit {
       {
         this.userApplication.grouped = false;
       }
-      
+
     }
   }
 
@@ -283,4 +294,3 @@ export class BoardUserComponent implements OnInit {
   }
 
 }
-

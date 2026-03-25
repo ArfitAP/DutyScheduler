@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { IRoomInvitation, IRoomJoinRequest } from './_models/Room';
+import { LanguageService } from './_services/language.service';
 import { RoomService } from './_services/room.service';
 import { TokenStorageService } from './_services/token-storage.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-root',
@@ -18,8 +20,14 @@ export class AppComponent {
   showInvitations = false;
   joinRequests: IRoomJoinRequest[] = [];
   showJoinRequests = false;
+  showLanguageMenu = false;
 
-  constructor(private tokenStorageService: TokenStorageService, private roomService: RoomService) { }
+  constructor(
+    private tokenStorageService: TokenStorageService,
+    private roomService: RoomService,
+    public languageService: LanguageService,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
@@ -43,7 +51,7 @@ export class AppComponent {
 
   toggleInvitations(): void {
     this.showInvitations = !this.showInvitations;
-    if (this.showInvitations) this.showJoinRequests = false;
+    if (this.showInvitations) { this.showJoinRequests = false; this.showLanguageMenu = false; }
   }
 
   loadJoinRequests(): void {
@@ -55,20 +63,30 @@ export class AppComponent {
 
   toggleJoinRequests(): void {
     this.showJoinRequests = !this.showJoinRequests;
-    if (this.showJoinRequests) this.showInvitations = false;
+    if (this.showJoinRequests) { this.showInvitations = false; this.showLanguageMenu = false; }
+  }
+
+  toggleLanguageMenu(): void {
+    this.showLanguageMenu = !this.showLanguageMenu;
+    if (this.showLanguageMenu) { this.showInvitations = false; this.showJoinRequests = false; }
+  }
+
+  changeLanguage(lang: string): void {
+    this.languageService.setLanguage(lang);
+    this.showLanguageMenu = false;
   }
 
   acceptInvitation(id: number): void {
     this.roomService.acceptInvitation(id).subscribe({
       next: () => { this.loadInvitations(); },
-      error: () => { alert('Greška!'); }
+      error: () => { alert(this.translate.instant('NAV.ERROR')); }
     });
   }
 
   declineInvitation(id: number): void {
     this.roomService.declineInvitation(id).subscribe({
       next: () => { this.loadInvitations(); },
-      error: () => { alert('Greška!'); }
+      error: () => { alert(this.translate.instant('NAV.ERROR')); }
     });
   }
 
