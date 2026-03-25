@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AuthModule } from './auth/auth.module';
@@ -14,5 +16,10 @@ import { SchedulerModule } from './scheduler/scheduler.module';
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         AuthModule,
-        SchedulerModule], providers: [authInterceptorProviders, provideHttpClient(withInterceptorsFromDi())] })
+        SchedulerModule,
+        TranslateModule.forRoot()], providers: [
+        authInterceptorProviders,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' })
+    ] })
 export class AppModule { }

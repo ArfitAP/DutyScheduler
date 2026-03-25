@@ -2,7 +2,7 @@
 
   <div class="calendar-sidebar">
     <div style="margin-bottom: 0.5rem;">
-      <a routerLink="/home" style="font-size: 0.85rem;">&larr; Natrag</a>
+      <a routerLink="/home" style="font-size: 0.85rem;">&larr; {{ 'CALENDAR.BACK' | translate }}</a>
       @if (roomName) {
         <span style="font-size: 0.85rem; margin-left: 0.5rem; color: #6c757d;">| {{ roomName }}</span>
       }
@@ -15,13 +15,13 @@
     </div>
 
     <div class="sidebar-nav">
-      <button class="nav-btn" (click)="prevMonth()" title="Prethodni mjesec">
+      <button class="nav-btn" (click)="prevMonth()" [title]="'CALENDAR.PREV_MONTH' | translate">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button class="nav-btn" (click)="today()" title="Trenutni mjesec">Danas</button>
-      <button class="nav-btn" (click)="nextMonthNav()" title="Sljedeći mjesec">
+      <button class="nav-btn" (click)="today()" [title]="'CALENDAR.TODAY' | translate">{{ 'CALENDAR.TODAY' | translate }}</button>
+      <button class="nav-btn" (click)="nextMonthNav()" [title]="'CALENDAR.NEXT_MONTH' | translate">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="sidebar-legend">
-      <div class="legend-title">Raspored</div>
+      <div class="legend-title">{{ 'CALENDAR.SCHEDULE' | translate }}</div>
       @for (user of Usernames; track user) {
         <div class="legend-item">
           <span class="legend-color" [style.background-color]="UserColors.get(user)"></span>

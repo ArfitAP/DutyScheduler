@@ -1,17 +1,17 @@
 @if (currentUser) {
   <div class="container mt-4">
-    <h4>Profil</h4>
+    <h4>{{ 'PROFILE.TITLE' | translate }}</h4>
     <div class="card mt-3">
       <div class="card-body">
-        <p><strong>Korisničko ime:</strong> {{ currentUser.username }}</p>
-        <p><strong>Email:</strong> {{ currentUser.email }}</p>
-        <p><strong>Uloge:</strong> {{ currentUser.roles?.join(', ') }}</p>
+        <p><strong>{{ 'PROFILE.USERNAME' | translate }}</strong> {{ currentUser.username }}</p>
+        <p><strong>{{ 'PROFILE.EMAIL' | translate }}</strong> {{ currentUser.email }}</p>
+        <p><strong>{{ 'PROFILE.ROLES' | translate }}</strong> {{ currentUser.roles?.join(', ') }}</p>
       </div>
     </div>
-    <a routerLink="/home" class="btn btn-primary mt-3">Moje sobe</a>
+    <a routerLink="/home" class="btn btn-primary mt-3">{{ 'PROFILE.MY_ROOMS' | translate }}</a>
   </div>
 } @else {
   <div class="container mt-4">
-    Molimo prijavite se.
+    {{ 'PROFILE.PLEASE_LOGIN' | translate }}
   </div>
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { IRoom } from 'src/app/_models/Room';
 import { RoomService } from 'src/app/_services/room.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
@@ -21,7 +22,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private tokenStorageService: TokenStorageService,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class HomeComponent implements OnInit {
         this.joinCode = '';
       },
       error: (err) => {
-        this.joinMessage = err.error ? JSON.parse(err.error).message : 'Greška pri slanju zahtjeva';
+        this.joinMessage = err.error ? JSON.parse(err.error).message : this.translate.instant('HOME.JOIN_ERROR');
         this.joinError = true;
       }
     });

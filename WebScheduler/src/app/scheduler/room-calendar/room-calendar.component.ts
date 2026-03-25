@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { ISchedule } from 'src/app/_models/Schedule';
 import { ColorService } from 'src/app/_services/color.service';
+import { LanguageService } from 'src/app/_services/language.service';
 import { RoomService } from 'src/app/_services/room.service';
 
 @Component({
@@ -14,9 +16,9 @@ import { RoomService } from 'src/app/_services/room.service';
 })
 export class RoomCalendarComponent implements OnInit {
 
-  dayNames: string[] = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'];
-  dayNamesShort: string[] = ['Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub', 'Ned'];
-  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
+  dayNames: string[] = [];
+  dayNamesShort: string[] = [];
+  monthNames: string[] = [];
 
   roomId = 0;
   roomName = '';
@@ -37,15 +39,28 @@ export class RoomCalendarComponent implements OnInit {
     private route: ActivatedRoute,
     private roomService: RoomService,
     private datePipe: DatePipe,
-    private colorService: ColorService
+    private colorService: ColorService,
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
+    this.updateLocalizedNames();
     this.roomId = Number(this.route.snapshot.paramMap.get('id'));
     this.roomService.getRoomDetail(this.roomId).subscribe({
       next: (data) => { this.roomName = data.name; }
     });
     this.loadMonth();
+
+    this.translate.onLangChange.subscribe(() => {
+      this.updateLocalizedNames();
+    });
+  }
+
+  updateLocalizedNames(): void {
+    this.dayNames = this.languageService.getDayNames();
+    this.dayNamesShort = this.languageService.getDayNamesShort();
+    this.monthNames = this.languageService.getMonthNames();
   }
 
   prevMonth(): void {

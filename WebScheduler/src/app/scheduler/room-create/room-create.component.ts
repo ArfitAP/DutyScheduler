@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from 'src/app/_services/room.service';
 
 @Component({
@@ -13,11 +14,11 @@ export class RoomCreateComponent {
   description = '';
   error = '';
 
-  constructor(private roomService: RoomService, private router: Router) { }
+  constructor(private roomService: RoomService, private router: Router, private translate: TranslateService) { }
 
   create(): void {
     if (!this.name.trim()) {
-      this.error = 'Naziv sobe je obavezan';
+      this.error = this.translate.instant('ROOM_CREATE.NAME_REQUIRED');
       return;
     }
     this.error = '';
@@ -26,7 +27,7 @@ export class RoomCreateComponent {
         this.router.navigate(['/room', room.id]);
       },
       error: () => {
-        this.error = 'Greška pri kreiranju sobe';
+        this.error = this.translate.instant('ROOM_CREATE.CREATE_ERROR');
       }
     });
   }

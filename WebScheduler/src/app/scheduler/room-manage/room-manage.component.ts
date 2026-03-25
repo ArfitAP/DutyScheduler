@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { IRoomDetail, IRoomJoinRequest, IRoomUser } from 'src/app/_models/Room';
 import { IUserActivation } from 'src/app/_models/UserActivation';
+import { LanguageService } from 'src/app/_services/language.service';
 import { RoomService } from 'src/app/_services/room.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
@@ -14,8 +16,6 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
     standalone: false
 })
 export class RoomManageComponent implements OnInit {
-
-  monthNames: string[] = ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'];
 
   roomId = 0;
   room: IRoomDetail | null = null;
@@ -41,28 +41,41 @@ export class RoomManageComponent implements OnInit {
 
   // Day Hours
   dayHours: { day: string; hours: number; dayOfWeek: number }[] = [];
-  dayNames: string[] = ['Ned', 'Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub'];
+  dayNames: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private roomService: RoomService,
     private tokenStorageService: TokenStorageService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private translate: TranslateService,
+    private languageService: LanguageService
   ) { }
 
   ngOnInit(): void {
     this.userId = this.tokenStorageService.getUser().id;
     this.roomId = Number(this.route.snapshot.paramMap.get('id'));
 
-    // Build month list: current month + 12 future months
+    this.dayNames = this.languageService.getDayNamesSundayFirst();
+
+    const monthNames = this.languageService.getMonthNames();
     for (let i = 0; i <= 12; i++) {
       let d = new Date(new Date().getFullYear(), new Date().getMonth() + i, 1);
       this.monthList.push({
         value: d,
-        label: this.monthNames[d.getMonth()] + ' ' + d.getFullYear()
+        label: monthNames[d.getMonth()] + ' ' + d.getFullYear()
       });
     }
     this.selectedMonth = this.monthList[0].value;
+
+    this.translate.onLangChange.subscribe(() => {
+      this.dayNames = this.languageService.getDayNamesSundayFirst();
+      const newMonthNames = this.languageService.getMonthNames();
+      this.monthList = this.monthList.map((m, i) => ({
+        ...m,
+        label: newMonthNames[m.value.getMonth()] + ' ' + m.value.getFullYear()
+      }));
+    });
 
     this.loadRoom();
     this.loadActivations();
@@ -74,13 +87,12 @@ export class RoomManageComponent implements OnInit {
     this.roomService.getRoomDetail(this.roomId).subscribe({
       next: (data) => {
         this.room = data;
-        // Load users after room is loaded so filterUsers() works
         this.loadUsers();
         if (data.isOwner) {
           this.loadJoinRequests();
         }
       },
-      error: () => { this.error = 'Greška pri učitavanju sobe'; }
+      error: () => { this.error = this.translate.instant('ROOM_MANAGE.ROOM_LOAD_ERROR'); }
     });
   }
 
@@ -108,10 +120,10 @@ export class RoomManageComponent implements OnInit {
     this.inviteMessage = '';
     this.roomService.inviteUser(this.roomId, userId).subscribe({
       next: () => {
-        this.inviteMessage = 'Pozivnica poslana';
+        this.inviteMessage = this.translate.instant('ROOM_MANAGE.INVITATION_SENT');
       },
       error: () => {
-        this.inviteMessage = 'Greška - korisnik je već pozvan ili je već član';
+        this.inviteMessage = this.translate.instant('ROOM_MANAGE.INVITE_ERROR');
       }
     });
   }
@@ -119,7 +131,7 @@ export class RoomManageComponent implements OnInit {
   removeMember(userId: number): void {
     this.roomService.removeMember(this.roomId, userId).subscribe({
       next: () => { this.loadRoom(); },
-      error: () => { alert('Greška pri uklanjanju člana'); }
+      error: () => { alert(this.translate.instant('ROOM_MANAGE.REMOVE_MEMBER_ERROR')); }
     });
   }
 
@@ -133,14 +145,14 @@ export class RoomManageComponent implements OnInit {
   approveJoinRequest(requestId: number): void {
     this.roomService.approveJoinRequest(requestId).subscribe({
       next: () => { this.loadRoom(); },
-      error: () => { alert('Greška pri odobravanju zahtjeva'); }
+      error: () => { alert(this.translate.instant('ROOM_MANAGE.APPROVE_ERROR')); }
     });
   }
 
   rejectJoinRequest(requestId: number): void {
     this.roomService.rejectJoinRequest(requestId).subscribe({
       next: () => { this.loadJoinRequests(); },
-      error: () => { alert('Greška pri odbijanju zahtjeva'); }
+      error: () => { alert(this.translate.instant('ROOM_MANAGE.REJECT_ERROR')); }
     });
   }
 
@@ -164,10 +176,10 @@ export class RoomManageComponent implements OnInit {
     let mon = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd')!;
     this.roomService.saveUserActives(this.roomId, mon, this.userId, this.userActivations).subscribe({
       next: (res) => {
-        if (res) alert('Aktivni korisnici spremljeni');
-        else alert('Greška!');
+        if (res) alert(this.translate.instant('ROOM_MANAGE.ACTIVES_SAVED'));
+        else alert(this.translate.instant('ROOM_MANAGE.ERROR'));
       },
-      error: () => { alert('Greška!'); }
+      error: () => { alert(this.translate.instant('ROOM_MANAGE.ERROR')); }
     });
   }
 
@@ -177,11 +189,11 @@ export class RoomManageComponent implements OnInit {
     let mon = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd')!;
     this.roomService.generateSchedule(this.roomId, mon, this.userId).subscribe({
       next: (res) => {
-        if (res) this.generationMessage = 'Generiranje rasporeda pokrenuto!';
-        else this.generationMessage = 'Greška!';
+        if (res) this.generationMessage = this.translate.instant('ROOM_MANAGE.GENERATION_STARTED');
+        else this.generationMessage = this.translate.instant('ROOM_MANAGE.ERROR');
       },
       error: () => {
-        this.generationMessage = 'Greška pri generiranju!';
+        this.generationMessage = this.translate.instant('ROOM_MANAGE.GENERATION_ERROR');
         this.loading = false;
       }
     });
@@ -192,9 +204,11 @@ export class RoomManageComponent implements OnInit {
     this.roomService.isServerBusy(this.roomId, mon).subscribe({
       next: (busy) => {
         this.loading = busy;
-        this.statusMessage = busy ? 'Server je zauzet generiranjem rasporeda' : 'Server je slobodan';
+        this.statusMessage = busy
+          ? this.translate.instant('ROOM_MANAGE.SERVER_BUSY')
+          : this.translate.instant('ROOM_MANAGE.SERVER_FREE');
       },
-      error: () => { this.statusMessage = 'Greška pri provjeri statusa'; }
+      error: () => { this.statusMessage = this.translate.instant('ROOM_MANAGE.STATUS_CHECK_ERROR'); }
     });
   }
 
@@ -202,7 +216,6 @@ export class RoomManageComponent implements OnInit {
   loadDayHours(): void {
     let mon = this.datePipe.transform(this.selectedMonth, 'yyyy-MM-dd')!;
 
-    // Build all days of the selected month with defaults
     let year = this.selectedMonth.getFullYear();
     let month = this.selectedMonth.getMonth();
     let numDays = new Date(year, month + 1, 0).getDate();
@@ -211,12 +224,11 @@ export class RoomManageComponent implements OnInit {
     for (let i = 1; i <= numDays; i++) {
       let d = new Date(year, month, i);
       let dayStr = this.datePipe.transform(d, 'yyyy-MM-dd')!;
-      let dow = d.getDay(); // 0=Sun, 6=Sat
+      let dow = d.getDay();
       let defaultHours = (dow === 0 || dow === 6) ? 16 : 8;
       this.dayHours.push({ day: dayStr, hours: defaultHours, dayOfWeek: dow });
     }
 
-    // Load saved custom hours and override defaults
     this.roomService.getDayHours(this.roomId, mon).subscribe({
       next: (saved) => {
         for (let s of saved) {
@@ -232,10 +244,10 @@ export class RoomManageComponent implements OnInit {
     let payload = this.dayHours.map(d => ({ day: d.day, hours: d.hours }));
     this.roomService.setDayHours(this.roomId, mon, payload).subscribe({
       next: (res) => {
-        if (res) alert('Sati po danima spremljeni');
-        else alert('Greška!');
+        if (res) alert(this.translate.instant('ROOM_MANAGE.DAY_HOURS_SAVED'));
+        else alert(this.translate.instant('ROOM_MANAGE.ERROR'));
       },
-      error: () => { alert('Greška!'); }
+      error: () => { alert(this.translate.instant('ROOM_MANAGE.ERROR')); }
     });
   }
 

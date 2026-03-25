@@ -3,22 +3,37 @@
     <a href="#" class="navbar-brand">Duty Scheduler</a>
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
       <li class="nav-item">
-        <a href="/home" class="nav-link" routerLink="home">Početna </a>
+        <a href="/home" class="nav-link" routerLink="home">{{ 'NAV.HOME' | translate }} </a>
       </li>
       @if (showAdminBoard) {
         <li class="nav-item">
-          <a href="/admin" class="nav-link" routerLink="admin">Administracija</a>
+          <a href="/admin" class="nav-link" routerLink="admin">{{ 'NAV.ADMIN' | translate }}</a>
         </li>
       }
     </ul>
 
     @if (!isLoggedIn) {
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a href="/register" class="nav-link" routerLink="register">Registracija</a>
+        <li class="nav-item" style="position: relative;">
+          <a href="javascript:void(0)" class="nav-link" (click)="toggleLanguageMenu()">
+            🌐 {{ languageService.currentLang | uppercase }}
+          </a>
+          @if (showLanguageMenu) {
+            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 150px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              @for (lang of languageService.supportedLanguages; track lang.code) {
+                <div style="padding: 8px 12px; cursor: pointer; color: #333; font-size: 0.9rem;" (click)="changeLanguage(lang.code)"
+                  [style.font-weight]="lang.code === languageService.currentLang ? 'bold' : 'normal'">
+                  {{ lang.label }}
+                </div>
+              }
+            </div>
+          }
         </li>
         <li class="nav-item">
-          <a href="/login" class="nav-link" routerLink="login">Prijava</a>
+          <a href="/register" class="nav-link" routerLink="register">{{ 'NAV.REGISTER' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a href="/login" class="nav-link" routerLink="login">{{ 'NAV.LOGIN' | translate }}</a>
         </li>
       </ul>
     }
@@ -26,8 +41,23 @@
     @if (isLoggedIn) {
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" style="position: relative;">
+          <a href="javascript:void(0)" class="nav-link" (click)="toggleLanguageMenu()">
+            🌐 {{ languageService.currentLang | uppercase }}
+          </a>
+          @if (showLanguageMenu) {
+            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 150px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              @for (lang of languageService.supportedLanguages; track lang.code) {
+                <div style="padding: 8px 12px; cursor: pointer; color: #333; font-size: 0.9rem;" (click)="changeLanguage(lang.code)"
+                  [style.font-weight]="lang.code === languageService.currentLang ? 'bold' : 'normal'">
+                  {{ lang.label }}
+                </div>
+              }
+            </div>
+          }
+        </li>
+        <li class="nav-item" style="position: relative;">
           <a href="javascript:void(0)" class="nav-link" (click)="toggleInvitations()">
-            Pozivnice
+            {{ 'NAV.INVITATIONS' | translate }}
             @if (invitations.length > 0) {
               <span class="badge badge-danger">{{ invitations.length }}</span>
             }
@@ -35,17 +65,17 @@
           @if (showInvitations) {
             <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 300px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
               @if (invitations.length === 0) {
-                <div style="padding: 10px; color: #666; font-size: 0.9rem;">Nema novih pozivnica</div>
+                <div style="padding: 10px; color: #666; font-size: 0.9rem;">{{ 'NAV.NO_INVITATIONS' | translate }}</div>
               }
               @for (inv of invitations; track inv.id) {
                 <div style="padding: 10px; border-bottom: 1px solid #eee;">
                   <div style="color: #333; font-size: 0.9rem;">
                     <strong>{{ inv.roomName }}</strong>
-                    <br><span style="color: #666;">Od: {{ inv.invitedByUsername }}</span>
+                    <br><span style="color: #666;">{{ 'NAV.FROM' | translate }} {{ inv.invitedByUsername }}</span>
                   </div>
                   <div style="margin-top: 5px;">
-                    <button class="btn btn-sm btn-success mr-1" (click)="acceptInvitation(inv.id)">Prihvati</button>
-                    <button class="btn btn-sm btn-danger" (click)="declineInvitation(inv.id)">Odbij</button>
+                    <button class="btn btn-sm btn-success mr-1" (click)="acceptInvitation(inv.id)">{{ 'NAV.ACCEPT' | translate }}</button>
+                    <button class="btn btn-sm btn-danger" (click)="declineInvitation(inv.id)">{{ 'NAV.DECLINE' | translate }}</button>
                   </div>
                 </div>
               }
@@ -54,7 +84,7 @@
         </li>
         <li class="nav-item" style="position: relative;">
           <a href="javascript:void(0)" class="nav-link" (click)="toggleJoinRequests()">
-            Moji zahtjevi
+            {{ 'NAV.MY_REQUESTS' | translate }}
             @if (joinRequests.length > 0) {
               <span class="badge badge-info">{{ joinRequests.length }}</span>
             }
@@ -62,7 +92,7 @@
           @if (showJoinRequests) {
             <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 300px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
               @if (joinRequests.length === 0) {
-                <div style="padding: 10px; color: #666; font-size: 0.9rem;">Nema poslanih zahtjeva</div>
+                <div style="padding: 10px; color: #666; font-size: 0.9rem;">{{ 'NAV.NO_REQUESTS' | translate }}</div>
               }
               @for (req of joinRequests; track req.id) {
                 <div style="padding: 10px; border-bottom: 1px solid #eee;">
@@ -71,13 +101,13 @@
                   </div>
                   <div style="margin-top: 3px;">
                     @if (req.status === 'PENDING') {
-                      <span class="badge badge-warning">Na čekanju</span>
+                      <span class="badge badge-warning">{{ 'NAV.STATUS_PENDING' | translate }}</span>
                     }
                     @if (req.status === 'APPROVED') {
-                      <span class="badge badge-success">Odobreno</span>
+                      <span class="badge badge-success">{{ 'NAV.STATUS_APPROVED' | translate }}</span>
                     }
                     @if (req.status === 'REJECTED') {
-                      <span class="badge badge-danger">Odbijeno</span>
+                      <span class="badge badge-danger">{{ 'NAV.STATUS_REJECTED' | translate }}</span>
                     }
                   </div>
                 </div>
@@ -89,7 +119,7 @@
           <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
         </li>
         <li class="nav-item">
-          <a href class="nav-link" (click)="logout()">Odjava</a>
+          <a href class="nav-link" (click)="logout()">{{ 'NAV.LOGOUT' | translate }}</a>
         </li>
       </ul>
     }

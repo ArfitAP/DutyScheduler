@@ -6,9 +6,9 @@
       class="profile-img-card"
       />
     <div class="w-50 mt-5 mx-auto">
-      <h4 class="text-center mb-3">Postavi korisničko ime</h4>
+      <h4 class="text-center mb-3">{{ 'USERNAME_SETUP.TITLE' | translate }}</h4>
       <p class="text-center text-muted mb-4">
-        Odaberite jedinstveno korisničko ime za svoj račun.
+        {{ 'USERNAME_SETUP.DESCRIPTION' | translate }}
       </p>
       <form
         name="form"
@@ -17,7 +17,7 @@
         novalidate
         >
         <div class="form-group">
-          <label for="username">Korisničko ime</label>
+          <label for="username">{{ 'USERNAME_SETUP.USERNAME' | translate }}</label>
           <input
             type="text"
             class="form-control"
@@ -31,27 +31,27 @@
             @if (username.errors && f.submitted) {
               <div class="alert-danger mt-1">
                 @if (username.errors['required']) {
-                  <div>Korisničko ime je obavezno</div>
+                  <div>{{ 'USERNAME_SETUP.USERNAME_REQUIRED' | translate }}</div>
                 }
                 @if (username.errors['minlength']) {
                   <div>
-                    Korisničko ime mora biti duljine minimalno 3 znaka
+                    {{ 'USERNAME_SETUP.USERNAME_MIN_LENGTH' | translate }}
                   </div>
                 }
                 @if (username.errors['maxlength']) {
                   <div>
-                    Korisničko ime može biti duljine najviše 20 znakova
+                    {{ 'USERNAME_SETUP.USERNAME_MAX_LENGTH' | translate }}
                   </div>
                 }
               </div>
             }
           </div>
           <div class="form-group mt-3">
-            <button class="btn btn-primary btn-block">Spremi</button>
+            <button class="btn btn-primary btn-block">{{ 'USERNAME_SETUP.SAVE' | translate }}</button>
           </div>
           @if (f.submitted && isSubmitted && errorMessage) {
             <div class="alert alert-warning mt-2">
-              Pogreška !<br />{{ errorMessage }}
+              {{ 'USERNAME_SETUP.ERROR' | translate }}<br />{{ errorMessage }}
             </div>
           }
         </form>

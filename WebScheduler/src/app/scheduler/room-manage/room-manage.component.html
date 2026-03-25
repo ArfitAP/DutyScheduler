@@ -13,15 +13,15 @@
             <p class="text-muted mb-1">{{ room.description }}</p>
           }
           <div class="room-meta">
-            <span>Vlasnik: {{ room.ownerUsername }}</span>
-            <span>Članova: {{ room.memberCount }}</span>
-            <span>Identifikator: <code class="room-code">{{ room.roomCode }}</code></span>
+            <span>{{ 'ROOM_MANAGE.OWNER' | translate }} {{ room.ownerUsername }}</span>
+            <span>{{ 'ROOM_MANAGE.MEMBERS' | translate }} {{ room.memberCount }}</span>
+            <span>{{ 'ROOM_MANAGE.IDENTIFIER' | translate }} <code class="room-code">{{ room.roomCode }}</code></span>
           </div>
         </div>
         <div class="header-nav">
-          <a class="btn btn-sm btn-secondary" routerLink="/home">Natrag</a>
-          <a class="btn btn-sm btn-info" [routerLink]="['/room', roomId, 'calendar']">Kalendar</a>
-          <a class="btn btn-sm btn-success" [routerLink]="['/room', roomId, 'select']">Odaberi termine</a>
+          <a class="btn btn-sm btn-secondary" routerLink="/home">{{ 'ROOM_MANAGE.BACK' | translate }}</a>
+          <a class="btn btn-sm btn-info" [routerLink]="['/room', roomId, 'calendar']">{{ 'ROOM_MANAGE.CALENDAR' | translate }}</a>
+          <a class="btn btn-sm btn-success" [routerLink]="['/room', roomId, 'select']">{{ 'ROOM_MANAGE.SELECT_DATES' | translate }}</a>
         </div>
       </div>
     </div>
@@ -33,21 +33,21 @@
         <!-- Invite (owner only) -->
         @if (room.isOwner) {
           <div class="manage-card">
-            <h5>Pozovi korisnika</h5>
+            <h5>{{ 'ROOM_MANAGE.INVITE_USER' | translate }}</h5>
             @if (inviteMessage) {
               <div class="alert alert-info py-1 px-2 mb-2" style="font-size: 0.85rem;">{{ inviteMessage }}</div>
             }
-            <input type="text" class="form-control form-control-sm" placeholder="Pretraži korisnike..." [(ngModel)]="searchText" (ngModelChange)="filterUsers()">
+            <input type="text" class="form-control form-control-sm" [placeholder]="'ROOM_MANAGE.SEARCH_USERS' | translate" [(ngModel)]="searchText" (ngModelChange)="filterUsers()">
             @if (searchText.trim()) {
               <div class="invite-results">
                 @for (user of filteredUsers; track user.id) {
                   <div class="invite-row">
                     <span>{{ user.username }}</span>
-                    <button class="btn btn-sm btn-primary" (click)="invite(user.id)">Pozovi</button>
+                    <button class="btn btn-sm btn-primary" (click)="invite(user.id)">{{ 'ROOM_MANAGE.INVITE' | translate }}</button>
                   </div>
                 }
                 @if (filteredUsers.length === 0) {
-                  <div class="invite-row text-muted">Nema rezultata</div>
+                  <div class="invite-row text-muted">{{ 'ROOM_MANAGE.NO_RESULTS' | translate }}</div>
                 }
               </div>
             }
@@ -57,13 +57,13 @@
         <!-- Join Requests (owner only) -->
         @if (room.isOwner && joinRequests.length > 0) {
           <div class="manage-card">
-            <h5>Zahtjevi za pridruživanje</h5>
+            <h5>{{ 'ROOM_MANAGE.JOIN_REQUESTS' | translate }}</h5>
             @for (req of joinRequests; track req.id) {
               <div class="join-request-row">
                 <span class="member-name">{{ req.username }}</span>
                 <span class="join-request-actions">
-                  <button class="btn btn-sm btn-success" (click)="approveJoinRequest(req.id)">Odobri</button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="rejectJoinRequest(req.id)">Odbij</button>
+                  <button class="btn btn-sm btn-success" (click)="approveJoinRequest(req.id)">{{ 'ROOM_MANAGE.APPROVE' | translate }}</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="rejectJoinRequest(req.id)">{{ 'ROOM_MANAGE.REJECT' | translate }}</button>
                 </span>
               </div>
             }
@@ -72,16 +72,16 @@
 
         <!-- Members -->
         <div class="manage-card">
-          <h5>Članovi</h5>
+          <h5>{{ 'ROOM_MANAGE.MEMBERS_TITLE' | translate }}</h5>
           @for (member of room.members; track member.id) {
             <div class="member-row">
               <span class="member-name">{{ member.username }}</span>
               <span>
                 @if (member.id === room.ownerId) {
-                  <span class="badge-owner">Vlasnik</span>
+                  <span class="badge-owner">{{ 'ROOM_MANAGE.OWNER_BADGE' | translate }}</span>
                 }
                 @if (room.isOwner && member.id !== room.ownerId) {
-                  <button class="btn btn-sm btn-outline-danger" (click)="removeMember(member.id)">Ukloni</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="removeMember(member.id)">{{ 'ROOM_MANAGE.REMOVE' | translate }}</button>
                 }
               </span>
             </div>
@@ -95,7 +95,7 @@
 
           <!-- Month selector -->
           <div class="month-selector">
-            <label>Mjesec:</label>
+            <label>{{ 'ROOM_MANAGE.MONTH' | translate }}</label>
             <select class="form-control form-control-sm" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange()">
               @for (mon of monthList; track mon.label) {
                 <option [ngValue]="mon.value">{{ mon.label }}</option>
@@ -107,15 +107,15 @@
           <div class="right-columns">
             <!-- Day Hours -->
             <div class="manage-card right-col-left">
-              <h5>Sati po danima</h5>
-              <p class="text-muted mb-2" style="font-size: 0.8rem;">Zadano: 8h radni dan, 16h vikend/praznik</p>
+              <h5>{{ 'ROOM_MANAGE.DAY_HOURS' | translate }}</h5>
+              <p class="text-muted mb-2" style="font-size: 0.8rem;">{{ 'ROOM_MANAGE.DAY_HOURS_DEFAULT' | translate }}</p>
               <div class="day-hours-scroll">
                 <table class="table table-sm mb-0">
                   <thead>
                     <tr>
-                      <th>Dan</th>
-                      <th>Dan u tjednu</th>
-                      <th>Sati</th>
+                      <th>{{ 'ROOM_MANAGE.DAY' | translate }}</th>
+                      <th>{{ 'ROOM_MANAGE.DAY_OF_WEEK' | translate }}</th>
+                      <th>{{ 'ROOM_MANAGE.HOURS' | translate }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -129,17 +129,17 @@
                   </tbody>
                 </table>
               </div>
-              <button class="btn btn-primary btn-sm mt-2" (click)="saveDayHours()">Spremi sate</button>
+              <button class="btn btn-primary btn-sm mt-2" (click)="saveDayHours()">{{ 'ROOM_MANAGE.SAVE_HOURS' | translate }}</button>
             </div>
 
             <!-- Activation & Generation side by side -->
             <div class="manage-card right-col-right">
-              <h5>Aktivacija i generiranje</h5>
+              <h5>{{ 'ROOM_MANAGE.ACTIVATION_GENERATION' | translate }}</h5>
               <div class="activation-generation-row">
                 <div class="activation-col">
-                  <p class="section-label">Aktivni korisnici</p>
+                  <p class="section-label">{{ 'ROOM_MANAGE.ACTIVE_USERS' | translate }}</p>
                   @if (userActivations.length === 0) {
-                    <p class="text-muted" style="font-size: 0.85rem;">Nema korisnika za aktivaciju</p>
+                    <p class="text-muted" style="font-size: 0.85rem;">{{ 'ROOM_MANAGE.NO_USERS_FOR_ACTIVATION' | translate }}</p>
                   }
                   @for (user of userActivations; track user.userid) {
                     <div class="activation-item">
@@ -147,18 +147,18 @@
                       <label for="act-{{user.userid}}" style="margin: 0; cursor: pointer;">{{ user.username }}</label>
                     </div>
                   }
-                  <button class="btn btn-primary btn-sm mt-2" (click)="saveActivations()">Spremi aktivne</button>
+                  <button class="btn btn-primary btn-sm mt-2" (click)="saveActivations()">{{ 'ROOM_MANAGE.SAVE_ACTIVE' | translate }}</button>
                 </div>
                 <div class="generation-col">
-                  <p class="section-label">Generiranje rasporeda</p>
+                  <p class="section-label">{{ 'ROOM_MANAGE.SCHEDULE_GENERATION' | translate }}</p>
                   <div class="generation-area">
                     <button class="btn btn-primary btn-sm" (click)="generateSchedule()" [disabled]="loading">
                       @if (loading) {
                         <span class="spinner-border spinner-border-sm" role="status"></span>
                       }
-                      Generiraj raspored
+                      {{ 'ROOM_MANAGE.GENERATE_SCHEDULE' | translate }}
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm" (click)="checkBusy()">Provjeri status</button>
+                    <button class="btn btn-outline-secondary btn-sm" (click)="checkBusy()">{{ 'ROOM_MANAGE.CHECK_STATUS' | translate }}</button>
                   </div>
                   @if (generationMessage) {
                     <div class="alert alert-info mt-2 py-1 px-2" style="font-size: 0.85rem;">{{ generationMessage }}</div>
