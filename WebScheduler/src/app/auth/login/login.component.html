@@ -1,101 +1,140 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <img
-      id="profile-img"
-      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-      />
-      @if (!isLoggedIn) {
-        <form
-          name="form"
-          (ngSubmit)="f.form.valid && onSubmit()"
-          #f="ngForm"
-          novalidate
-          class="w-50 mt-5 mx-auto"
+<div class="auth-page">
+  <div class="auth-shell">
+
+    <!-- ═══ Left: Decorative panel ═══ -->
+    <aside class="auth-aside">
+      <div class="auth-aside-inner">
+        <div class="auth-badge">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>{{ 'APP.TITLE' | translate }}</span>
+        </div>
+        <h1 class="auth-hero-title">{{ 'HOME_HERO.TITLE' | translate }}</h1>
+        <p class="auth-hero-sub">{{ 'HOME_HERO.SUBTITLE' | translate }}</p>
+
+        <ul class="auth-feature-list stagger">
+          <li>
+            <span class="auth-feature-ico"><svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M4 6h12v10H4zM4 6V4m12 2V4M4 10h12" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <div>
+              <strong>{{ 'HOME_HERO.FEATURE_1_T' | translate }}</strong>
+              <span>{{ 'HOME_HERO.FEATURE_1_D' | translate }}</span>
+            </div>
+          </li>
+          <li>
+            <span class="auth-feature-ico"><svg viewBox="0 0 20 20" fill="none" width="18" height="18"><circle cx="7" cy="7" r="3" stroke="#fff" stroke-width="1.6"/><circle cx="14" cy="13" r="3" stroke="#fff" stroke-width="1.6"/><path d="M2 17c.5-2 2.5-3 5-3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <div>
+              <strong>{{ 'HOME_HERO.FEATURE_2_T' | translate }}</strong>
+              <span>{{ 'HOME_HERO.FEATURE_2_D' | translate }}</span>
+            </div>
+          </li>
+          <li>
+            <span class="auth-feature-ico"><svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div>
+              <strong>{{ 'HOME_HERO.FEATURE_3_T' | translate }}</strong>
+              <span>{{ 'HOME_HERO.FEATURE_3_D' | translate }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="auth-aside-shapes" aria-hidden="true">
+        <span class="shape s1"></span>
+        <span class="shape s2"></span>
+        <span class="shape s3"></span>
+      </div>
+    </aside>
+
+    <!-- ═══ Right: Form ═══ -->
+    <section class="auth-form-wrap">
+      <div class="auth-form-card">
+
+        @if (isLoggedIn) {
+          <div class="auth-logged-in anim-scale-in">
+            <div class="auth-check">
+              <svg viewBox="0 0 24 24" fill="none" width="32" height="32"><path d="M5 12l5 5L20 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>{{ 'LOGIN.LOGGED_IN_AS' | translate }} {{ roles }}</h3>
+          </div>
+        }
+
+        @if (!isLoggedIn) {
+          <div class="auth-form-head">
+            <h2>{{ 'NAV.LOGIN' | translate }}</h2>
+            <p>{{ 'HOME_HERO.SUBTITLE' | translate }}</p>
+          </div>
+
+          <form
+            name="form"
+            (ngSubmit)="f.form.valid && onSubmit()"
+            #f="ngForm"
+            novalidate
+            class="auth-form"
           >
-          <div class="form-group">
-            <label for="username">{{ 'LOGIN.USERNAME' | translate }}</label>
-            <input
-              type="text"
-              class="form-control"
-              name="username"
-              [(ngModel)]="form.username"
-              required
-              #username="ngModel"
-              />
+            <div class="form-group">
+              <label for="username">{{ 'LOGIN.USERNAME' | translate }}</label>
+              <div class="field-wrap">
+                <svg class="field-ico" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+                <input
+                  id="username"
+                  type="text"
+                  class="form-control has-ico"
+                  name="username"
+                  [(ngModel)]="form.username"
+                  required
+                  #username="ngModel"
+                  autocomplete="username"
+                />
+              </div>
               @if (username.errors && f.submitted) {
-                <div
-                  class="alert alert-danger"
-                  role="alert"
-                  >
-                  {{ 'LOGIN.USERNAME_REQUIRED' | translate }}
+                <div class="alert alert-danger">{{ 'LOGIN.USERNAME_REQUIRED' | translate }}</div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
+              <div class="field-wrap">
+                <svg class="field-ico" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+                <input
+                  id="password"
+                  type="password"
+                  class="form-control has-ico"
+                  name="password"
+                  [(ngModel)]="form.password"
+                  required
+                  minlength="6"
+                  #password="ngModel"
+                  autocomplete="current-password"
+                />
+              </div>
+              @if (password.errors && f.submitted) {
+                <div class="alert alert-danger">
+                  @if (password.errors['required']) { {{ 'LOGIN.PASSWORD_REQUIRED' | translate }} }
+                  @if (password.errors['minlength']) { {{ 'LOGIN.PASSWORD_MIN_LENGTH' | translate }} }
                 </div>
               }
             </div>
-            <div class="form-group">
-              <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                [(ngModel)]="form.password"
-                required
-                minlength="6"
-                #password="ngModel"
-                />
-                @if (password.errors && f.submitted) {
-                  <div
-                    class="alert alert-danger"
-                    role="alert"
-                    >
-                    @if (password.errors['required']) {
-                      <div>{{ 'LOGIN.PASSWORD_REQUIRED' | translate }}</div>
-                    }
-                    @if (password.errors['minlength']) {
-                      <div>
-                        {{ 'LOGIN.PASSWORD_MIN_LENGTH' | translate }}
-                      </div>
-                    }
-                  </div>
-                }
-              </div>
-              <div class="form-group">
-                <button class="btn btn-primary btn-block">
-                  {{ 'LOGIN.SUBMIT' | translate }}
-                </button>
-              </div>
-              <div class="form-group">
-                @if (f.submitted && isLoginFailed) {
-                  <div
-                    class="alert alert-danger"
-                    role="alert"
-                    >
-                    {{ 'LOGIN.ERROR' | translate }} {{ errorMessage }}
-                  </div>
-                }
-              </div>
-            </form>
 
-            <div class="divider w-50 mx-auto my-3">
-              <hr class="d-inline-block w-100" />
-              <span class="divider-text">{{ 'LOGIN.OR' | translate }}</span>
-            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">
+              {{ 'LOGIN.SUBMIT' | translate }}
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
 
-            <div class="w-50 mx-auto mb-4">
-              <div id="google-signin-btn"></div>
-            </div>
-
-            @if (isLoginFailed && !f.submitted) {
-              <div class="alert alert-danger w-50 mx-auto" role="alert">
+            @if ((f.submitted && isLoginFailed) || (isLoginFailed && !f.submitted)) {
+              <div class="alert alert-danger">
                 {{ 'LOGIN.ERROR' | translate }} {{ errorMessage }}
               </div>
             }
-          }
+          </form>
 
-          @if (isLoggedIn) {
-            <div class="alert alert-success w-50 mt-5 mx-auto">
-              {{ 'LOGIN.LOGGED_IN_AS' | translate }} {{ roles }}.
-            </div>
-          }
-        </div>
+          <div class="auth-divider"><span>{{ 'LOGIN.OR' | translate }}</span></div>
+
+          <div id="google-signin-btn" class="auth-google"></div>
+
+          <div class="auth-footer-links">
+            {{ 'HOME_HERO.CTA_REGISTER' | translate }}?
+            <a routerLink="/register">{{ 'NAV.REGISTER' | translate }}</a>
+          </div>
+        }
       </div>
+    </section>
+  </div>
+</div>

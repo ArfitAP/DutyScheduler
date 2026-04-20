@@ -204,5 +204,29 @@
     "OCTOBER": "Listopad",
     "NOVEMBER": "Studeni",
     "DECEMBER": "Prosinac"
+  },
+  "FOOTER": {
+    "TAGLINE": "Moderno planiranje dežurstava za timove svih veličina.",
+    "DEVELOPER": "Programer",
+    "DEV_ROLE": "Full-stack inženjer",
+    "LINKS": "Resursi",
+    "REPO": "Izvorni kod na GitHubu",
+    "CONTACT": "Kontaktiraj programera",
+    "REPORT": "Prijavi problem",
+    "ABOUT": "O aplikaciji",
+    "ABOUT_TEXT": "Projekt otvorenog koda za izradu i upravljanje rasporedima dežurstava s poštenom raspodjelom i preferencijama članova.",
+    "BUILT_WITH": "Izrađeno s pažnjom"
+  },
+  "HOME_HERO": {
+    "TITLE": "Planirajte dežurstva na moderan način",
+    "SUBTITLE": "Napravite sobe, pozovite tim, prikupite preferencije i generirajte poštene rasporede u sekundama.",
+    "CTA_LOGIN": "Prijava",
+    "CTA_REGISTER": "Registracija",
+    "FEATURE_1_T": "Pametno raspoređivanje",
+    "FEATURE_1_D": "Automatska pravedna raspodjela dežurstava",
+    "FEATURE_2_T": "Timske sobe",
+    "FEATURE_2_D": "Organizirano po timovima, projektima ili smjenama",
+    "FEATURE_3_T": "Preferencije",
+    "FEATURE_3_D": "Članovi označavaju željene i blokirane dane"
   }
 }

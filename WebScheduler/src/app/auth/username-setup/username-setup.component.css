@@ -1,7 +1,1 @@
-.profile-img-card {
-    height: 50px;
-    width: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-}
+/* Component-specific tweaks (shared auth styles live in global styles.css) */

@@ -1,55 +1,157 @@
-<div class="container mt-4">
+<div class="home-page">
 
   @if (!isLoggedIn) {
-    <div class="text-center mt-5">
-      <h3>{{ 'HOME.TITLE' | translate }}</h3>
-      <p>{{ 'HOME.LOGIN_PROMPT' | translate }}</p>
-    </div>
+    <!-- Hero for guests -->
+    <section class="home-hero">
+      <div class="home-hero-bg" aria-hidden="true">
+        <span class="orb orb-a"></span>
+        <span class="orb orb-b"></span>
+        <span class="orb orb-c"></span>
+      </div>
+
+      <div class="home-hero-inner">
+        <div class="home-hero-badge">
+          <span class="badge-dot"></span>
+          <span>{{ 'APP.TITLE' | translate }}</span>
+        </div>
+        <h1 class="home-hero-title">{{ 'HOME_HERO.TITLE' | translate }}</h1>
+        <p class="home-hero-sub">{{ 'HOME_HERO.SUBTITLE' | translate }}</p>
+
+        <div class="home-hero-cta">
+          <a routerLink="/login" class="btn btn-primary btn-lg">
+            {{ 'HOME_HERO.CTA_LOGIN' | translate }}
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a routerLink="/register" class="btn btn-outline btn-lg">
+            {{ 'HOME_HERO.CTA_REGISTER' | translate }}
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature cards -->
+      <div class="home-features">
+        <div class="feature-card card">
+          <div class="feature-ico" style="background: var(--gradient-brand);">
+            <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>{{ 'HOME_HERO.FEATURE_1_T' | translate }}</h3>
+          <p>{{ 'HOME_HERO.FEATURE_1_D' | translate }}</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-ico" style="background: var(--gradient-cyan);">
+            <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><circle cx="7" cy="7" r="3" stroke="#fff" stroke-width="1.8"/><circle cx="14" cy="9" r="2.5" stroke="#fff" stroke-width="1.8"/><path d="M2 17c0-2.5 2-4 5-4s5 1.5 5 4M12 17c0-2 1.5-3 3.5-3S19 15 19 17" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>{{ 'HOME_HERO.FEATURE_2_T' | translate }}</h3>
+          <p>{{ 'HOME_HERO.FEATURE_2_D' | translate }}</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-ico" style="background: var(--gradient-sunset);">
+            <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><path d="M4 10l3 3 9-9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 10v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>{{ 'HOME_HERO.FEATURE_3_T' | translate }}</h3>
+          <p>{{ 'HOME_HERO.FEATURE_3_D' | translate }}</p>
+        </div>
+      </div>
+    </section>
   }
 
   @if (isLoggedIn) {
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4>{{ 'HOME.MY_ROOMS' | translate }}</h4>
-      <div class="d-flex align-items-center" style="gap: 0.5rem;">
-        <div class="input-group input-group-sm" style="width: 320px;">
-          <input type="text" class="form-control" [placeholder]="'HOME.ROOM_CODE_PLACEHOLDER' | translate" [(ngModel)]="joinCode" maxlength="10">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" (click)="requestToJoin()" [disabled]="!joinCode.trim()">{{ 'HOME.REQUEST_ACCESS' | translate }}</button>
-          </div>
+    <!-- Dashboard -->
+    <section class="home-dashboard">
+
+      <header class="dash-head">
+        <div>
+          <h1 class="page-title">{{ 'HOME.MY_ROOMS' | translate }}</h1>
+          <p class="page-subtitle">{{ 'HOME_HERO.SUBTITLE' | translate }}</p>
         </div>
-        <a routerLink="/room/create" class="btn btn-primary btn-sm">{{ 'HOME.NEW_ROOM' | translate }}</a>
-      </div>
-    </div>
-    @if (joinMessage) {
-      <div class="alert py-1 px-2 mb-2" [class.alert-success]="!joinError" [class.alert-danger]="joinError" style="font-size: 0.85rem;">
-        {{ joinMessage }}
-      </div>
-    }
+        <a routerLink="/room/create" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          {{ 'HOME.NEW_ROOM' | translate }}
+        </a>
+      </header>
 
-    @if (rooms.length === 0) {
-      <div class="alert alert-info">
-        {{ 'HOME.NO_ROOMS' | translate }}
-      </div>
-    }
-
-    <div class="row">
-      @for (room of rooms; track room.id) {
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ room.name }}</h5>
-              <p class="card-text text-muted" style="font-size: 0.9rem;">{{ room.description || ('HOME.NO_DESCRIPTION' | translate) }}</p>
-              <p class="card-text" style="font-size: 0.85rem;">
-                {{ 'HOME.OWNER' | translate }} {{ room.ownerUsername }}
-                <br>{{ 'HOME.MEMBERS' | translate }} {{ room.memberCount }}
-              </p>
-              <a [routerLink]="['/room', room.id, 'calendar']" class="btn btn-sm btn-primary">{{ 'HOME.CALENDAR' | translate }}</a>
-              <a [routerLink]="['/room', room.id]" class="btn btn-sm btn-secondary ml-1">{{ 'HOME.MANAGE' | translate }}</a>
-            </div>
+      <!-- Join by code -->
+      <div class="join-card surface-raised">
+        <div class="join-card-ico">
+          <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><path d="M14 7V5a4 4 0 0 0-8 0v2M4 7h12v10H4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="12" r="1.4" fill="currentColor"/></svg>
+        </div>
+        <div class="join-card-body">
+          <div class="join-card-title">{{ 'HOME.REQUEST_ACCESS' | translate }}</div>
+          <div class="join-card-row">
+            <input
+              type="text"
+              class="form-control"
+              [placeholder]="'HOME.ROOM_CODE_PLACEHOLDER' | translate"
+              [(ngModel)]="joinCode"
+              maxlength="10"
+              (keyup.enter)="requestToJoin()"
+            />
+            <button class="btn btn-secondary" (click)="requestToJoin()" [disabled]="!joinCode.trim()">
+              {{ 'HOME.REQUEST_ACCESS' | translate }}
+              <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
+          @if (joinMessage) {
+            <div class="alert" [class.alert-success]="!joinError" [class.alert-danger]="joinError">
+              {{ joinMessage }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Rooms grid -->
+      @if (rooms.length === 0) {
+        <div class="dash-empty surface">
+          <div class="dash-empty-ico">
+            <svg viewBox="0 0 24 24" fill="none" width="48" height="48"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p>{{ 'HOME.NO_ROOMS' | translate }}</p>
+          <a routerLink="/room/create" class="btn btn-primary">
+            {{ 'HOME.NEW_ROOM' | translate }}
+          </a>
+        </div>
+      } @else {
+        <div class="rooms-grid stagger">
+          @for (room of rooms; track room.id) {
+            <article class="room-card card card-interactive">
+              <div class="room-card-top">
+                <div class="room-card-ico" [style.background]="room.isOwner ? 'var(--gradient-brand)' : 'var(--gradient-cyan)'">
+                  <svg viewBox="0 0 20 20" fill="none" width="20" height="20"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                @if (room.isOwner) {
+                  <span class="badge badge-primary">{{ 'ROOM_MANAGE.OWNER_BADGE' | translate }}</span>
+                }
+              </div>
+
+              <h3 class="room-card-title">{{ room.name }}</h3>
+              <p class="room-card-desc">{{ room.description || ('HOME.NO_DESCRIPTION' | translate) }}</p>
+
+              <div class="room-card-meta">
+                <div class="room-meta-item">
+                  <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+                  <span>{{ room.ownerUsername }}</span>
+                </div>
+                <div class="room-meta-item">
+                  <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="9" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M2 17c0-2.5 2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <span>{{ room.memberCount }}</span>
+                </div>
+              </div>
+
+              <div class="room-card-actions">
+                <a [routerLink]="['/room', room.id, 'calendar']" class="btn btn-primary btn-sm">
+                  <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  {{ 'HOME.CALENDAR' | translate }}
+                </a>
+                <a [routerLink]="['/room', room.id]" class="btn btn-ghost btn-sm">
+                  <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M16 10a6 6 0 0 0-.2-1.6l1.8-1.4-2-3.4-2.1.8A6 6 0 0 0 12 3l-.4-2.2h-3.2L8 3A6 6 0 0 0 6.5 4.4l-2.1-.8-2 3.4L4.2 8.4A6 6 0 0 0 4 10c0 .5.1 1.1.2 1.6l-1.8 1.4 2 3.4 2.1-.8c.5.5 1 1 1.5 1.4l.4 2.2h3.2l.4-2.2c.5-.4 1.1-.9 1.5-1.4l2.1.8 2-3.4-1.8-1.4c.1-.5.2-1.1.2-1.6z" stroke="currentColor" stroke-width="1.4"/></svg>
+                  {{ 'HOME.MANAGE' | translate }}
+                </a>
+              </div>
+            </article>
+          }
         </div>
       }
-    </div>
+    </section>
   }
 
 </div>

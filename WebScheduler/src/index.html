@@ -2,19 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>WebScheduler</title>
+  <title>Duty Scheduler</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="description" content="Modern duty scheduling platform for teams">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
-      crossorigin="anonymous"
-    />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="app-boot-loader">
+      <div class="app-boot-spinner"></div>
+    </div>
+  </app-root>
 </body>
 </html>
