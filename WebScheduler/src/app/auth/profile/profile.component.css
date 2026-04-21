@@ -13,8 +13,8 @@
   overflow: hidden;
   border-radius: var(--radius-xl);
   padding: 40px 36px;
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
   box-shadow: var(--shadow-lg);
   isolation: isolate;
 }

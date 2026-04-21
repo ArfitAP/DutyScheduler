@@ -1,116 +1,209 @@
-<div class="container mt-4">
+<div class="manage-page">
   @if (error) {
     <div class="alert alert-danger">{{ error }}</div>
   }
 
   @if (room) {
-    <!-- Header -->
-    <div class="room-header">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <h3>{{ room.name }}</h3>
-          @if (room.description) {
-            <p class="text-muted mb-1">{{ room.description }}</p>
-          }
-          <div class="room-meta">
-            <span>{{ 'ROOM_MANAGE.OWNER' | translate }} {{ room.ownerUsername }}</span>
-            <span>{{ 'ROOM_MANAGE.MEMBERS' | translate }} {{ room.memberCount }}</span>
-            <span>{{ 'ROOM_MANAGE.IDENTIFIER' | translate }} <code class="room-code">{{ room.roomCode }}</code></span>
+
+    <!-- ═══════════ Room Header ═══════════ -->
+    <header class="mg-hero">
+      <div class="mg-hero-bg" aria-hidden="true"></div>
+      <div class="mg-hero-inner">
+        <div class="mg-hero-top">
+          <div class="mg-hero-ico">
+            <svg viewBox="0 0 20 20" fill="none" width="28" height="28"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="mg-hero-text">
+            <h1 class="mg-hero-title">{{ room.name }}</h1>
+            @if (room.description) {
+              <p class="mg-hero-desc">{{ room.description }}</p>
+            }
           </div>
         </div>
-        <div class="header-nav">
-          <a class="btn btn-sm btn-secondary" routerLink="/home">{{ 'ROOM_MANAGE.BACK' | translate }}</a>
-          <a class="btn btn-sm btn-info" [routerLink]="['/room', roomId, 'calendar']">{{ 'ROOM_MANAGE.CALENDAR' | translate }}</a>
-          <a class="btn btn-sm btn-success" [routerLink]="['/room', roomId, 'select']">{{ 'ROOM_MANAGE.SELECT_DATES' | translate }}</a>
-        </div>
-      </div>
-    </div>
 
-    <div class="manage-layout">
-      <!-- ════════ LEFT PANEL: Invite & Members ════════ -->
-      <div class="panel-left">
+        <div class="mg-hero-meta">
+          <div class="meta-chip">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>{{ 'ROOM_MANAGE.OWNER' | translate }} {{ room.ownerUsername }}</span>
+          </div>
+          <div class="meta-chip">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="9" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M2 17c0-2.5 2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>{{ 'ROOM_MANAGE.MEMBERS' | translate }} {{ room.memberCount }}</span>
+          </div>
+          <div class="meta-chip meta-code">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M14 7V5a4 4 0 0 0-8 0v2M4 7h12v10H4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ 'ROOM_MANAGE.IDENTIFIER' | translate }}</span>
+            <code>{{ room.roomCode }}</code>
+          </div>
+        </div>
+
+        <nav class="mg-hero-nav">
+          <a class="btn btn-ghost btn-sm" routerLink="/home">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M12 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ 'ROOM_MANAGE.BACK' | translate }}
+          </a>
+          <a class="btn btn-info btn-sm" [routerLink]="['/room', roomId, 'calendar']">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            {{ 'ROOM_MANAGE.CALENDAR' | translate }}
+          </a>
+          <a class="btn btn-success btn-sm" [routerLink]="['/room', roomId, 'select']">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ 'ROOM_MANAGE.SELECT_DATES' | translate }}
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ═══════════ Management Layout ═══════════ -->
+    <div class="mg-grid">
+
+      <!-- LEFT: Members/Invite/Requests -->
+      <aside class="mg-side">
 
         <!-- Invite (owner only) -->
         @if (room.isOwner) {
-          <div class="manage-card">
-            <h5>{{ 'ROOM_MANAGE.INVITE_USER' | translate }}</h5>
+          <section class="mg-card card">
+            <div class="mg-card-head">
+              <div class="mg-card-ico" style="background: var(--gradient-brand);">
+                <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 4v12M4 10h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+              <h2>{{ 'ROOM_MANAGE.INVITE_USER' | translate }}</h2>
+            </div>
+
             @if (inviteMessage) {
-              <div class="alert alert-info py-1 px-2 mb-2" style="font-size: 0.85rem;">{{ inviteMessage }}</div>
+              <div class="alert alert-info">{{ inviteMessage }}</div>
             }
-            <input type="text" class="form-control form-control-sm" [placeholder]="'ROOM_MANAGE.SEARCH_USERS' | translate" [(ngModel)]="searchText" (ngModelChange)="filterUsers()">
+            <div class="field-wrap">
+              <svg class="field-ico" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M14 14l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input
+                type="text"
+                class="form-control has-ico"
+                [placeholder]="'ROOM_MANAGE.SEARCH_USERS' | translate"
+                [(ngModel)]="searchText"
+                (ngModelChange)="filterUsers()"
+              />
+            </div>
             @if (searchText.trim()) {
-              <div class="invite-results">
+              <div class="invite-list">
                 @for (user of filteredUsers; track user.id) {
                   <div class="invite-row">
-                    <span>{{ user.username }}</span>
-                    <button class="btn btn-sm btn-primary" (click)="invite(user.id)">{{ 'ROOM_MANAGE.INVITE' | translate }}</button>
+                    <div class="user-chip">
+                      <span class="user-chip-avatar">{{ (user.username || '?') | slice:0:1 | uppercase }}</span>
+                      <span>{{ user.username }}</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm" (click)="invite(user.id)">
+                      {{ 'ROOM_MANAGE.INVITE' | translate }}
+                    </button>
                   </div>
                 }
                 @if (filteredUsers.length === 0) {
-                  <div class="invite-row text-muted">{{ 'ROOM_MANAGE.NO_RESULTS' | translate }}</div>
+                  <div class="invite-empty">{{ 'ROOM_MANAGE.NO_RESULTS' | translate }}</div>
                 }
               </div>
             }
-          </div>
+          </section>
         }
 
-        <!-- Join Requests (owner only) -->
+        <!-- Join Requests -->
         @if (room.isOwner && joinRequests.length > 0) {
-          <div class="manage-card">
-            <h5>{{ 'ROOM_MANAGE.JOIN_REQUESTS' | translate }}</h5>
-            @for (req of joinRequests; track req.id) {
-              <div class="join-request-row">
-                <span class="member-name">{{ req.username }}</span>
-                <span class="join-request-actions">
-                  <button class="btn btn-sm btn-success" (click)="approveJoinRequest(req.id)">{{ 'ROOM_MANAGE.APPROVE' | translate }}</button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="rejectJoinRequest(req.id)">{{ 'ROOM_MANAGE.REJECT' | translate }}</button>
-                </span>
+          <section class="mg-card card">
+            <div class="mg-card-head">
+              <div class="mg-card-ico" style="background: var(--gradient-sunset);">
+                <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zM10 6v4M10 13v.01" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
               </div>
-            }
-          </div>
+              <h2>{{ 'ROOM_MANAGE.JOIN_REQUESTS' | translate }}</h2>
+              <span class="badge badge-primary">{{ joinRequests.length }}</span>
+            </div>
+            <div class="request-list">
+              @for (req of joinRequests; track req.id) {
+                <div class="request-row">
+                  <div class="user-chip">
+                    <span class="user-chip-avatar">{{ (req.username || '?') | slice:0:1 | uppercase }}</span>
+                    <span>{{ req.username }}</span>
+                  </div>
+                  <div class="request-actions">
+                    <button class="btn btn-success btn-sm" (click)="approveJoinRequest(req.id)">
+                      <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                      {{ 'ROOM_MANAGE.APPROVE' | translate }}
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" (click)="rejectJoinRequest(req.id)">
+                      <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                      {{ 'ROOM_MANAGE.REJECT' | translate }}
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </section>
         }
 
         <!-- Members -->
-        <div class="manage-card">
-          <h5>{{ 'ROOM_MANAGE.MEMBERS_TITLE' | translate }}</h5>
-          @for (member of room.members; track member.id) {
-            <div class="member-row">
-              <span class="member-name">{{ member.username }}</span>
-              <span>
-                @if (member.id === room.ownerId) {
-                  <span class="badge-owner">{{ 'ROOM_MANAGE.OWNER_BADGE' | translate }}</span>
-                }
-                @if (room.isOwner && member.id !== room.ownerId) {
-                  <button class="btn btn-sm btn-outline-danger" (click)="removeMember(member.id)">{{ 'ROOM_MANAGE.REMOVE' | translate }}</button>
-                }
-              </span>
+        <section class="mg-card card">
+          <div class="mg-card-head">
+            <div class="mg-card-ico" style="background: var(--gradient-cyan);">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><circle cx="7" cy="7" r="3" stroke="#fff" stroke-width="1.8"/><circle cx="14" cy="9" r="2.5" stroke="#fff" stroke-width="1.8"/><path d="M2 17c0-2.5 2-4 5-4s5 1.5 5 4M12 17c0-2 1.5-3 3.5-3S19 15 19 17" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
             </div>
-          }
-        </div>
-      </div>
+            <h2>{{ 'ROOM_MANAGE.MEMBERS_TITLE' | translate }}</h2>
+            <span class="badge badge-primary">{{ room.members.length }}</span>
+          </div>
+          <div class="member-list">
+            @for (member of room.members; track member.id) {
+              <div class="member-row">
+                <div class="user-chip">
+                  <span class="user-chip-avatar">{{ (member.username || '?') | slice:0:1 | uppercase }}</span>
+                  <span>{{ member.username }}</span>
+                </div>
+                <div class="member-actions">
+                  @if (member.id === room.ownerId) {
+                    <span class="badge badge-primary">{{ 'ROOM_MANAGE.OWNER_BADGE' | translate }}</span>
+                  }
+                  @if (room.isOwner && member.id !== room.ownerId) {
+                    <button class="btn btn-outline-danger btn-sm" (click)="removeMember(member.id)">
+                      {{ 'ROOM_MANAGE.REMOVE' | translate }}
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      </aside>
 
-      <!-- ════════ RIGHT PANEL: Schedule management (owner only) ════════ -->
+      <!-- RIGHT: Schedule controls (owner only) -->
       @if (room.isOwner) {
-        <div class="panel-right">
+        <main class="mg-main">
 
-          <!-- Month selector -->
-          <div class="month-selector">
-            <label>{{ 'ROOM_MANAGE.MONTH' | translate }}</label>
-            <select class="form-control form-control-sm" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange()">
+          <!-- Month selector bar -->
+          <section class="mg-card card mg-month-bar">
+            <label for="month-select">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              {{ 'ROOM_MANAGE.MONTH' | translate }}
+            </label>
+            <select
+              id="month-select"
+              class="form-control"
+              [(ngModel)]="selectedMonth"
+              (ngModelChange)="onMonthChange()"
+            >
               @for (mon of monthList; track mon.label) {
                 <option [ngValue]="mon.value">{{ mon.label }}</option>
               }
             </select>
-          </div>
+          </section>
 
-          <!-- Day Hours + Activation/Generation side by side -->
-          <div class="right-columns">
+          <div class="mg-main-grid">
             <!-- Day Hours -->
-            <div class="manage-card right-col-left">
-              <h5>{{ 'ROOM_MANAGE.DAY_HOURS' | translate }}</h5>
-              <p class="text-muted mb-2" style="font-size: 0.8rem;">{{ 'ROOM_MANAGE.DAY_HOURS_DEFAULT' | translate }}</p>
+            <section class="mg-card card">
+              <div class="mg-card-head">
+                <div class="mg-card-ico" style="background: var(--gradient-brand);">
+                  <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><circle cx="10" cy="10" r="7" stroke="#fff" stroke-width="1.8"/><path d="M10 6v4l3 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <h2>{{ 'ROOM_MANAGE.DAY_HOURS' | translate }}</h2>
+              </div>
+              <p class="mg-subtle">{{ 'ROOM_MANAGE.DAY_HOURS_DEFAULT' | translate }}</p>
+
               <div class="day-hours-scroll">
-                <table class="table table-sm mb-0">
+                <table class="hours-table">
                   <thead>
                     <tr>
                       <th>{{ 'ROOM_MANAGE.DAY' | translate }}</th>
@@ -123,54 +216,95 @@
                       <tr [class.weekend-row]="isWeekendOrHoliday(dh.dayOfWeek)">
                         <td>{{ dh.day | date: 'dd.MM.' }}</td>
                         <td>{{ dayNames[dh.dayOfWeek] }}</td>
-                        <td><input type="number" class="form-control form-control-sm hours-input" [(ngModel)]="dh.hours" min="0" max="24"></td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control hours-input"
+                            [(ngModel)]="dh.hours"
+                            min="0"
+                            max="24"
+                          />
+                        </td>
                       </tr>
                     }
                   </tbody>
                 </table>
               </div>
-              <button class="btn btn-primary btn-sm mt-2" (click)="saveDayHours()">{{ 'ROOM_MANAGE.SAVE_HOURS' | translate }}</button>
-            </div>
 
-            <!-- Activation & Generation side by side -->
-            <div class="manage-card right-col-right">
-              <h5>{{ 'ROOM_MANAGE.ACTIVATION_GENERATION' | translate }}</h5>
-              <div class="activation-generation-row">
-                <div class="activation-col">
-                  <p class="section-label">{{ 'ROOM_MANAGE.ACTIVE_USERS' | translate }}</p>
-                  @if (userActivations.length === 0) {
-                    <p class="text-muted" style="font-size: 0.85rem;">{{ 'ROOM_MANAGE.NO_USERS_FOR_ACTIVATION' | translate }}</p>
-                  }
-                  @for (user of userActivations; track user.userid) {
-                    <div class="activation-item">
-                      <input type="checkbox" [(ngModel)]="user.active" id="act-{{user.userid}}">
-                      <label for="act-{{user.userid}}" style="margin: 0; cursor: pointer;">{{ user.username }}</label>
-                    </div>
-                  }
-                  <button class="btn btn-primary btn-sm mt-2" (click)="saveActivations()">{{ 'ROOM_MANAGE.SAVE_ACTIVE' | translate }}</button>
+              <div class="mg-card-actions">
+                <button class="btn btn-primary btn-sm" (click)="saveDayHours()">
+                  <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  {{ 'ROOM_MANAGE.SAVE_HOURS' | translate }}
+                </button>
+              </div>
+            </section>
+
+            <!-- Activation & Generation -->
+            <section class="mg-card card">
+              <div class="mg-card-head">
+                <div class="mg-card-ico" style="background: var(--gradient-sunset);">
+                  <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 2l7 3v5c0 5-3 7.5-7 8-4-0.5-7-3-7-8V5l7-3z M7 10l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
-                <div class="generation-col">
-                  <p class="section-label">{{ 'ROOM_MANAGE.SCHEDULE_GENERATION' | translate }}</p>
-                  <div class="generation-area">
+                <h2>{{ 'ROOM_MANAGE.ACTIVATION_GENERATION' | translate }}</h2>
+              </div>
+
+              <div class="actgen-split">
+                <!-- Active users -->
+                <div class="actgen-col">
+                  <div class="mg-label">{{ 'ROOM_MANAGE.ACTIVE_USERS' | translate }}</div>
+                  @if (userActivations.length === 0) {
+                    <p class="mg-subtle">{{ 'ROOM_MANAGE.NO_USERS_FOR_ACTIVATION' | translate }}</p>
+                  }
+                  <div class="activation-list">
+                    @for (user of userActivations; track user.userid) {
+                      <label class="activation-item" [for]="'act-' + user.userid">
+                        <input type="checkbox" [(ngModel)]="user.active" [id]="'act-' + user.userid" />
+                        <span class="check-box"></span>
+                        <span class="user-chip">
+                          <span class="user-chip-avatar">{{ (user.username || '?') | slice:0:1 | uppercase }}</span>
+                          <span>{{ user.username }}</span>
+                        </span>
+                      </label>
+                    }
+                  </div>
+                  <button class="btn btn-primary btn-sm" (click)="saveActivations()">
+                    <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    {{ 'ROOM_MANAGE.SAVE_ACTIVE' | translate }}
+                  </button>
+                </div>
+
+                <!-- Generation -->
+                <div class="actgen-col">
+                  <div class="mg-label">{{ 'ROOM_MANAGE.SCHEDULE_GENERATION' | translate }}</div>
+                  <div class="gen-buttons">
                     <button class="btn btn-primary btn-sm" (click)="generateSchedule()" [disabled]="loading">
                       @if (loading) {
-                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                        <span class="spinner spinner-sm"></span>
+                      } @else {
+                        <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M10 3l7 4v6l-7 4-7-4V7z" stroke="currentColor" stroke-width="1.6"/><path d="M10 11v4M17 7l-7 4-7-4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
                       }
                       {{ 'ROOM_MANAGE.GENERATE_SCHEDULE' | translate }}
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm" (click)="checkBusy()">{{ 'ROOM_MANAGE.CHECK_STATUS' | translate }}</button>
+                    <button class="btn btn-outline btn-sm" (click)="checkBusy()">
+                      <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10a6 6 0 0 1 10-4.5L16 4M16 10a6 6 0 0 1-10 4.5L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 2v4h-4M4 18v-4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      {{ 'ROOM_MANAGE.CHECK_STATUS' | translate }}
+                    </button>
                   </div>
+
                   @if (generationMessage) {
-                    <div class="alert alert-info mt-2 py-1 px-2" style="font-size: 0.85rem;">{{ generationMessage }}</div>
+                    <div class="alert alert-info">{{ generationMessage }}</div>
                   }
                   @if (statusMessage) {
-                    <div class="alert alert-secondary mt-2 py-1 px-2" style="font-size: 0.85rem;">{{ statusMessage }}</div>
+                    <div class="status-chip" [class.status-busy]="loading">
+                      <span class="status-dot"></span>
+                      {{ statusMessage }}
+                    </div>
                   }
                 </div>
               </div>
-            </div>
+            </section>
           </div>
-        </div>
+        </main>
       }
     </div>
   }

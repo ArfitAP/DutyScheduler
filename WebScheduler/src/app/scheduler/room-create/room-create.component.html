@@ -1,20 +1,55 @@
-<div class="container mt-4">
-  <h3>{{ 'ROOM_CREATE.TITLE' | translate }}</h3>
+<div class="room-create-page">
 
-  @if (error) {
-    <div class="alert alert-danger">{{ error }}</div>
-  }
+  <header class="rc-head">
+    <div class="rc-head-ico">
+      <svg viewBox="0 0 20 20" fill="none" width="24" height="24"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4M10 12v3M8.5 13.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <h1 class="page-title">{{ 'ROOM_CREATE.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'HOME_HERO.FEATURE_2_D' | translate }}</p>
+    </div>
+  </header>
 
-  <div class="form-group mt-3">
-    <label for="name">{{ 'ROOM_CREATE.NAME_LABEL' | translate }}</label>
-    <input type="text" class="form-control" id="name" [(ngModel)]="name" maxlength="100">
-  </div>
+  <section class="rc-card card">
+    @if (error) {
+      <div class="alert alert-danger">{{ error }}</div>
+    }
 
-  <div class="form-group mt-3">
-    <label for="description">{{ 'ROOM_CREATE.DESCRIPTION_LABEL' | translate }}</label>
-    <textarea class="form-control" id="description" [(ngModel)]="description" maxlength="500" rows="3"></textarea>
-  </div>
+    <div class="form-group">
+      <label for="name">{{ 'ROOM_CREATE.NAME_LABEL' | translate }}</label>
+      <div class="field-wrap">
+        <svg class="field-ico" viewBox="0 0 20 20" fill="none"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input
+          id="name"
+          type="text"
+          class="form-control has-ico"
+          [(ngModel)]="name"
+          maxlength="100"
+          autofocus
+        />
+      </div>
+    </div>
 
-  <button class="btn btn-primary mt-3" (click)="create()" [disabled]="!name.trim()">{{ 'ROOM_CREATE.CREATE' | translate }}</button>
-  <a class="btn btn-secondary mt-3 ml-2" routerLink="/home">{{ 'ROOM_CREATE.CANCEL' | translate }}</a>
+    <div class="form-group">
+      <label for="description">{{ 'ROOM_CREATE.DESCRIPTION_LABEL' | translate }}</label>
+      <textarea
+        id="description"
+        class="form-control"
+        [(ngModel)]="description"
+        maxlength="500"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <div class="rc-actions">
+      <a class="btn btn-ghost" routerLink="/home">
+        <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M12 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        {{ 'ROOM_CREATE.CANCEL' | translate }}
+      </a>
+      <button class="btn btn-primary" (click)="create()" [disabled]="!name.trim()">
+        {{ 'ROOM_CREATE.CREATE' | translate }}
+        <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </section>
 </div>

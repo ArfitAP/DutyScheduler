@@ -6,6 +6,7 @@ import { RoomService } from 'src/app/_services/room.service';
 @Component({
     selector: 'app-room-create',
     templateUrl: './room-create.component.html',
+    styleUrls: ['./room-create.component.css'],
     standalone: false
 })
 export class RoomCreateComponent {
