@@ -10,7 +10,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 @Component({
     selector: 'app-room-user-select',
     templateUrl: './room-user-select.component.html',
-    styleUrls: ['../board-user/board-user.component.css'],
+    styleUrls: ['./room-user-select.component.css'],
     providers: [DatePipe],
     standalone: false
 })

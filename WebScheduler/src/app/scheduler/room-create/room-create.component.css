@@ -1,0 +1,90 @@
+/* Room Create */
+
+.room-create-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 28px 48px;
+  animation: fade-up 480ms var(--ease-out) both;
+}
+
+.rc-head {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.rc-head-ico {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-brand);
+  flex-shrink: 0;
+}
+
+.rc-head .page-title {
+  margin: 0 0 2px;
+}
+
+.rc-head .page-subtitle {
+  margin: 0;
+}
+
+.rc-card {
+  padding: 28px;
+  animation: fade-up 500ms var(--ease-out) 80ms both;
+}
+
+.rc-card .alert {
+  margin-bottom: 18px;
+}
+
+.rc-card textarea.form-control {
+  resize: vertical;
+  min-height: 110px;
+  font-family: var(--font-sans);
+}
+
+.rc-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.rc-actions .btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .room-create-page {
+    padding: 20px 16px 40px;
+  }
+  .rc-head {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  .rc-card {
+    padding: 22px;
+  }
+  .rc-actions {
+    flex-direction: column-reverse;
+  }
+  .rc-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-create-page,
+  .rc-card {
+    animation: none !important;
+  }
+}

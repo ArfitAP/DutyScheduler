@@ -1,0 +1,231 @@
+/* Board Admin — role management */
+
+.admin-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 32px 28px 48px;
+  animation: fade-up 480ms var(--ease-out) both;
+}
+
+/* Header */
+.admin-head {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.admin-head-ico {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-brand);
+  flex-shrink: 0;
+}
+
+.admin-head .page-title {
+  margin: 0 0 2px;
+}
+
+.admin-head .page-subtitle {
+  margin: 0;
+}
+
+/* Main card */
+.admin-card {
+  padding: 28px;
+  animation: fade-up 500ms var(--ease-out) 80ms both;
+}
+
+.admin-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.admin-card-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-50);
+  color: var(--brand-600);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-card-head h2 {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-form-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-form-row .field-wrap {
+  flex: 1;
+  min-width: 220px;
+}
+
+.admin-form-row .btn {
+  flex-shrink: 0;
+}
+
+/* User result */
+.admin-result {
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fade-up 380ms var(--ease-out) both;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-surface);
+}
+
+.admin-result-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.admin-result-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.admin-result-name .name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--ink-900);
+  word-break: break-word;
+}
+
+.admin-result-name .sub {
+  font-size: var(--text-xs);
+  color: var(--ink-500);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* Toggle switch */
+.admin-toggle {
+  padding: 14px 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switch-track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--ink-200);
+  border-radius: 999px;
+  transition: background var(--duration-base) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform var(--duration-base) var(--ease-spring);
+}
+
+.switch input:checked + .switch-track {
+  background: var(--gradient-brand);
+}
+
+.switch input:checked + .switch-track .switch-thumb {
+  transform: translateX(20px);
+}
+
+.switch input:focus-visible + .switch-track {
+  box-shadow: var(--shadow-glow);
+}
+
+.switch-label {
+  font-weight: 600;
+  color: var(--ink-800);
+  font-size: var(--text-sm);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 600px) {
+  .admin-page {
+    padding: 20px 16px 40px;
+  }
+  .admin-head {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  .admin-card {
+    padding: 20px;
+  }
+  .admin-form-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-page,
+  .admin-card,
+  .admin-result,
+  .switch-thumb,
+  .switch-track {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,12 +1,29 @@
-<div class="container mt-3">
-  <div class="d-flex justify-content-between align-items-center">
-    <h4>{{ 'USER_SELECT.TITLE' | translate:{ roomName: roomName } }}</h4>
-    <a [routerLink]="['/room', roomId]" class="btn btn-sm btn-secondary">{{ 'USER_SELECT.BACK' | translate }}</a>
-  </div>
+<div class="us-page">
 
-  <div class="form-group mt-2" style="max-width: 300px;">
-    <label>{{ 'USER_SELECT.MONTH' | translate }}</label>
-    <select class="form-control" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange()">
+  <!-- Header -->
+  <header class="us-head">
+    <div class="us-head-left">
+      <div class="us-head-ico">
+        <svg viewBox="0 0 20 20" fill="none" width="24" height="24"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4M7 13l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <h1 class="page-title">{{ 'USER_SELECT.TITLE' | translate:{ roomName: roomName } }}</h1>
+        <p class="page-subtitle">{{ 'HOME_HERO.FEATURE_3_D' | translate }}</p>
+      </div>
+    </div>
+    <a [routerLink]="['/room', roomId]" class="btn btn-ghost btn-sm">
+      <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M12 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {{ 'USER_SELECT.BACK' | translate }}
+    </a>
+  </header>
+
+  <!-- Month selector -->
+  <div class="us-month-bar card">
+    <label for="us-month">
+      <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      {{ 'USER_SELECT.MONTH' | translate }}
+    </label>
+    <select id="us-month" class="form-control" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange()">
       @for (mon of monthList; track mon.label) {
         <option [ngValue]="mon.value">{{ mon.label }}</option>
       }
@@ -14,46 +31,93 @@
   </div>
 
   @if (!userApplication.active) {
-    <div>
+    <div class="us-empty surface">
+      <svg viewBox="0 0 20 20" fill="none" width="48" height="48" class="us-empty-ico"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v5M10 14v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       <p>{{ 'USER_SELECT.NOT_ACTIVATED' | translate }}</p>
     </div>
   }
+
   @if (userApplication.active) {
-    <div class="row">
-      <div class="col-9">
-        <div class="pick-calendar">
-          <table class="calndar-table">
-            <thead>
+    <div class="us-grid">
+      <!-- Calendar -->
+      <div class="us-calendar card">
+        <table class="us-table">
+          <thead>
+            <tr>
+              @for (i of [0,1,2,3,4,5,6]; track i) {
+                <th>{{ dayNames[i] }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (weeks of monthWeeks; track weeks) {
               <tr>
-                @for (i of [0,1,2,3,4,5,6]; track i) {
-                  <th>{{ dayNames[i] }}</th>
+                @for (days of weeks; track days) {
+                  <td [class.empty]="days.hidden">
+                    @if (!days.hidden) {
+                      <button
+                        type="button"
+                        class="day-btn"
+                        [class.is-selected]="days.selected"
+                        [class.is-not-wanted]="days.notWanted"
+                        [class.is-holyday]="days.holyday"
+                        (click)="dayClick(days.date)"
+                      >
+                        <span class="day-btn-num">{{ days.date | date: 'dd' }}</span>
+                      </button>
+                    }
+                  </td>
                 }
               </tr>
-            </thead>
-            <tbody>
-              @for (weeks of monthWeeks; track weeks) {
-                <tr>
-                  @for (days of weeks; track days) {
-                    <td>
-                      @if (!days.hidden) {
-                        <button type="button" class="cell-button" [ngClass]="{'background-selected': days.selected, 'background-not-wanted': days.notWanted, 'font-red': days.holyday}" (click)="dayClick(days.date)">
-                          <span class="cell-font">{{ days.date | date: 'dd' }}</span>
-                        </button>
-                      }
-                    </td>
-                  }
-                </tr>
-              }
-            </tbody>
-          </table>
+            }
+          </tbody>
+        </table>
+
+        <!-- Legend -->
+        <div class="us-legend">
+          <div class="us-legend-item">
+            <span class="us-legend-swatch us-legend-wanted"></span>
+            <span>{{ 'USER_SELECT.SAVE_SELECTION' | translate }}</span>
+          </div>
+          <div class="us-legend-item">
+            <span class="us-legend-swatch us-legend-unwanted"></span>
+            <span>{{ 'NAV.DECLINE' | translate }}</span>
+          </div>
+          <div class="us-legend-item">
+            <span class="us-legend-swatch us-legend-holiday"></span>
+            <span>{{ 'DAYS.SUNDAY' | translate }}/{{ 'DAYS.SATURDAY' | translate }}</span>
+          </div>
         </div>
       </div>
-      <div class="col calendar-save-margin">
-        <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> {{ 'USER_SELECT.GROUP_DUTY' | translate }}
-        <div class="mt-2">
-          <button class="btn btn-primary w-100" type="button" (click)="save()">{{ 'USER_SELECT.SAVE_SELECTION' | translate }}</button>
+
+      <!-- Sidebar: save controls -->
+      <aside class="us-side card">
+        <div class="us-side-title">{{ 'USER_SELECT.SAVE_SELECTION' | translate }}</div>
+
+        <label class="us-toggle-row" [class.is-disabled]="!groupSelected">
+          <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped" />
+          <span class="check-box"></span>
+          <span>{{ 'USER_SELECT.GROUP_DUTY' | translate }}</span>
+        </label>
+
+        <div class="us-summary">
+          <div class="us-summary-row">
+            <span class="us-summary-dot us-summary-dot-wanted"></span>
+            <span class="us-summary-label">{{ 'USER_SELECT.SAVE_SELECTION' | translate }}</span>
+            <span class="us-summary-count">{{ userSelectedDays.length }}</span>
+          </div>
+          <div class="us-summary-row">
+            <span class="us-summary-dot us-summary-dot-unwanted"></span>
+            <span class="us-summary-label">{{ 'NAV.DECLINE' | translate }}</span>
+            <span class="us-summary-count">{{ notWantedDays.length }}</span>
+          </div>
         </div>
-      </div>
+
+        <button class="btn btn-primary btn-block" type="button" (click)="save()">
+          <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {{ 'USER_SELECT.SAVE_SELECTION' | translate }}
+        </button>
+      </aside>
     </div>
   }
 </div>

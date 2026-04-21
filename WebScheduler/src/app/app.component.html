@@ -1,131 +1,385 @@
-<div id="app">
-  <nav class="navbar navbar-expand navbar-dark bg-primary">
-    <a href="#" class="navbar-brand">Duty Scheduler</a>
-    <ul class="navbar-nav mr-auto" routerLinkActive="active">
-      <li class="nav-item">
-        <a href="/home" class="nav-link" routerLink="home">{{ 'NAV.HOME' | translate }} </a>
-      </li>
-      @if (showAdminBoard) {
-        <li class="nav-item">
-          <a href="/admin" class="nav-link" routerLink="admin">{{ 'NAV.ADMIN' | translate }}</a>
-        </li>
-      }
-    </ul>
+<div class="app-shell">
 
-    @if (!isLoggedIn) {
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item" style="position: relative;">
-          <a href="javascript:void(0)" class="nav-link" (click)="toggleLanguageMenu()">
-            🌐 {{ languageService.currentLang | uppercase }}
-          </a>
-          @if (showLanguageMenu) {
-            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 150px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-              @for (lang of languageService.supportedLanguages; track lang.code) {
-                <div style="padding: 8px 12px; cursor: pointer; color: #333; font-size: 0.9rem;" (click)="changeLanguage(lang.code)"
-                  [style.font-weight]="lang.code === languageService.currentLang ? 'bold' : 'normal'">
-                  {{ lang.label }}
-                </div>
-              }
-            </div>
-          }
-        </li>
-        <li class="nav-item">
-          <a href="/register" class="nav-link" routerLink="register">{{ 'NAV.REGISTER' | translate }}</a>
-        </li>
-        <li class="nav-item">
-          <a href="/login" class="nav-link" routerLink="login">{{ 'NAV.LOGIN' | translate }}</a>
-        </li>
-      </ul>
-    }
-
-    @if (isLoggedIn) {
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item" style="position: relative;">
-          <a href="javascript:void(0)" class="nav-link" (click)="toggleLanguageMenu()">
-            🌐 {{ languageService.currentLang | uppercase }}
-          </a>
-          @if (showLanguageMenu) {
-            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 150px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-              @for (lang of languageService.supportedLanguages; track lang.code) {
-                <div style="padding: 8px 12px; cursor: pointer; color: #333; font-size: 0.9rem;" (click)="changeLanguage(lang.code)"
-                  [style.font-weight]="lang.code === languageService.currentLang ? 'bold' : 'normal'">
-                  {{ lang.label }}
-                </div>
-              }
-            </div>
-          }
-        </li>
-        <li class="nav-item" style="position: relative;">
-          <a href="javascript:void(0)" class="nav-link" (click)="toggleInvitations()">
-            {{ 'NAV.INVITATIONS' | translate }}
-            @if (invitations.length > 0) {
-              <span class="badge badge-danger">{{ invitations.length }}</span>
-            }
-          </a>
-          @if (showInvitations) {
-            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 300px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-              @if (invitations.length === 0) {
-                <div style="padding: 10px; color: #666; font-size: 0.9rem;">{{ 'NAV.NO_INVITATIONS' | translate }}</div>
-              }
-              @for (inv of invitations; track inv.id) {
-                <div style="padding: 10px; border-bottom: 1px solid #eee;">
-                  <div style="color: #333; font-size: 0.9rem;">
-                    <strong>{{ inv.roomName }}</strong>
-                    <br><span style="color: #666;">{{ 'NAV.FROM' | translate }} {{ inv.invitedByUsername }}</span>
-                  </div>
-                  <div style="margin-top: 5px;">
-                    <button class="btn btn-sm btn-success mr-1" (click)="acceptInvitation(inv.id)">{{ 'NAV.ACCEPT' | translate }}</button>
-                    <button class="btn btn-sm btn-danger" (click)="declineInvitation(inv.id)">{{ 'NAV.DECLINE' | translate }}</button>
-                  </div>
-                </div>
-              }
-            </div>
-          }
-        </li>
-        <li class="nav-item" style="position: relative;">
-          <a href="javascript:void(0)" class="nav-link" (click)="toggleJoinRequests()">
-            {{ 'NAV.MY_REQUESTS' | translate }}
-            @if (joinRequests.length > 0) {
-              <span class="badge badge-info">{{ joinRequests.length }}</span>
-            }
-          </a>
-          @if (showJoinRequests) {
-            <div style="position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; min-width: 300px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-              @if (joinRequests.length === 0) {
-                <div style="padding: 10px; color: #666; font-size: 0.9rem;">{{ 'NAV.NO_REQUESTS' | translate }}</div>
-              }
-              @for (req of joinRequests; track req.id) {
-                <div style="padding: 10px; border-bottom: 1px solid #eee;">
-                  <div style="color: #333; font-size: 0.9rem;">
-                    <strong>{{ req.roomName }}</strong>
-                  </div>
-                  <div style="margin-top: 3px;">
-                    @if (req.status === 'PENDING') {
-                      <span class="badge badge-warning">{{ 'NAV.STATUS_PENDING' | translate }}</span>
-                    }
-                    @if (req.status === 'APPROVED') {
-                      <span class="badge badge-success">{{ 'NAV.STATUS_APPROVED' | translate }}</span>
-                    }
-                    @if (req.status === 'REJECTED') {
-                      <span class="badge badge-danger">{{ 'NAV.STATUS_REJECTED' | translate }}</span>
-                    }
-                  </div>
-                </div>
-              }
-            </div>
-          }
-        </li>
-        <li class="nav-item">
-          <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
-        </li>
-        <li class="nav-item">
-          <a href class="nav-link" (click)="logout()">{{ 'NAV.LOGOUT' | translate }}</a>
-        </li>
-      </ul>
-    }
-  </nav>
-
-  <div class="container">
-    <router-outlet></router-outlet>
+  <!-- ══════════ DECORATIVE ORBS ══════════ -->
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
   </div>
+
+  <!-- ══════════ HEADER ══════════ -->
+  <header class="app-header" [class.scrolled]="scrolled">
+    <div class="header-inner">
+
+      <!-- Brand -->
+      <a routerLink="/home" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="6" width="28" height="24" rx="5" fill="url(#bg1)"/>
+            <rect x="2" y="6" width="28" height="7" rx="5" fill="url(#bg2)"/>
+            <circle cx="10" cy="20" r="2" fill="#fff" opacity="0.95"/>
+            <circle cx="16" cy="20" r="2" fill="#fff" opacity="0.7"/>
+            <circle cx="22" cy="20" r="2" fill="#fff" opacity="0.45"/>
+            <circle cx="10" cy="26" r="2" fill="#fff" opacity="0.45"/>
+            <circle cx="16" cy="26" r="2" fill="#fff" opacity="0.95"/>
+            <rect x="9" y="2" width="2.5" height="7" rx="1.25" fill="#4338ca"/>
+            <rect x="20.5" y="2" width="2.5" height="7" rx="1.25" fill="#4338ca"/>
+            <defs>
+              <linearGradient id="bg1" x1="0" y1="0" x2="32" y2="32">
+                <stop stop-color="#6366f1"/>
+                <stop offset="1" stop-color="#d946ef"/>
+              </linearGradient>
+              <linearGradient id="bg2" x1="0" y1="6" x2="0" y2="13">
+                <stop stop-color="#4338ca"/>
+                <stop offset="1" stop-color="#6366f1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Duty</span><span class="brand-accent">Scheduler</span>
+        </span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="nav-primary hidden-sm">
+        <a routerLink="/home" routerLinkActive="active" class="nav-link">
+          <svg class="nav-ico" viewBox="0 0 20 20" fill="none"><path d="M3 10l7-7 7 7v8a2 2 0 0 1-2 2h-3v-6H8v6H5a2 2 0 0 1-2-2v-8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <span>{{ 'NAV.HOME' | translate }}</span>
+        </a>
+        @if (showAdminBoard) {
+          <a routerLink="/admin" routerLinkActive="active" class="nav-link">
+            <svg class="nav-ico" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 3v5c0 5-3 7.5-7 8-4-0.5-7-3-7-8V5l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>{{ 'NAV.ADMIN' | translate }}</span>
+          </a>
+        }
+      </nav>
+
+      <!-- Right cluster -->
+      <div class="header-actions">
+
+        <!-- Language switcher -->
+        <div class="menu-host hidden-sm">
+          <button type="button" class="icon-btn" (click)="toggleLanguageMenu()" [class.active]="showLanguageMenu" [attr.aria-label]="'NAV.LANGUAGE' | translate">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M2 10h16M10 2c2.5 3 2.5 13 0 16M10 2c-2.5 3-2.5 13 0 16" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span class="icon-btn-label">{{ languageService.currentLang | uppercase }}</span>
+          </button>
+          @if (showLanguageMenu) {
+            <div class="menu-panel menu-panel-sm anim-scale-in">
+              @for (lang of languageService.supportedLanguages; track lang.code) {
+                <button type="button" class="menu-item" [class.selected]="lang.code === languageService.currentLang" (click)="changeLanguage(lang.code)">
+                  <span class="lang-code">{{ lang.code | uppercase }}</span>
+                  <span>{{ lang.label }}</span>
+                  @if (lang.code === languageService.currentLang) {
+                    <svg class="check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        @if (!isLoggedIn) {
+          <a routerLink="/register" class="btn btn-ghost btn-sm hidden-sm">{{ 'NAV.REGISTER' | translate }}</a>
+          <a routerLink="/login" class="btn btn-primary btn-sm hidden-sm">{{ 'NAV.LOGIN' | translate }}</a>
+        }
+
+        @if (isLoggedIn) {
+          <!-- Invitations -->
+          <div class="menu-host hidden-sm">
+            <button type="button" class="icon-btn" (click)="toggleInvitations()" [class.active]="showInvitations" [attr.aria-label]="'NAV.INVITATIONS' | translate">
+              <svg viewBox="0 0 20 20" fill="none"><path d="M3 6l7 4.5L17 6M3 5h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              @if (invitations.length > 0) {
+                <span class="icon-btn-count">{{ invitations.length }}</span>
+              }
+            </button>
+            @if (showInvitations) {
+              <div class="menu-panel menu-panel-lg anim-scale-in">
+                <div class="menu-heading">{{ 'NAV.INVITATIONS' | translate }}</div>
+                @if (invitations.length === 0) {
+                  <div class="menu-empty">{{ 'NAV.NO_INVITATIONS' | translate }}</div>
+                }
+                @for (inv of invitations; track inv.id) {
+                  <div class="menu-row">
+                    <div class="menu-row-main">
+                      <strong>{{ inv.roomName }}</strong>
+                      <span class="menu-row-sub">{{ 'NAV.FROM' | translate }} {{ inv.invitedByUsername }}</span>
+                    </div>
+                    <div class="menu-row-actions">
+                      <button class="btn btn-success btn-sm" (click)="acceptInvitation(inv.id)">{{ 'NAV.ACCEPT' | translate }}</button>
+                      <button class="btn btn-outline-danger btn-sm" (click)="declineInvitation(inv.id)">{{ 'NAV.DECLINE' | translate }}</button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- My requests -->
+          <div class="menu-host hidden-sm">
+            <button type="button" class="icon-btn" (click)="toggleJoinRequests()" [class.active]="showJoinRequests" [attr.aria-label]="'NAV.MY_REQUESTS' | translate">
+              <svg viewBox="0 0 20 20" fill="none"><path d="M10 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zM3 18c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              @if (joinRequests.length > 0) {
+                <span class="icon-btn-count">{{ joinRequests.length }}</span>
+              }
+            </button>
+            @if (showJoinRequests) {
+              <div class="menu-panel menu-panel-lg anim-scale-in">
+                <div class="menu-heading">{{ 'NAV.MY_REQUESTS' | translate }}</div>
+                @if (joinRequests.length === 0) {
+                  <div class="menu-empty">{{ 'NAV.NO_REQUESTS' | translate }}</div>
+                }
+                @for (req of joinRequests; track req.id) {
+                  <div class="menu-row">
+                    <div class="menu-row-main">
+                      <strong>{{ req.roomName }}</strong>
+                    </div>
+                    @if (req.status === 'PENDING')  { <span class="badge badge-warning">{{ 'NAV.STATUS_PENDING' | translate }}</span> }
+                    @if (req.status === 'APPROVED') { <span class="badge badge-success">{{ 'NAV.STATUS_APPROVED' | translate }}</span> }
+                    @if (req.status === 'REJECTED') { <span class="badge badge-danger">{{ 'NAV.STATUS_REJECTED' | translate }}</span> }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- User pill -->
+          <div class="menu-host hidden-sm">
+            <button type="button" class="user-pill" (click)="toggleUserMenu()" [class.active]="showUserMenu">
+              <span class="avatar">{{ (username || '?') | slice:0:1 | uppercase }}</span>
+              <span class="user-pill-name">{{ username }}</span>
+              <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            @if (showUserMenu) {
+              <div class="menu-panel menu-panel-sm anim-scale-in">
+                <a routerLink="/profile" class="menu-item">
+                  <svg class="menu-ico" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+                  <span>{{ 'PROFILE.TITLE' | translate }}</span>
+                </a>
+                <button type="button" class="menu-item danger" (click)="logout()">
+                  <svg class="menu-ico" viewBox="0 0 20 20" fill="none"><path d="M13 4h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-3M9 6l-3 4 3 4M6 10h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span>{{ 'NAV.LOGOUT' | translate }}</span>
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Mobile toggle -->
+        <button type="button" class="hamburger only-sm" (click)="toggleMobileMenu()" [class.open]="showMobileMenu" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════ MOBILE DRAWER ══════════ -->
+  @if (showMobileMenu) {
+    <div class="drawer-backdrop" (click)="toggleMobileMenu()"></div>
+  }
+  <aside class="drawer" [class.open]="showMobileMenu" aria-label="Mobile menu">
+    <div class="drawer-header">
+      <span class="drawer-title">{{ 'APP.TITLE' | translate }}</span>
+      <button type="button" class="icon-btn" (click)="toggleMobileMenu()" aria-label="Close">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+
+      @if (isLoggedIn) {
+        <div class="drawer-user">
+          <span class="avatar avatar-lg">{{ (username || '?') | slice:0:1 | uppercase }}</span>
+          <div>
+            <div class="drawer-username">{{ username }}</div>
+            @if (showAdminBoard) { <span class="badge badge-primary">ADMIN</span> }
+          </div>
+        </div>
+      }
+
+      <nav class="drawer-nav stagger">
+        <a routerLink="/home" class="drawer-link" (click)="toggleMobileMenu()">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M3 10l7-7 7 7v8a2 2 0 0 1-2 2h-3v-6H8v6H5a2 2 0 0 1-2-2v-8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <span>{{ 'NAV.HOME' | translate }}</span>
+        </a>
+
+        @if (showAdminBoard) {
+          <a routerLink="/admin" class="drawer-link" (click)="toggleMobileMenu()">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M10 2l7 3v5c0 5-3 7.5-7 8-4-0.5-7-3-7-8V5l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>{{ 'NAV.ADMIN' | translate }}</span>
+          </a>
+        }
+
+        @if (isLoggedIn) {
+          <a routerLink="/profile" class="drawer-link" (click)="toggleMobileMenu()">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>{{ 'PROFILE.TITLE' | translate }}</span>
+          </a>
+
+          <button type="button" class="drawer-link" (click)="toggleInvitations()">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M3 6l7 4.5L17 6M3 5h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>{{ 'NAV.INVITATIONS' | translate }}</span>
+            @if (invitations.length > 0) { <span class="badge badge-danger">{{ invitations.length }}</span> }
+          </button>
+
+          <button type="button" class="drawer-link" (click)="toggleJoinRequests()">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M10 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zM3 18c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>{{ 'NAV.MY_REQUESTS' | translate }}</span>
+            @if (joinRequests.length > 0) { <span class="badge badge-info">{{ joinRequests.length }}</span> }
+          </button>
+        } @else {
+          <a routerLink="/login" class="drawer-link" (click)="toggleMobileMenu()">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M11 6l3 4-3 4M14 10H5M8 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ 'NAV.LOGIN' | translate }}</span>
+          </a>
+          <a routerLink="/register" class="drawer-link" (click)="toggleMobileMenu()">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5M16 4v4M14 6h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>{{ 'NAV.REGISTER' | translate }}</span>
+          </a>
+        }
+      </nav>
+
+      @if (showInvitations && isLoggedIn) {
+        <div class="drawer-panel anim-fade-in">
+          <div class="section-header">{{ 'NAV.INVITATIONS' | translate }}</div>
+          @if (invitations.length === 0) {
+            <div class="menu-empty">{{ 'NAV.NO_INVITATIONS' | translate }}</div>
+          }
+          @for (inv of invitations; track inv.id) {
+            <div class="menu-row">
+              <div class="menu-row-main">
+                <strong>{{ inv.roomName }}</strong>
+                <span class="menu-row-sub">{{ 'NAV.FROM' | translate }} {{ inv.invitedByUsername }}</span>
+              </div>
+              <div class="menu-row-actions">
+                <button class="btn btn-success btn-sm" (click)="acceptInvitation(inv.id)">{{ 'NAV.ACCEPT' | translate }}</button>
+                <button class="btn btn-outline-danger btn-sm" (click)="declineInvitation(inv.id)">{{ 'NAV.DECLINE' | translate }}</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (showJoinRequests && isLoggedIn) {
+        <div class="drawer-panel anim-fade-in">
+          <div class="section-header">{{ 'NAV.MY_REQUESTS' | translate }}</div>
+          @if (joinRequests.length === 0) {
+            <div class="menu-empty">{{ 'NAV.NO_REQUESTS' | translate }}</div>
+          }
+          @for (req of joinRequests; track req.id) {
+            <div class="menu-row">
+              <div class="menu-row-main"><strong>{{ req.roomName }}</strong></div>
+              @if (req.status === 'PENDING')  { <span class="badge badge-warning">{{ 'NAV.STATUS_PENDING' | translate }}</span> }
+              @if (req.status === 'APPROVED') { <span class="badge badge-success">{{ 'NAV.STATUS_APPROVED' | translate }}</span> }
+              @if (req.status === 'REJECTED') { <span class="badge badge-danger">{{ 'NAV.STATUS_REJECTED' | translate }}</span> }
+            </div>
+          }
+        </div>
+      }
+
+      <div class="drawer-section">
+        <div class="section-header">{{ 'NAV.LANGUAGE' | translate }}</div>
+        <div class="lang-grid">
+          @for (lang of languageService.supportedLanguages; track lang.code) {
+            <button type="button" class="lang-pill" [class.selected]="lang.code === languageService.currentLang" (click)="changeLanguage(lang.code)">
+              <span class="lang-code">{{ lang.code | uppercase }}</span>
+              <span>{{ lang.label }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (isLoggedIn) {
+        <button type="button" class="btn btn-outline-danger btn-block mt-5" (click)="logout()">
+          {{ 'NAV.LOGOUT' | translate }}
+        </button>
+      }
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main class="app-main" [@routeAnim]="getRouteKey()">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="app-footer">
+    <div class="footer-inner container">
+
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="6" width="28" height="24" rx="5" fill="url(#fg1)"/>
+              <rect x="2" y="6" width="28" height="7" rx="5" fill="url(#fg2)"/>
+              <circle cx="10" cy="20" r="2" fill="#fff" opacity="0.95"/>
+              <circle cx="16" cy="20" r="2" fill="#fff" opacity="0.7"/>
+              <circle cx="22" cy="20" r="2" fill="#fff" opacity="0.45"/>
+              <circle cx="10" cy="26" r="2" fill="#fff" opacity="0.45"/>
+              <circle cx="16" cy="26" r="2" fill="#fff" opacity="0.95"/>
+              <rect x="9" y="2" width="2.5" height="7" rx="1.25" fill="#4338ca"/>
+              <rect x="20.5" y="2" width="2.5" height="7" rx="1.25" fill="#4338ca"/>
+              <defs>
+                <linearGradient id="fg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#d946ef"/></linearGradient>
+                <linearGradient id="fg2" x1="0" y1="6" x2="0" y2="13"><stop stop-color="#4338ca"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+              </defs>
+            </svg>
+          </span>
+          <span class="brand-text"><span class="brand-name">Duty</span><span class="brand-accent">Scheduler</span></span>
+        </div>
+        <p class="footer-tagline">{{ 'FOOTER.TAGLINE' | translate }}</p>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-heading">{{ 'FOOTER.DEVELOPER' | translate }}</div>
+        <div class="footer-dev">
+          <div class="dev-avatar">AP</div>
+          <div>
+            <div class="dev-name">Antonio Pavliš</div>
+            <div class="dev-role">{{ 'FOOTER.DEV_ROLE' | translate }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-heading">{{ 'FOOTER.LINKS' | translate }}</div>
+        <ul class="footer-links">
+          <li>
+            <a href="https://github.com/ArfitAP/DutyScheduler" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12A11.5 11.5 0 0 0 8.37 23c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.53-3.87-1.53-.52-1.33-1.28-1.68-1.28-1.68-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.72-1.55-2.56-.3-5.26-1.28-5.26-5.72 0-1.27.45-2.3 1.19-3.12-.12-.3-.52-1.48.11-3.09 0 0 .97-.31 3.18 1.19a11.04 11.04 0 0 1 5.79 0c2.2-1.5 3.17-1.19 3.17-1.19.64 1.61.24 2.79.12 3.09.74.82 1.18 1.85 1.18 3.12 0 4.46-2.71 5.42-5.29 5.71.41.35.78 1.05.78 2.11v3.13c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              {{ 'FOOTER.REPO' | translate }}
+            </a>
+          </li>
+          <li>
+            <a href="mailto:antonio.pavlis51&#64;gmail.com">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true"><path d="M3 5h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M3 6l7 4.5L17 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              {{ 'FOOTER.CONTACT' | translate }}
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/ArfitAP/DutyScheduler/issues" target="_blank" rel="noopener">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v5M10 14v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              {{ 'FOOTER.REPORT' | translate }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-heading">{{ 'FOOTER.ABOUT' | translate }}</div>
+        <p class="footer-about">{{ 'FOOTER.ABOUT_TEXT' | translate }}</p>
+        <div class="footer-stack">
+          <span class="stack-chip">Angular 21</span>
+          <span class="stack-chip">Spring Boot</span>
+          <span class="stack-chip">TypeScript</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom container">
+      <span>© {{ currentYear }} Duty Scheduler · {{ 'FOOTER.BUILT_WITH' | translate }}</span>
+      <span class="footer-version">v1.0</span>
+    </div>
+  </footer>
+
 </div>

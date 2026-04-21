@@ -73,7 +73,7 @@
     "MY_ROOMS": "Meine Räume",
     "ROOM_CODE_PLACEHOLDER": "Raumkennung",
     "REQUEST_ACCESS": "Zugang anfordern",
-    "NEW_ROOM": "+ Neuer Raum",
+    "NEW_ROOM": "Neuer Raum",
     "NO_ROOMS": "Sie haben keine Räume. Erstellen Sie einen neuen Raum oder warten Sie auf eine Einladung.",
     "NO_DESCRIPTION": "Keine Beschreibung",
     "OWNER": "Besitzer:",
@@ -204,5 +204,29 @@
     "OCTOBER": "Oktober",
     "NOVEMBER": "November",
     "DECEMBER": "Dezember"
+  },
+  "FOOTER": {
+    "TAGLINE": "Moderne Dienstplanung für Teams jeder Größe.",
+    "DEVELOPER": "Entwickler",
+    "DEV_ROLE": "Full-Stack-Entwickler",
+    "LINKS": "Ressourcen",
+    "REPO": "Quellcode auf GitHub",
+    "CONTACT": "Entwickler kontaktieren",
+    "REPORT": "Problem melden",
+    "ABOUT": "Über",
+    "ABOUT_TEXT": "Open-Source-Projekt zur Erstellung und Verwaltung von Dienstplänen mit fairer Verteilung und Präferenzen der Mitglieder.",
+    "BUILT_WITH": "Mit Sorgfalt erstellt"
+  },
+  "HOME_HERO": {
+    "TITLE": "Dienstpläne auf moderne Art planen",
+    "SUBTITLE": "Räume erstellen, Team einladen, Präferenzen sammeln und faire Pläne in Sekunden generieren.",
+    "CTA_LOGIN": "Anmelden",
+    "CTA_REGISTER": "Konto erstellen",
+    "FEATURE_1_T": "Intelligente Planung",
+    "FEATURE_1_D": "Automatische faire Dienstverteilung",
+    "FEATURE_2_T": "Team-Räume",
+    "FEATURE_2_D": "Pro Team, Projekt oder Schicht organisieren",
+    "FEATURE_3_T": "Präferenzen",
+    "FEATURE_3_D": "Mitglieder markieren gewünschte und blockierte Tage"
   }
 }

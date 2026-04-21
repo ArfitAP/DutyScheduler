@@ -1,8 +1,428 @@
-.card {
-  transition: transform 0.12s, box-shadow 0.12s;
+/* Home page — guest hero + logged-in dashboard */
+
+.home-page {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 32px 28px 48px;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* ==================== GUEST HERO ==================== */
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  padding: 80px 48px 64px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-lg);
+  isolation: isolate;
+  text-align: center;
+  animation: fade-up 480ms var(--ease-out) both;
+}
+
+.home-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gradient-mesh);
+  opacity: 0.85;
+}
+
+.home-hero-bg .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  animation: float-blob 18s ease-in-out infinite;
+}
+
+.home-hero-bg .orb-a {
+  width: 380px;
+  height: 380px;
+  background: var(--gradient-brand);
+  top: -160px;
+  left: -120px;
+}
+
+.home-hero-bg .orb-b {
+  width: 320px;
+  height: 320px;
+  background: var(--gradient-cyan);
+  bottom: -140px;
+  right: -100px;
+  animation-delay: -6s;
+}
+
+.home-hero-bg .orb-c {
+  width: 260px;
+  height: 260px;
+  background: var(--gradient-sunset);
+  top: 20%;
+  right: 10%;
+  opacity: 0.35;
+  animation-delay: -12s;
+}
+
+.home-hero-inner {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-700);
+  margin-bottom: 20px;
+}
+
+.home-hero-badge .badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.home-hero-title {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  background: linear-gradient(135deg, var(--ink-900) 0%, var(--brand-600) 60%, var(--accent-500) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.home-hero-sub {
+  margin: 0 auto 32px;
+  max-width: 620px;
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--ink-600);
+}
+
+.home-hero-cta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Feature cards */
+.home-features {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  padding: 28px 24px;
+  text-align: left;
+  animation: fade-up 500ms var(--ease-out) both;
+  transition: transform var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
+}
+
+.feature-card:nth-child(1) { animation-delay: 120ms; }
+.feature-card:nth-child(2) { animation-delay: 220ms; }
+.feature-card:nth-child(3) { animation-delay: 320ms; }
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-ico {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+.feature-card h3 {
+  margin: 0 0 6px;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--ink-600);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+/* ==================== DASHBOARD ==================== */
+.home-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fade-up 400ms var(--ease-out) both;
+}
+
+.dash-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dash-head .page-title {
+  margin: 0 0 4px;
+}
+
+.dash-head .page-subtitle {
+  margin: 0;
+}
+
+/* Join card */
+.join-card {
+  display: flex;
+  gap: 20px;
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  align-items: flex-start;
+  animation: fade-up 500ms var(--ease-out) 80ms both;
+}
+
+.join-card-ico {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--brand-50), var(--cyan-50));
+  color: var(--brand-600);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--brand-100);
+}
+
+.join-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.join-card-title {
+  font-weight: 700;
+  font-size: var(--text-base);
+  color: var(--ink-900);
+  margin-bottom: 10px;
+}
+
+.join-card-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.join-card-row .form-control {
+  flex: 1;
+  min-width: 200px;
+}
+
+.join-card-row .btn {
+  flex-shrink: 0;
+}
+
+.join-card .alert {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+/* Empty state */
+.dash-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 64px 24px;
+  text-align: center;
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--border-soft);
+  background: var(--bg-surface);
+  animation: fade-up 500ms var(--ease-out) 120ms both;
+}
+
+.dash-empty-ico {
+  color: var(--ink-400);
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.dash-empty p {
+  margin: 0;
+  color: var(--ink-600);
+  font-size: var(--text-base);
+  max-width: 440px;
+}
+
+/* Rooms grid */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.room-card {
+  position: relative;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.room-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.04), transparent 60%);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.room-card:hover::before {
+  opacity: 1;
+}
+
+.room-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-card-ico {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.room-card-title {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink-900);
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.room-card-desc {
+  margin: 0;
+  color: var(--ink-500);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  min-height: 2.5em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.room-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink-500);
+  font-size: var(--text-sm);
+}
+
+.room-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.room-meta-item svg {
+  opacity: 0.7;
+}
+
+.room-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.room-card-actions .btn {
+  flex: 1;
+  justify-content: center;
+  min-width: 110px;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 760px) {
+  .home-page {
+    padding: 20px 16px 40px;
+  }
+  .home-hero {
+    padding: 56px 24px 40px;
+  }
+  .home-features {
+    margin-top: 40px;
+  }
+  .dash-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dash-head .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .join-card {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .join-card-row {
+    flex-direction: column;
+  }
+  .join-card-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero,
+  .home-features .feature-card,
+  .home-dashboard,
+  .join-card,
+  .dash-empty,
+  .home-hero-bg .orb,
+  .home-hero-badge .badge-dot {
+    animation: none !important;
+  }
 }

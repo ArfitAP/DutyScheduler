@@ -73,7 +73,7 @@
     "MY_ROOMS": "My rooms",
     "ROOM_CODE_PLACEHOLDER": "Room identifier",
     "REQUEST_ACCESS": "Request access",
-    "NEW_ROOM": "+ New room",
+    "NEW_ROOM": "New room",
     "NO_ROOMS": "You don't have any rooms. Create a new room or wait for an invitation.",
     "NO_DESCRIPTION": "No description",
     "OWNER": "Owner:",
@@ -204,5 +204,29 @@
     "OCTOBER": "October",
     "NOVEMBER": "November",
     "DECEMBER": "December"
+  },
+  "FOOTER": {
+    "TAGLINE": "Modern duty scheduling for teams of any size.",
+    "DEVELOPER": "Developer",
+    "DEV_ROLE": "Full-stack engineer",
+    "LINKS": "Resources",
+    "REPO": "Source on GitHub",
+    "CONTACT": "Contact developer",
+    "REPORT": "Report an issue",
+    "ABOUT": "About",
+    "ABOUT_TEXT": "Open-source project to generate and manage duty rosters with fair distribution and member preferences.",
+    "BUILT_WITH": "Crafted with care"
+  },
+  "HOME_HERO": {
+    "TITLE": "Plan duty rosters the modern way",
+    "SUBTITLE": "Create rooms, invite your team, collect preferences, and generate fair schedules in seconds.",
+    "CTA_LOGIN": "Sign in",
+    "CTA_REGISTER": "Create account",
+    "FEATURE_1_T": "Smart scheduling",
+    "FEATURE_1_D": "Automatic fair duty distribution",
+    "FEATURE_2_T": "Team rooms",
+    "FEATURE_2_D": "Organize per team, project or shift",
+    "FEATURE_3_T": "Preferences",
+    "FEATURE_3_D": "Members mark wanted and blocked days"
   }
 }

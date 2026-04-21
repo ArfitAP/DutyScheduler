@@ -1,60 +1,76 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <img
-      id="profile-img"
-      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-      />
-    <div class="w-50 mt-5 mx-auto">
-      <h4 class="text-center mb-3">{{ 'USERNAME_SETUP.TITLE' | translate }}</h4>
-      <p class="text-center text-muted mb-4">
-        {{ 'USERNAME_SETUP.DESCRIPTION' | translate }}
-      </p>
-      <form
-        name="form"
-        (ngSubmit)="f.form.valid && onSubmit()"
-        #f="ngForm"
-        novalidate
+<div class="auth-page">
+  <div class="auth-shell auth-shell-compact">
+
+    <aside class="auth-aside">
+      <div class="auth-aside-inner">
+        <div class="auth-badge">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><circle cx="10" cy="7" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="#fff" stroke-width="1.8"/></svg>
+          <span>{{ 'USERNAME_SETUP.TITLE' | translate }}</span>
+        </div>
+        <h1 class="auth-hero-title">{{ 'USERNAME_SETUP.TITLE' | translate }}</h1>
+        <p class="auth-hero-sub">{{ 'USERNAME_SETUP.DESCRIPTION' | translate }}</p>
+      </div>
+
+      <div class="auth-aside-shapes" aria-hidden="true">
+        <span class="shape s1"></span>
+        <span class="shape s2"></span>
+        <span class="shape s3"></span>
+      </div>
+    </aside>
+
+    <section class="auth-form-wrap">
+      <div class="auth-form-card">
+
+        <div class="auth-form-head">
+          <h2>{{ 'USERNAME_SETUP.TITLE' | translate }}</h2>
+          <p>{{ 'USERNAME_SETUP.DESCRIPTION' | translate }}</p>
+        </div>
+
+        <form
+          name="form"
+          (ngSubmit)="f.form.valid && onSubmit()"
+          #f="ngForm"
+          novalidate
+          class="auth-form"
         >
-        <div class="form-group">
-          <label for="username">{{ 'USERNAME_SETUP.USERNAME' | translate }}</label>
-          <input
-            type="text"
-            class="form-control"
-            name="username"
-            [(ngModel)]="form.username"
-            required
-            minlength="3"
-            maxlength="20"
-            #username="ngModel"
-            />
+          <div class="form-group">
+            <label for="username">{{ 'USERNAME_SETUP.USERNAME' | translate }}</label>
+            <div class="field-wrap">
+              <svg class="field-ico" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input
+                id="username"
+                type="text"
+                class="form-control has-ico"
+                name="username"
+                [(ngModel)]="form.username"
+                required
+                minlength="3"
+                maxlength="20"
+                #username="ngModel"
+                autofocus
+              />
+            </div>
             @if (username.errors && f.submitted) {
-              <div class="alert-danger mt-1">
-                @if (username.errors['required']) {
-                  <div>{{ 'USERNAME_SETUP.USERNAME_REQUIRED' | translate }}</div>
-                }
-                @if (username.errors['minlength']) {
-                  <div>
-                    {{ 'USERNAME_SETUP.USERNAME_MIN_LENGTH' | translate }}
-                  </div>
-                }
-                @if (username.errors['maxlength']) {
-                  <div>
-                    {{ 'USERNAME_SETUP.USERNAME_MAX_LENGTH' | translate }}
-                  </div>
-                }
+              <div class="alert alert-danger">
+                @if (username.errors['required']) { {{ 'USERNAME_SETUP.USERNAME_REQUIRED' | translate }} }
+                @if (username.errors['minlength']) { {{ 'USERNAME_SETUP.USERNAME_MIN_LENGTH' | translate }} }
+                @if (username.errors['maxlength']) { {{ 'USERNAME_SETUP.USERNAME_MAX_LENGTH' | translate }} }
               </div>
             }
           </div>
-          <div class="form-group mt-3">
-            <button class="btn btn-primary btn-block">{{ 'USERNAME_SETUP.SAVE' | translate }}</button>
-          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">
+            {{ 'USERNAME_SETUP.SAVE' | translate }}
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
           @if (f.submitted && isSubmitted && errorMessage) {
-            <div class="alert alert-warning mt-2">
-              {{ 'USERNAME_SETUP.ERROR' | translate }}<br />{{ errorMessage }}
+            <div class="alert alert-danger">
+              {{ 'USERNAME_SETUP.ERROR' | translate }} {{ errorMessage }}
             </div>
           }
         </form>
       </div>
-    </div>
+    </section>
   </div>
+</div>

@@ -1,21 +1,32 @@
-<div class="d-flex justify-content-center mt-3">
-  <h4>{{ 'BOARD_USER.TITLE' | translate }} {{monthNames[nextMonth.getMonth()]}} {{nextMonth | date: 'yyyy.'}}</h4>
-</div>
+<div class="us-page">
 
-@if (!userApplication.active) {
-  <div>
-    <p>{{ 'BOARD_USER.NOT_INCLUDED' | translate }}</p>
-  </div>
-}
-@if (userApplication.active) {
-  <div class="row">
-    <div class="col-9">
-      <div class="pick-calendar">
-        <table class="calndar-table">
+  <!-- Header -->
+  <header class="us-head">
+    <div class="us-head-left">
+      <div class="us-head-ico">
+        <svg viewBox="0 0 20 20" fill="none" width="24" height="24"><path d="M3 5h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z M2 9h16M6 3v4M14 3v4M7 13l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <h1 class="page-title">{{ 'BOARD_USER.TITLE' | translate }} {{ monthNames[nextMonth.getMonth()] }} {{ nextMonth | date: 'yyyy.' }}</h1>
+      </div>
+    </div>
+  </header>
+
+  @if (!userApplication.active) {
+    <div class="us-empty surface">
+      <svg viewBox="0 0 20 20" fill="none" width="48" height="48" class="us-empty-ico"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v5M10 14v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <p>{{ 'BOARD_USER.NOT_INCLUDED' | translate }}</p>
+    </div>
+  }
+
+  @if (userApplication.active) {
+    <div class="us-grid">
+      <div class="us-calendar card">
+        <table class="us-table">
           <thead>
             <tr>
               @for (i of [0,1,2,3,4,5,6]; track i) {
-                <th>{{dayNames[i]}}</th>
+                <th>{{ dayNames[i] }}</th>
               }
             </tr>
           </thead>
@@ -23,12 +34,17 @@
             @for (weeks of nextMonthWeeks; track weeks) {
               <tr>
                 @for (days of weeks; track days) {
-                  <td>
+                  <td [class.empty]="days.hidden">
                     @if (!days.hidden) {
-                      <button type="button" class="cell-button" [ngClass]="{'background-selected' : days.selected, 'background-not-wanted' : days.notWanted, 'font-red' : days.holyday}" (click)="dayClick(days.date)">
-                        <span class="cell-font">
-                          {{days.date | date: 'dd'}}
-                        </span>
+                      <button
+                        type="button"
+                        class="day-btn"
+                        [class.is-selected]="days.selected"
+                        [class.is-not-wanted]="days.notWanted"
+                        [class.is-holyday]="days.holyday"
+                        (click)="dayClick(days.date)"
+                      >
+                        <span class="day-btn-num">{{ days.date | date: 'dd' }}</span>
                       </button>
                     }
                   </td>
@@ -38,14 +54,34 @@
           </tbody>
         </table>
       </div>
-    </div>
-    <div class="col calendar-save-margin">
-      <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped"> {{ 'BOARD_USER.GROUP_DUTY' | translate }}
-      <div class="mt-2">
-        <button class="btn btn-primary w-100" type="button" (click)="save()">
+
+      <aside class="us-side card">
+        <div class="us-side-title">{{ 'BOARD_USER.SAVE_SELECTION' | translate }}</div>
+
+        <label class="us-toggle-row" [class.is-disabled]="!groupSelected">
+          <input type="checkbox" [disabled]="!groupSelected" [(ngModel)]="userApplication.grouped" />
+          <span class="check-box"></span>
+          <span>{{ 'BOARD_USER.GROUP_DUTY' | translate }}</span>
+        </label>
+
+        <div class="us-summary">
+          <div class="us-summary-row">
+            <span class="us-summary-dot us-summary-dot-wanted"></span>
+            <span class="us-summary-label">{{ 'BOARD_USER.SAVE_SELECTION' | translate }}</span>
+            <span class="us-summary-count">{{ userSelectedDays.length }}</span>
+          </div>
+          <div class="us-summary-row">
+            <span class="us-summary-dot us-summary-dot-unwanted"></span>
+            <span class="us-summary-label">{{ 'NAV.DECLINE' | translate }}</span>
+            <span class="us-summary-count">{{ notWantedDays.length }}</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" type="button" (click)="save()">
+          <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           {{ 'BOARD_USER.SAVE_SELECTION' | translate }}
         </button>
-      </div>
+      </aside>
     </div>
-  </div>
-}
+  }
+</div>

@@ -1,24 +1,72 @@
-<div class="container mt-4">
-  <h4>{{ 'ADMIN.TITLE' | translate }}</h4>
-  <p class="text-muted">{{ 'ADMIN.DESCRIPTION' | translate }}</p>
+<div class="admin-page">
 
-  <hr>
+  <header class="admin-head">
+    <div class="admin-head-ico">
+      <svg viewBox="0 0 20 20" fill="none" width="24" height="24"><path d="M10 2l7 3v5c0 5-3 7.5-7 8-4-0.5-7-3-7-8V5l7-3z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 10l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <h1 class="page-title">{{ 'ADMIN.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'ADMIN.DESCRIPTION' | translate }}</p>
+    </div>
+  </header>
 
-  <h5>{{ 'ADMIN.ROLE_MANAGEMENT' | translate }}</h5>
-  <div class="row mt-3">
-    <div class="col-6">
-      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" [placeholder]="'ADMIN.USERNAME_PLACEHOLDER' | translate">
-    </div>
-    <div class="col-4">
-      <button class="btn btn-primary" type="button" (click)="getUserRole()">{{ 'ADMIN.GET_USER' | translate }}</button>
-    </div>
-  </div>
-  <div class="row mt-3">
-    @if (requestedUser) {
-      <div class="col">
-        {{ 'ADMIN.ADMIN_LABEL' | translate }} <input type="checkbox" [(ngModel)]="requestedUser.active">
-        <button class="btn btn-primary ml-4" type="button" (click)="setAdmin()">{{ 'ADMIN.SAVE' | translate }}</button>
+  <section class="admin-card card">
+    <div class="admin-card-head">
+      <div class="admin-card-ico">
+        <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
       </div>
-    }
-  </div>
+      <h2>{{ 'ADMIN.ROLE_MANAGEMENT' | translate }}</h2>
+    </div>
+
+    <div class="admin-form">
+      <div class="form-group">
+        <label for="admin-username">{{ 'ADMIN.USERNAME_PLACEHOLDER' | translate }}</label>
+        <div class="admin-form-row">
+          <div class="field-wrap">
+            <svg class="field-ico" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+            <input
+              type="text"
+              class="form-control has-ico"
+              id="admin-username"
+              name="username"
+              [(ngModel)]="username"
+              [placeholder]="'ADMIN.USERNAME_PLACEHOLDER' | translate"
+              (keyup.enter)="getUserRole()"
+            />
+          </div>
+          <button class="btn btn-primary" type="button" (click)="getUserRole()" [disabled]="!username.trim()">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1.8"/><path d="M14 14l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            {{ 'ADMIN.GET_USER' | translate }}
+          </button>
+        </div>
+      </div>
+
+      @if (requestedUser) {
+        <div class="admin-result surface">
+          <div class="admin-result-head">
+            <div class="admin-result-avatar">
+              {{ (username || '?') | slice:0:1 | uppercase }}
+            </div>
+            <div class="admin-result-name">
+              <div class="name">{{ username }}</div>
+              <div class="sub">{{ 'ADMIN.ROLE_MANAGEMENT' | translate }}</div>
+            </div>
+          </div>
+
+          <div class="admin-toggle">
+            <label class="switch">
+              <input type="checkbox" [(ngModel)]="requestedUser.active" />
+              <span class="switch-track"><span class="switch-thumb"></span></span>
+              <span class="switch-label">{{ 'ADMIN.ADMIN_LABEL' | translate }}</span>
+            </label>
+          </div>
+
+          <button class="btn btn-primary btn-block" type="button" (click)="setAdmin()">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ 'ADMIN.SAVE' | translate }}
+          </button>
+        </div>
+      }
+    </div>
+  </section>
 </div>
