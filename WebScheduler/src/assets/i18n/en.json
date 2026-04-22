@@ -19,7 +19,12 @@
     "STATUS_APPROVED": "Approved",
     "STATUS_REJECTED": "Rejected",
     "ERROR": "Error!",
-    "LANGUAGE": "Language"
+    "LANGUAGE": "Language",
+    "THEME": "Theme",
+    "THEME_LIGHT": "Light",
+    "THEME_DARK": "Dark",
+    "THEME_SYSTEM": "System",
+    "TOGGLE_THEME": "Toggle theme"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -30,7 +35,15 @@
     "SUBMIT": "Sign in",
     "ERROR": "Error:",
     "OR": "or",
-    "LOGGED_IN_AS": "Logged in as"
+    "LOGGED_IN_AS": "Logged in as",
+    "INVALID_CREDENTIALS": "Incorrect username or password.",
+    "ACCOUNT_DISABLED": "This account is disabled. Please contact an administrator.",
+    "ACCOUNT_LOCKED": "This account is locked. Please try again later.",
+    "NETWORK_ERROR": "Cannot reach the server. Please check your internet connection.",
+    "SERVER_ERROR": "The server encountered an error. Please try again later.",
+    "TOO_MANY_ATTEMPTS": "Too many failed attempts. Please wait a moment and try again.",
+    "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again.",
+    "GOOGLE_AUTH_FAILED": "Google sign-in failed. Please try again."
   },
   "REGISTER": {
     "USERNAME": "Username",
@@ -46,7 +59,14 @@
     "SUBMIT": "Register",
     "ERROR": "Error!",
     "SUCCESS": "Registration successful!",
-    "OR": "or"
+    "OR": "or",
+    "USERNAME_TAKEN": "This username is already taken. Please choose another.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "INVALID_INPUT": "Please check your input and try again.",
+    "NETWORK_ERROR": "Cannot reach the server. Please check your internet connection.",
+    "SERVER_ERROR": "The server encountered an error. Please try again later.",
+    "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again.",
+    "GOOGLE_AUTH_FAILED": "Google sign-up failed. Please try again."
   },
   "PROFILE": {
     "TITLE": "Profile",
@@ -163,6 +183,8 @@
     "GROUP_DUTY": "I want duty grouped",
     "SAVE_SELECTION": "Save selection",
     "SELECTION_SAVED": "Your selection has been saved",
+    "SELECTED": "Selected",
+    "UNWANTED": "Unwanted",
     "ERROR": "Error!"
   },
   "BOARD_USER": {
@@ -171,6 +193,8 @@
     "GROUP_DUTY": "I want duty grouped",
     "SAVE_SELECTION": "Save selection",
     "SELECTION_SAVED": "Your selection has been saved",
+    "SELECTED": "Selected",
+    "UNWANTED": "Unwanted",
     "ERROR": "Error!"
   },
   "DAYS": {

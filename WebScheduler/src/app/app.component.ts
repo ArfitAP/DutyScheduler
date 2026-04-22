@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { IRoomInvitation, IRoomJoinRequest } from './_models/Room';
 import { LanguageService } from './_services/language.service';
 import { RoomService } from './_services/room.service';
+import { ThemeService, ThemeMode } from './_services/theme.service';
 import { TokenStorageService } from './_services/token-storage.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private roomService: RoomService,
     public languageService: LanguageService,
+    public themeService: ThemeService,
     private translate: TranslateService,
     private router: Router
   ) { }
@@ -145,6 +147,14 @@ export class AppComponent implements OnInit {
   changeLanguage(lang: string): void {
     this.languageService.setLanguage(lang);
     this.showLanguageMenu = false;
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggle();
+  }
+
+  setThemeMode(mode: ThemeMode): void {
+    this.themeService.setMode(mode);
   }
 
   acceptInvitation(id: number): void {

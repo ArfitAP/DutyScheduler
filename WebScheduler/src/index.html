@@ -8,6 +8,20 @@
   <meta name="theme-color" content="#6366f1">
   <meta name="description" content="Modern duty scheduling platform for teams">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+    // Apply stored theme before first paint to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var saved = localStorage.getItem('app-theme');
+        var mode = (saved === 'light' || saved === 'dark')
+          ? saved
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', mode);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

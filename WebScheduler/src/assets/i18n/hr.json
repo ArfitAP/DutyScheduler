@@ -19,7 +19,12 @@
     "STATUS_APPROVED": "Odobreno",
     "STATUS_REJECTED": "Odbijeno",
     "ERROR": "Greška!",
-    "LANGUAGE": "Jezik"
+    "LANGUAGE": "Jezik",
+    "THEME": "Tema",
+    "THEME_LIGHT": "Svijetla",
+    "THEME_DARK": "Tamna",
+    "THEME_SYSTEM": "Sustav",
+    "TOGGLE_THEME": "Promijeni temu"
   },
   "LOGIN": {
     "USERNAME": "Korisničko ime",
@@ -30,7 +35,15 @@
     "SUBMIT": "Prijava",
     "ERROR": "Pogreška:",
     "OR": "ili",
-    "LOGGED_IN_AS": "Prijavljen kao"
+    "LOGGED_IN_AS": "Prijavljen kao",
+    "INVALID_CREDENTIALS": "Neispravno korisničko ime ili lozinka.",
+    "ACCOUNT_DISABLED": "Ovaj račun je onemogućen. Molimo obratite se administratoru.",
+    "ACCOUNT_LOCKED": "Ovaj račun je zaključan. Molimo pokušajte kasnije.",
+    "NETWORK_ERROR": "Server nije dostupan. Provjerite internetsku vezu.",
+    "SERVER_ERROR": "Dogodila se pogreška na serveru. Molimo pokušajte kasnije.",
+    "TOO_MANY_ATTEMPTS": "Previše neuspjelih pokušaja. Pričekajte trenutak i pokušajte ponovno.",
+    "UNEXPECTED_ERROR": "Dogodila se neočekivana pogreška. Molimo pokušajte ponovno.",
+    "GOOGLE_AUTH_FAILED": "Google prijava nije uspjela. Molimo pokušajte ponovno."
   },
   "REGISTER": {
     "USERNAME": "Korisničko ime",
@@ -46,7 +59,14 @@
     "SUBMIT": "Registracija",
     "ERROR": "Pogreška !",
     "SUCCESS": "Registracija uspješna !",
-    "OR": "ili"
+    "OR": "ili",
+    "USERNAME_TAKEN": "Ovo korisničko ime je već zauzeto. Odaberite drugo.",
+    "EMAIL_TAKEN": "Račun s ovom email adresom već postoji.",
+    "INVALID_INPUT": "Molimo provjerite unos i pokušajte ponovno.",
+    "NETWORK_ERROR": "Server nije dostupan. Provjerite internetsku vezu.",
+    "SERVER_ERROR": "Dogodila se pogreška na serveru. Molimo pokušajte kasnije.",
+    "UNEXPECTED_ERROR": "Dogodila se neočekivana pogreška. Molimo pokušajte ponovno.",
+    "GOOGLE_AUTH_FAILED": "Google registracija nije uspjela. Molimo pokušajte ponovno."
   },
   "PROFILE": {
     "TITLE": "Profil",
@@ -163,6 +183,8 @@
     "GROUP_DUTY": "Želim dežurstvo grupirano",
     "SAVE_SELECTION": "Spremi odabir",
     "SELECTION_SAVED": "Vaš izbor je spremljen",
+    "SELECTED": "Odabrano",
+    "UNWANTED": "Neželjeno",
     "ERROR": "Greška!"
   },
   "BOARD_USER": {
@@ -171,6 +193,8 @@
     "GROUP_DUTY": "Želim dežurstvo grupirano",
     "SAVE_SELECTION": "Spremi odabir",
     "SELECTION_SAVED": "Vaš izbor je spremljen",
+    "SELECTED": "Odabrano",
+    "UNWANTED": "Neželjeno",
     "ERROR": "Pogreška !"
   },
   "DAYS": {

@@ -119,8 +119,8 @@
             </button>
 
             @if ((f.submitted && isLoginFailed) || (isLoginFailed && !f.submitted)) {
-              <div class="alert alert-danger">
-                {{ 'LOGIN.ERROR' | translate }} {{ errorMessage }}
+              <div class="alert alert-danger" role="alert">
+                {{ errorMessage }}
               </div>
             }
           </form>

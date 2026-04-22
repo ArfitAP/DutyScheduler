@@ -19,7 +19,12 @@
     "STATUS_APPROVED": "Genehmigt",
     "STATUS_REJECTED": "Abgelehnt",
     "ERROR": "Fehler!",
-    "LANGUAGE": "Sprache"
+    "LANGUAGE": "Sprache",
+    "THEME": "Erscheinungsbild",
+    "THEME_LIGHT": "Hell",
+    "THEME_DARK": "Dunkel",
+    "THEME_SYSTEM": "System",
+    "TOGGLE_THEME": "Erscheinungsbild wechseln"
   },
   "LOGIN": {
     "USERNAME": "Benutzername",
@@ -30,7 +35,15 @@
     "SUBMIT": "Anmelden",
     "ERROR": "Fehler:",
     "OR": "oder",
-    "LOGGED_IN_AS": "Angemeldet als"
+    "LOGGED_IN_AS": "Angemeldet als",
+    "INVALID_CREDENTIALS": "Benutzername oder Passwort ist falsch.",
+    "ACCOUNT_DISABLED": "Dieses Konto ist deaktiviert. Bitte wenden Sie sich an einen Administrator.",
+    "ACCOUNT_LOCKED": "Dieses Konto ist gesperrt. Bitte versuchen Sie es später erneut.",
+    "NETWORK_ERROR": "Server nicht erreichbar. Bitte überprüfen Sie Ihre Internetverbindung.",
+    "SERVER_ERROR": "Ein Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "TOO_MANY_ATTEMPTS": "Zu viele fehlgeschlagene Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+    "UNEXPECTED_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "GOOGLE_AUTH_FAILED": "Google-Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "REGISTER": {
     "USERNAME": "Benutzername",
@@ -46,7 +59,14 @@
     "SUBMIT": "Registrieren",
     "ERROR": "Fehler!",
     "SUCCESS": "Registrierung erfolgreich!",
-    "OR": "oder"
+    "OR": "oder",
+    "USERNAME_TAKEN": "Dieser Benutzername ist bereits vergeben. Bitte wählen Sie einen anderen.",
+    "EMAIL_TAKEN": "Ein Konto mit dieser E-Mail-Adresse existiert bereits.",
+    "INVALID_INPUT": "Bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.",
+    "NETWORK_ERROR": "Server nicht erreichbar. Bitte überprüfen Sie Ihre Internetverbindung.",
+    "SERVER_ERROR": "Ein Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "UNEXPECTED_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "GOOGLE_AUTH_FAILED": "Google-Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "PROFILE": {
     "TITLE": "Profil",
@@ -163,6 +183,8 @@
     "GROUP_DUTY": "Ich möchte gruppierte Dienste",
     "SAVE_SELECTION": "Auswahl speichern",
     "SELECTION_SAVED": "Ihre Auswahl wurde gespeichert",
+    "SELECTED": "Ausgewählt",
+    "UNWANTED": "Unerwünscht",
     "ERROR": "Fehler!"
   },
   "BOARD_USER": {
@@ -171,6 +193,8 @@
     "GROUP_DUTY": "Ich möchte gruppierte Dienste",
     "SAVE_SELECTION": "Auswahl speichern",
     "SELECTION_SAVED": "Ihre Auswahl wurde gespeichert",
+    "SELECTED": "Ausgewählt",
+    "UNWANTED": "Unerwünscht",
     "ERROR": "Fehler!"
   },
   "DAYS": {

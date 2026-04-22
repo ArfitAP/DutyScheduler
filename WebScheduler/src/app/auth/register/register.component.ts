@@ -1,5 +1,7 @@
 import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { environment } from '../../../environments/environment';
@@ -28,7 +30,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -70,7 +73,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
           }
         },
         error: err => {
-          this.googleErrorMessage = err.error?.message || err.message;
+          this.googleErrorMessage = this.mapRegisterError(err, 'google');
           this.isGoogleSignUpFailed = true;
         }
       });
@@ -87,9 +90,50 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         this.isSignUpFailed = false;
       },
       error: err => {
-        this.errorMessage = err.message;
+        this.errorMessage = this.mapRegisterError(err, 'credentials');
         this.isSignUpFailed = true;
       }
     });
+  }
+
+  /**
+   * Map an HttpErrorResponse from the signup endpoints to a precise,
+   * user-friendly translated message. For 400/409 errors we peek at the
+   * server payload to distinguish "username already taken" from "email
+   * already taken" — the backend returns these as simple messages.
+   */
+  private mapRegisterError(err: HttpErrorResponse | any, kind: 'credentials' | 'google'): string {
+    const status = err?.status;
+    const serverMsg: string =
+      (typeof err?.error === 'string' ? err.error : err?.error?.message) || '';
+    const lowered = serverMsg.toLowerCase();
+
+    // Network / browser-side failure — request never reached the server.
+    if (status === 0) {
+      return this.translate.instant('REGISTER.NETWORK_ERROR');
+    }
+
+    // Server-side failure (5xx).
+    if (typeof status === 'number' && status >= 500) {
+      return this.translate.instant('REGISTER.SERVER_ERROR');
+    }
+
+    // Duplicate username / email, or other validation errors (4xx).
+    if (typeof status === 'number' && status >= 400 && status < 500) {
+      if (lowered.includes('username') && (lowered.includes('taken') || lowered.includes('exist') || lowered.includes('use'))) {
+        return this.translate.instant('REGISTER.USERNAME_TAKEN');
+      }
+      if (lowered.includes('email') && (lowered.includes('taken') || lowered.includes('exist') || lowered.includes('use'))) {
+        return this.translate.instant('REGISTER.EMAIL_TAKEN');
+      }
+      return kind === 'google'
+        ? this.translate.instant('REGISTER.GOOGLE_AUTH_FAILED')
+        : this.translate.instant('REGISTER.INVALID_INPUT');
+    }
+
+    // Anything else — unexpected.
+    return kind === 'google'
+      ? this.translate.instant('REGISTER.GOOGLE_AUTH_FAILED')
+      : this.translate.instant('REGISTER.UNEXPECTED_ERROR');
   }
 }
