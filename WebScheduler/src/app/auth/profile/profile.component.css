@@ -113,7 +113,7 @@
 .profile-email {
   margin: 0;
   color: var(--ink-500);
-  font-size: var(--text-md);
+  font-size: var(--text-base);
   word-break: break-all;
 }
 
@@ -137,8 +137,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform var(--duration-md) var(--ease-out),
-              box-shadow var(--duration-md) var(--ease-out);
+  transition: transform var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
   animation: fade-up 500ms var(--ease-out) both;
 }
 
@@ -211,7 +211,7 @@
 .profile-empty p {
   margin: 0;
   color: var(--ink-600);
-  font-size: var(--text-md);
+  font-size: var(--text-base);
 }
 
 /* ===== Responsive ===== */

@@ -148,8 +148,8 @@
             </button>
 
             @if (f.submitted && isSignUpFailed) {
-              <div class="alert alert-danger">
-                {{ 'REGISTER.ERROR' | translate }} {{ errorMessage }}
+              <div class="alert alert-danger" role="alert">
+                {{ errorMessage }}
               </div>
             }
           </form>
@@ -159,8 +159,8 @@
           <div id="google-signup-btn" class="auth-google"></div>
 
           @if (isGoogleSignUpFailed && googleErrorMessage) {
-            <div class="alert alert-danger mt-3">
-              {{ 'REGISTER.ERROR' | translate }} {{ googleErrorMessage }}
+            <div class="alert alert-danger mt-3" role="alert">
+              {{ googleErrorMessage }}
             </div>
           }
 

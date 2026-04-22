@@ -117,6 +117,91 @@
   --header-h: 68px;
   --footer-h: auto;
   --max-w: 1400px;
+
+  /* Theme-reactive surfaces (used by app shell) */
+  --header-bg:         rgba(255, 255, 255, 0.72);
+  --header-bg-scrolled: rgba(255, 255, 255, 0.88);
+  --header-shadow:     0 1px 0 rgba(15, 23, 42, 0.02), 0 6px 24px -12px rgba(15, 23, 42, 0.08);
+  --footer-bg:         linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(248, 250, 252, 0.95) 100%);
+  --glass-border:      rgba(255, 255, 255, 0.6);
+
+  /* Alerts (overridable per theme) */
+  --alert-info-bg:     #eff6ff;  --alert-info-fg:  #1e40af;  --alert-info-border: #bfdbfe;
+  --alert-success-bg:  #ecfdf5;  --alert-success-fg: #065f46; --alert-success-border: #a7f3d0;
+  --alert-warning-bg:  #fffbeb;  --alert-warning-fg: #92400e; --alert-warning-border: #fde68a;
+  --alert-danger-bg:   #fef2f2;  --alert-danger-fg: #991b1b;  --alert-danger-border: #fecaca;
+
+  /* Select arrow (uses stroke color) */
+  --select-arrow-stroke: %23475569;
+
+  color-scheme: light;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK THEME
+   Triggered by html[data-theme="dark"] (set by ThemeService or the
+   pre-bootstrap anti-flash script in index.html).
+   ═══════════════════════════════════════════════════════════════ */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Ink scale — flipped so --ink-900 reads as "strongest text" on dark */
+  --ink-0:   #000000;
+  --ink-50:  #050814;
+  --ink-100: #0b1220;
+  --ink-200: #151d33;
+  --ink-300: #1f2a44;
+  --ink-400: #3b486a;
+  --ink-500: #7b89a8;
+  --ink-600: #a0adc5;
+  --ink-700: #c5cde0;
+  --ink-800: #e3e8f3;
+  --ink-900: #f4f6fb;
+
+  /* Surfaces */
+  --bg-app:      #0b1220;
+  --bg-surface:  #131a2c;
+  --bg-raised:   #1b2338;
+  --bg-sunken:   #0a0f1c;
+  --bg-glass:    rgba(19, 26, 44, 0.72);
+  --bg-overlay:  rgba(0, 0, 0, 0.65);
+
+  /* Borders — light-over-dark with low alpha */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-soft:   rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.18);
+
+  /* Shadows (deeper, cooler) */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 4px 14px rgba(0, 0, 0, 0.5), 0 2px 5px rgba(0, 0, 0, 0.35);
+  --shadow-lg:  0 14px 32px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.4);
+  --shadow-xl:  0 28px 68px rgba(0, 0, 0, 0.6),  0 8px 18px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 0 4px rgba(129, 140, 248, 0.28);
+  --shadow-brand: 0 14px 36px -10px rgba(99, 102, 241, 0.65);
+
+  /* Gradients that mix with background */
+  --gradient-surface: linear-gradient(180deg, #1b2338 0%, #131a2c 100%);
+  --gradient-mesh:
+    radial-gradient(at 10% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(217, 70, 239, 0.16) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.18) 0px, transparent 50%);
+
+  /* Header / footer / glass */
+  --header-bg:          rgba(19, 26, 44, 0.72);
+  --header-bg-scrolled: rgba(19, 26, 44, 0.9);
+  --header-shadow:      0 1px 0 rgba(0, 0, 0, 0.25), 0 6px 24px -12px rgba(0, 0, 0, 0.55);
+  --footer-bg:          linear-gradient(180deg, rgba(19, 26, 44, 0.7) 0%, rgba(11, 18, 32, 0.95) 100%);
+  --glass-border:       rgba(255, 255, 255, 0.08);
+
+  /* Alerts — tinted for dark backgrounds */
+  --alert-info-bg:     rgba(59, 130, 246, 0.14);  --alert-info-fg:    #93c5fd;  --alert-info-border:    rgba(59, 130, 246, 0.35);
+  --alert-success-bg:  rgba(16, 185, 129, 0.14);  --alert-success-fg: #6ee7b7;  --alert-success-border: rgba(16, 185, 129, 0.35);
+  --alert-warning-bg:  rgba(245, 158, 11, 0.14);  --alert-warning-fg: #fcd34d;  --alert-warning-border: rgba(245, 158, 11, 0.35);
+  --alert-danger-bg:   rgba(239, 68, 68, 0.14);   --alert-danger-fg:  #fca5a5;  --alert-danger-border:  rgba(239, 68, 68, 0.35);
+
+  /* Select arrow */
+  --select-arrow-stroke: %23a0adc5;
 }
 
 /* ── Reset ── */
@@ -140,6 +225,8 @@ body {
   min-height: 100vh;
   line-height: 1.55;
   overflow-x: hidden;
+  transition: background-color var(--duration-base) var(--ease-out),
+              color var(--duration-base) var(--ease-out);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -290,7 +377,7 @@ img { max-width: 100%; display: block; }
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-md);
 }
 
@@ -515,6 +602,11 @@ select {
   padding-right: 2.25rem;
 }
 
+html[data-theme="dark"] select.form-control,
+html[data-theme="dark"] select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20' fill='none' stroke='%23a0adc5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
 textarea.form-control { resize: vertical; min-height: 6rem; }
 
 .form-control-sm {
@@ -584,10 +676,10 @@ input[type="checkbox"].toggle,
   from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.alert-info     { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
-.alert-success  { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
-.alert-warning  { background: #fffbeb; color: #92400e; border-color: #fde68a; }
-.alert-danger   { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.alert-info     { background: var(--alert-info-bg);     color: var(--alert-info-fg);     border-color: var(--alert-info-border); }
+.alert-success  { background: var(--alert-success-bg);  color: var(--alert-success-fg);  border-color: var(--alert-success-border); }
+.alert-warning  { background: var(--alert-warning-bg);  color: var(--alert-warning-fg);  border-color: var(--alert-warning-border); }
+.alert-danger   { background: var(--alert-danger-bg);   color: var(--alert-danger-fg);   border-color: var(--alert-danger-border); }
 .alert-secondary{ background: var(--ink-100); color: var(--ink-700); border-color: var(--border-soft); }
 
 .chip {
